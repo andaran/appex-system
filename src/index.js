@@ -10,32 +10,35 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 
 /* Components */
+import Register from './Components/register/RegWrap/reg-wrap';
 
 /* Libraries */
-
+import 'bootstrap/dist/css/bootstrap.min.css';
+import reportWebVitals from './reportWebVitals';
 import * as serviceWorker from './serviceWorker';
 import {
   BrowserRouter as Router,
   Switch,
-  Route
+  Route,
+  Redirect
 } from "react-router-dom";
 
 import {Provider} from 'react-redux';
 import store from './store';
+
+/* Styles */
+import './Styles/style.sass';
 
 /*   ---==== Render ====---   */
 
 ReactDOM.render(
   <Provider store={store}>
     <Router>
-      <Nav/>
       <Switch>
         <Route exact path="/">
-          <Main func = { null }/>
+          <Redirect to={ { pathname: "/reg" } }/>
         </Route>
-        <Route exact path="/articles" component={ Articles }/>
-        <Route exact path="/articles/:articleID" component={ ArticlePage }/>
-        <Route exact component={Error}/>
+        <Route exact path="/reg" component={ Register }/>
       </Switch>
     </Router>
   </Provider>,
@@ -46,4 +49,4 @@ ReactDOM.render(
 // to log results (for example: reportWebVitals(console.log))
 // or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
 reportWebVitals();
-serviceWorker.unregister();
+serviceWorker.register();
