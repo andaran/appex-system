@@ -1,0 +1,121 @@
+@import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@300;400&display=swap')
+  
+.reg-window
+  width: 360px
+  max-width: 90%
+  // border: .5px solid #4f4f4f
+  box-sizing: border-box
+  font-family: roboto
+
+.reg-window_center
+  margin: auto
+
+/* Input */
+
+.reg-window__input 
+  width: 100%
+  height: 100%
+  outline: none
+  display: block
+  background: #3b4148
+  border: none
+  color: #dddada
+  font-size: 18px
+  padding-left: 10px
+  box-sizing: border-box
+  border-radius: 0 5px 5px 0
+
+.reg-window__input-item
+  display: flex
+  justify-content: center
+  width: 100%
+  
+.reg-window__item-block
+  height: 50px
+  display: flex
+  justify-content: center
+  align-items: center
+  margin-top: 30px
+
+.reg-window__item-block:first-child
+  width: 60px
+  background: #363b41
+  border-radius: 5px 0 0 5px
+  color: #606468
+
+.reg-window__item-block:last-child
+  width: calc( 100% - 60px )
+  border-radius: 0 5px 5px 0
+
+/* Text */
+
+.reg-window__text-item
+  color: #dddada
+  font-size: 32px
+  display: flex
+  justify-content: center
+  align-items: center
+
+/* Button */
+
+.reg-window__button
+  background: #3dc1d3
+  height: 52px
+  width: 100%
+  margin-top: 30px
+  border-radius: 5px
+  display: flex
+  justify-content: center
+  align-items: center
+  color: white
+  font-size: 18px
+  user-select: none
+  cursor: pointer
+  transition: .1s
+
+  &:hover
+    background: #35abbb
+
+  &:active
+    background: #28808b
+    box-shadow: inset 0 0 3px rgba(0, 0, 0, 0.3)
+
+
+/* Appex logo */ 
+.appex-logo
+  filter: drop-shadow( 2px 2px 1px rgba(0, 0, 0, 0.1))
+  width: 82px
+  margin-right: -10px
+
+.logo-text
+  font-family: 'comfortaa', roboto, monospace
+  font-size: 40px
+  color: white
+  position: relative
+  text-shadow: .5px .5px .5px rgba(0, 0, 0, 0.1)
+
+/* Under text */  
+.reg-window__under-text
+  margin-top: 30px
+  color: #838a91
+  display: flex
+  justify-content: center
+  align-items: center
+
+  a
+    margin-left: 6px
+    color: #3498db
+
+    &:hover
+      text-decoration: none
+      color: #2980b9
+
+/* errs */  
+.reg-window__err-item 
+  width: calc( 100% - 76px )
+  float: right
+  background: #3b4148
+  padding: 8px
+  margin: 8px 8px 0 0
+  border-radius: 0 5px 5px 5px
+  color: #ff7675
