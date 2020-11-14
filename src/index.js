@@ -11,6 +11,7 @@ import ReactDOM from 'react-dom';
 
 /* Components */
 import Register from './Components/register/RegWrap/reg-wrap';
+import Login from './Components/login/LogWrap/log-wrap'
 
 /* Libraries */
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -39,6 +40,7 @@ ReactDOM.render(
           <Redirect to={ { pathname: "/reg" } }/>
         </Route>
         <Route exact path="/reg" component={ Register }/>
+        <Route exact path="/log" component={ Login }/>
       </Switch>
     </Router>
   </Provider>,

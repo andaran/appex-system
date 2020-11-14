@@ -3,7 +3,7 @@ import React from 'react';
 
 /* Components */
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUser, faLock, faEnvelope, faKey } from '@fortawesome/free-solid-svg-icons';
+import { faUser, faLock } from '@fortawesome/free-solid-svg-icons';
 import { Link } from 'react-router-dom';
 
 /* Component */
@@ -12,7 +12,7 @@ export default class RegWindow extends React.Component {
     super (props);
 
     this.state = {
-      errs: ['', '', '', ''],
+      errs: ['', '', ''],
     }
 
     // bind
@@ -22,7 +22,7 @@ export default class RegWindow extends React.Component {
 
   render() {
 
-    let errs = [null, null, null, null];
+    let errs = [null, null, null];
     errs = errs.map((item, index) => {
       if (this.state.errs[index] !== '') {
         return (
@@ -53,35 +53,25 @@ export default class RegWindow extends React.Component {
             <FontAwesomeIcon icon={ faLock } />
           </div>
           <div className="reg-window__item-block">
-            <input type="text" placeholder="пароль" id="reg-password" className="reg-window__input"/>
+            <input type="password" placeholder="пароль" id="reg-password" className="reg-window__input"/>
           </div>
         </div>
         { errs[1] }
         <div className="reg-window__input-item">
-          <div className="reg-window__item-block">
-            <FontAwesomeIcon icon={ faEnvelope } />
-          </div>
-          <div className="reg-window__item-block">
-            <input type="text" placeholder="почта" id="reg-email" className="reg-window__input"/>
+          <div className="reg-window__button reg-window__button_red" id="reg-btn"> 
+            Войти!
           </div>
         </div>
         { errs[2] }
         <div className="reg-window__input-item">
-          <div className="reg-window__item-block">
-            <FontAwesomeIcon icon={ faKey } />
-          </div>
-          <div className="reg-window__item-block">
-            <input type="text" placeholder="ключ" id="reg-key" className="reg-window__input"/>
+          <div className="reg-window__under-text">
+            Ещё не зарегистрировались? <Link to="/reg"> Регистрация </Link>
           </div>
         </div>
-        { errs[3] }
         <div className="reg-window__input-item">
-          <div className="reg-window__button reg-window__button_blue" id="reg-btn"> 
-            Зарегистрироваться!
+          <div className="reg-window__under-text reg-window__under-text_not-first">
+            Забыли пароль? <Link to="/reg"> Восстановить </Link>
           </div>
-        </div>
-        <div className="reg-window__under-text">
-          Уже Зарегистрированны? <Link to="/log"> Войти </Link>
         </div>
       </div>
     );
@@ -106,19 +96,19 @@ export default class RegWindow extends React.Component {
   btnClicked() {
     /* Clear warnings */
     this.setState({
-      errs: ['', '', '', '']
+      errs: ['', '', '']
     });
 
     const username = document.getElementById('reg-username').value;
     if (false) {
       this.setState({
-        errs: ['Такой пользователь уже есть в системе!', '', '', '']
+        errs: ['Такого пользователя нет в системе!', '', '']
       });
       return;
     }
-    if (username.length < 3) {
+    if (username.length === 0) {
       this.setState({
-        errs: ['Слишком короткое имя пользователя!', '', '', '']
+        errs: ['Введите имя пользователя!', '', '']
       });
       return;
     }
@@ -126,25 +116,16 @@ export default class RegWindow extends React.Component {
     const password = document.getElementById('reg-password').value;
     if (!/(?=.*[0-9])(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z!@#$%^&*]{6,}/.test(password)) {
       this.setState({
-        errs: ['', 'Слишком легкий пароль!', '', '']
+        errs: ['', 'Неверный пароль!', '']
       });
       return;
     }
 
-    const email = document.getElementById('reg-email').value;
-    if (!/\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,6}/.test(email)) {
+    if (password !== '!23qweasdZXC') {
       this.setState({
-        errs: ['', '', 'Неверно введен email адрес!', '']
+        errs: ['', '', 'Неверный логин или пароль!']
       });
       return;
     }
-
-    const code = document.getElementById('reg-key').value;
-    if (!/[0-9a-zA-Z!@#$%^&*]{8}/.test(code)) {
-      this.setState({
-        errs: ['', '', '', 'Неверный формат кода! Он должен прийти вам на почту.']
-      });
-      return;
-    } 
   }
 } 
