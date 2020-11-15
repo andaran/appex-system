@@ -46,6 +46,7 @@
 .reg-window__item-block:last-child
   width: calc( 100% - 60px )
   border-radius: 0 5px 5px 0
+  justify-content: flex-end
 
 /* Text */
 
@@ -93,6 +94,15 @@
   &:active
     background: #ad5252
 
+.reg-window__button_green
+  background: #1abc9c
+
+  &:hover
+    background: #18a88c
+
+  &:active
+    background: #169a80
+
 
 /* Appex logo */ 
 .appex-logo
@@ -135,3 +145,23 @@
   margin: 8px 8px 0 0
   border-radius: 0 5px 5px 5px
   color: #ff7675
+
+/* input button */  
+.reg-window__input-button
+  position: absolute
+  color: #606468
+  background: #363b41
+  display: flex
+  justify-content: center
+  align-items: center
+  width: 38px
+  height: 38px
+  margin-right: 6px
+  cursor: pointer
+  border-radius: 5px
+
+  &:hover
+    background: #34393e
+
+  &:active
+    background: #303439

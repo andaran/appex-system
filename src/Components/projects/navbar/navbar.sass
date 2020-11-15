@@ -1,0 +1,55 @@
+/* navbar */
+.navbar
+  background: #363b40
+  padding: 0
+  display: flex
+  justify-content: start
+  align-items: center
+
+.navbar__item
+  margin: 12px
+  display: flex
+  justify-content: center
+  align-items: center
+
+.navbar__items
+  display: flex
+  justify-content: center
+  align-items: center
+
+@media all and (max-width: 500px)
+  .navbar__items
+    width: 100%
+
+  .navbar__logo
+    width: 100%
+
+/* navbar link */
+.navbar__link
+  font-size: 18px
+  color: #8f969e
+  font-weight: 400
+
+  &:hover
+    color: #adb5bd
+    text-decoration: none
+
+/* appex logo */
+.navbar__logo
+  display: flex
+  justify-content: center
+  align-items: center
+  height: 100%
+  margin: 4px 20px -2px 18px
+
+.navbar__logo-img
+  filter: drop-shadow( 2px 2px 1px rgba(0, 0, 0, 0.1) )
+  width: 34px
+  margin-right: -5px
+
+.navbar__logo-text
+  font-family: 'comfortaa', roboto, monospace
+  font-size: 20px
+  color: white
+  position: relative
+  text-shadow: .5px .5px .5px rgba(0, 0, 0, 0.1)

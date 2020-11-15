@@ -65,12 +65,12 @@ export default class RegWindow extends React.Component {
         { errs[2] }
         <div className="reg-window__input-item">
           <div className="reg-window__under-text">
-            Ещё не зарегистрировались? <Link to="/reg"> Регистрация </Link>
+            Ещё не зарегистрировались? <Link to="/sign_up"> Регистрация </Link>
           </div>
         </div>
         <div className="reg-window__input-item">
           <div className="reg-window__under-text reg-window__under-text_not-first">
-            Забыли пароль? <Link to="/reg"> Восстановить </Link>
+            Забыли пароль? <Link to="/change_password"> Восстановить </Link>
           </div>
         </div>
       </div>

@@ -3,16 +3,16 @@ import React from 'react';
 
 /* Components */
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUser, faLock, faEnvelope, faKey, faPaperPlane } from '@fortawesome/free-solid-svg-icons';
+import { faUser, faLock, faEnvelope, faKey, faPaperPlane, faUnlock} from '@fortawesome/free-solid-svg-icons';
 import { Link } from 'react-router-dom';
 
 /* Component */
-export default class RegWindow extends React.Component {
+export default class ChangePass extends React.Component {
   constructor(props) {
     super (props);
 
     this.state = {
-      errs: ['', '', '', ''],
+      errs: ['', '', '', '', ''],
     }
 
     // bind
@@ -50,10 +50,10 @@ export default class RegWindow extends React.Component {
         { errs[0] }
         <div className="reg-window__input-item">
           <div className="reg-window__item-block">
-            <FontAwesomeIcon icon={ faLock } />
+            <FontAwesomeIcon icon={ faUnlock } />
           </div>
           <div className="reg-window__item-block">
-            <input type="text" placeholder="пароль" id="reg-password" className="reg-window__input"/>
+            <input type="password" placeholder="старый пароль" id="reg-password" className="reg-window__input"/>
           </div>
         </div>
         { errs[1] }
@@ -79,12 +79,25 @@ export default class RegWindow extends React.Component {
         </div>
         { errs[3] }
         <div className="reg-window__input-item">
-          <div className="reg-window__button reg-window__button_blue" id="reg-btn"> 
-            Зарегистрироваться!
+          <div className="reg-window__item-block">
+            <FontAwesomeIcon icon={ faLock } />
+          </div>
+          <div className="reg-window__item-block">
+            <input type="text" placeholder="новый пароль" id="reg-new-password" className="reg-window__input"/>
+          </div>
+        </div>
+        { errs[4] }
+        <div className="reg-window__input-item">
+          <div className="reg-window__button reg-window__button_green" id="reg-btn">
+            Сменить пароль!
           </div>
         </div>
         <div className="reg-window__under-text">
-          Уже зарегистрированны? <Link to="/sign_in"> Войти </Link>
+          Введите логин / пароль и email. На него вам придет код для создания нового пароля.
+        </div>
+        <div className="reg-window__under-text reg-window__under-text_not-first">
+          Перейти на
+          <Link to="/sign_in">страницу входа</Link>
         </div>
       </div>
     );
@@ -109,27 +122,37 @@ export default class RegWindow extends React.Component {
   btnClicked() {
     /* Clear warnings */
     this.setState({
-      errs: ['', '', '', '']
+      errs: ['', '', '', '', '']
     });
 
     const username = document.getElementById('reg-username').value;
+    const password = document.getElementById('reg-password').value;
+
+    /* username */
+    if (username.length === 0 && password.length === 0) {
+      this.setState({
+        errs: ['Введите имя пользователя или пароль!', '', '', '', '']
+      });
+      return;
+    }
     if (false) {
       this.setState({
         errs: ['Такой пользователь уже есть в системе!', '', '', '']
       });
       return;
     }
-    if (username.length < 3) {
+
+    /* password */
+    if (password.length === 0 && username.length === 0) {
       this.setState({
-        errs: ['Слишком короткое имя пользователя!', '', '', '']
+        errs: ['', 'Введите пароль или имя пользователя!', '', '', '']
       });
       return;
     }
 
-    const password = document.getElementById('reg-password').value;
-    if (!/(?=.*[0-9])(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z!@#$%^&*]{6,}/.test(password)) {
+    if (!/(?=.*[0-9])(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z])/.test(password) && username.length === 0) {
       this.setState({
-        errs: ['', 'Слишком легкий пароль!', '', '']
+        errs: ['', 'Слишком легкий пароль!', '', '', '']
       });
       return;
     }
@@ -137,7 +160,7 @@ export default class RegWindow extends React.Component {
     const email = document.getElementById('reg-email').value;
     if (!/\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,6}/.test(email)) {
       this.setState({
-        errs: ['', '', 'Неверно введен email адрес!', '']
+        errs: ['', '', 'Неверно введен email адрес!', '', '']
       });
       return;
     }
@@ -145,7 +168,7 @@ export default class RegWindow extends React.Component {
     const code = document.getElementById('reg-key').value;
     if (!/[0-9a-zA-Z!@#$%^&*]{8}/.test(code)) {
       this.setState({
-        errs: ['', '', '', 'Неверный формат кода! Он должен прийти вам на почту.']
+        errs: ['', '', '', 'Неверный формат кода! Он должен прийти вам на почту.', '']
       });
       return;
     } 
