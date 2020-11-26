@@ -1,0 +1,225 @@
+
+$checkboxes-size: 24px
+$checkboxes-size-small: 18px
+$icon-background: #3b4148
+
+@mixin item-span
+  span
+    color: #6a7076
+    font-size: 16px
+    font-weight: bold
+    display: inline-block
+
+@mixin item-wrap
+  display: flex
+  align-items: center
+  padding: 10px
+  margin: 0 0 10px 0
+
+@mixin item-input
+  input
+    background: none
+    border: none
+    border-bottom: 1px solid #6a7076
+    color: #838a91
+    outline: none
+    margin-left: 10px
+    width: 180px
+    padding-left: 2px
+
+@mixin active-icon
+  div
+    background: $icon-background
+    border-radius: 20%
+    transform: translateY(21px) scale(2.5)
+
+    &::after
+      width: 88px
+      top: -16px
+      height: 46px
+
+  svg
+    font-size: 12px
+    color: #262c31
+
+  span
+    visibility: hidden
+
+
+
+/* title */
+.create-app-window__title
+  color: #838a91
+  display: flex
+  justify-content: center
+  align-items: center
+  padding: 20px 0
+
+
+/* input item ( title ) */
+.create-app-window__input-item
+  @include item-wrap // wrap styles
+  @include item-span // span styles
+  @include item-input // item input
+
+/* item ( checkboxes ) */
+.create-app-window__item
+  @include item-wrap // wrap styles
+  @include item-span // span styles
+
+  div
+    margin-left: 10px
+    display: inline-flex
+    align-items: center
+    transition: .12s
+
+    input
+      margin: 5px
+      width: $checkboxes-size
+      height: $checkboxes-size
+
+      @media all and (max-width: 500px)
+        width: $checkboxes-size-small
+        height: $checkboxes-size-small
+
+      &::after
+        content: ''
+        width: $checkboxes-size
+        height: $checkboxes-size
+        background: #3498db
+        position: absolute
+        border-radius: 20%
+        cursor: pointer
+
+        @media all and (max-width: 500px)
+          width: $checkboxes-size-small
+          height: $checkboxes-size-small
+
+      &:checked::after
+        border: 2px solid white
+
+      /* colors */
+      &:nth-child(1)::after
+        background: #1abc9c
+
+      &:nth-child(2)::after
+        background: #2ecc71
+
+      &:nth-child(3)::after
+        background: #3498db
+
+      &:nth-child(4)::after
+        background: #9b59b6
+
+      &:nth-child(5)::after
+        background: #f1c40f
+
+      &:nth-child(6)::after
+        background: #e67e22
+
+      &:nth-child(7)::after
+        background: #e74c3c
+
+      &:nth-child(8)::after
+        background: #95a5a6
+
+
+/* big item ( icon ) */
+.create-app-window__big-item
+  @include item-wrap // wrap styles
+  @include item-span // span styles
+  @include item-input // item input
+
+  display: block
+
+  .create-app-window__small-text
+    color: #6a7076
+    position: relative
+    font-size: 10px
+    float: right
+    right: 1px
+    top: -8px
+
+    a
+      color: #2980b9
+
+      &:hover
+        text-decoration: none
+
+  .create-app-window__icons
+    width: 100%
+    background: #3b4148
+    margin: 10px auto
+    border-radius: 5px
+    padding: 10px
+    max-height: 300px
+    overflow-y: scroll
+    display: flex
+    flex-direction: row
+    flex-wrap: wrap
+
+    @media all and (max-width: 500px)
+      max-height: 200px
+      justify-content: center
+
+    .create-app-window__no-icons
+      color: #838a91
+      font-weight: bold
+
+    .create-app-window__icon_active
+      @include active-icon
+
+    .create-app-window__icon
+      margin: 4px
+      padding: 6px
+      background: #3b4148
+      width: 200px
+      border-radius: 4px
+      user-select: none
+      cursor: pointer
+
+      @media all and (max-width: 500px)
+        width: 100%
+
+      &:hover
+        @include active-icon
+
+        span
+          visibility: hidden
+
+      div
+        color: #838a91
+        font-size: 22px
+        width: 26px
+        height: 26px
+        display: flex
+        justify-content: center
+        align-items: center
+        margin: auto
+        margin-bottom: 10px
+        transition: .2s
+        position: relative
+
+        &::after
+          content: ''
+          position: absolute
+          // debugging
+          //background: yellow
+          //opacity: 0.5
+          width: 200px
+          height: 76px
+          transition: .4s
+          margin-bottom: -16px
+
+        svg
+          transition: .2s
+
+      span
+        font-weight: 400
+        display: block
+        text-align: center
+
+.create-app-window__buttons
+  display: flex
+  justify-content: flex-end
+  align-items: center

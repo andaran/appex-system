@@ -1,0 +1,112 @@
+
+/*   ---==== Modal wrap ====---   */
+
+.modal-wrap
+  padding: 100px 0 0 0
+  margin: 0
+  position: fixed
+  width: 100%
+  height: 100vh
+  background: rgba(0, 0, 0, .5)
+  z-index: 1000
+  display: flex
+  justify-content: center
+  align-items: flex-start
+
+  @media all and (max-width: 500px)
+    padding: 0
+    align-items: flex-start
+
+.modal-wrap .modal-content-wrapper
+  position: relative
+  animation: modal-wrap-animation .2s linear forwards
+  z-index: 1001
+
+  /* no important styles */
+  width: 80%
+  max-width: 1000px
+  min-height: 100px
+  background: #2c3338
+  border-radius: 10px
+  box-shadow: 0 0 20px rgba(0, 0, 0, .3)
+
+  @media all and (max-width: 500px)
+    width: 100%
+    border-radius: 0 0 16px 16px
+
+
+@keyframes modal-wrap-animation
+  from
+    margin-top: -100%
+    transform: scale(.6)
+  to
+    margin-top: 0
+    transform: scale(1)
+
+
+
+/*   ---==== Button ====---   */
+
+.preset-button
+
+  display: flex
+  justify-content: center
+  align-items: center
+  border-radius: 5px
+  font-weight: 400
+  color: #262c31
+  position: relative
+
+  &::after
+    content: ''
+    position: absolute
+    background: black
+    width: 100%
+    height: 100%
+    border-radius: 5px
+    opacity: 0
+    cursor: pointer
+    transition: .12s
+
+  &:hover
+    &::after
+      opacity: 0.1
+
+  &:active
+    &::after
+      opacity: 0.22
+
+
+  &_xs
+    border-radius: 4px
+    font-size: 11px
+    height: 20px
+    padding: 0 6px
+    margin: 10px 6px
+
+    &::after
+      border-radius: 4px
+
+  &_sm
+    font-size: 13px
+    height: 30px
+    padding: 0 10px
+    margin: 12px 8px
+
+  &_md
+    font-size: 16px
+    height: 40px
+    padding: 0 16px
+    margin: 16px 10px
+
+  &_lg
+    font-size: 18px
+    height: 50px
+    padding: 0 22px
+    margin: 18px 12px
+
+  &_xl
+    font-size: 20px
+    height: 60px
+    padding: 0 26px
+    margin: 20px 14px

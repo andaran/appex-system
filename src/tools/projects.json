@@ -1,0 +1,40 @@
+{
+  "projects": [
+    {
+      "title": "макароно-варка",
+      "icon": "faUtensils",
+      "color": "#f1c40f",
+      "id": "hGud&snkxkhs&6467"
+    },
+    {
+      "title": "Автополив",
+      "icon": "#3498db",
+      "color": "#3498db",
+      "id": "hGud&snkxkhs&6468"
+    },
+    {
+      "title": "Цветочек",
+      "icon": "faFan",
+      "color": "#2ecc71",
+      "id": "hGud&snkxkhs&6469"
+    },
+    {
+      "title": "Штора",
+      "icon": "faWindows",
+      "color": "#1abc9c",
+      "id": "hGud&snkxkhs&6470"
+    },
+    {
+      "title": "Свет",
+      "icon": "faLightbulb",
+      "color": "#e67e22",
+      "id": "hGud&snkxkhs&6471"
+    },
+    {
+      "title": "Сигнализация",
+      "icon": "faExclamation",
+      "color": "#e74c3c",
+      "id": "hGud&snkxkhs&6472"
+    }
+  ]
+}

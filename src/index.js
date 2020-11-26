@@ -14,6 +14,7 @@ import Register from './Components/register/RegWrap/reg-wrap';
 import Login from './Components/login/LogWrap/log-wrap';
 import ChangePass from './Components/change_pass/ChangePassWrap/change-pass-wrap';
 import Projects from './Components/projects/projects-wrap/ProjectsWrap';
+import ProjectPage from './Components/projects/project-page/ProjectPage';
 
 /* Libraries */
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -45,6 +46,7 @@ ReactDOM.render(
         <Route exact path="/sign_in" component={ Login }/>
         <Route exact path="/change_password" component={ ChangePass }/>
         <Route exact path="/projects" component={ Projects }/>
+        <Route exact path="/projects/:id" component={ ProjectPage }/>
       </Switch>
     </Router>
   </Provider>,

@@ -1,0 +1,74 @@
+.project-card-wrap
+  width: 240px
+  height: 340px
+  display: flex
+  justify-content: center
+  align-items: center
+
+  &:hover
+    .project-card__icon
+      transform: scale(1.16)
+      box-shadow: 0 0 20px rgba(0, 0, 0, .1)
+
+  @media all and (max-width: 500px)
+    width: 160px
+    height: 260px
+    margin: 0 2px
+
+
+.project-card
+  width: 200px
+  height: 300px
+  background: #3b4148
+  box-shadow: 0 0 10px 2px rgba(0, 0, 0, .02)
+  transition: .12s
+  border-radius: 5px
+  position: relative
+  display: flex
+  justify-content: center
+  align-items: center
+
+  &:hover
+    box-shadow: 0 0 15px 4px rgba(0, 0, 0, .02)
+    .project-card__icon
+      color: #262c31
+      text-decoration: none
+
+  @media all and (max-width: 500px)
+    width: 160px
+    height: 240px
+
+/* header */
+.project-card__header
+  top: 4px
+  font-weight: bold
+  color: #8e959c
+  padding: 5px
+  font-size: 16px
+  position: absolute
+
+  @media all and (max-width: 500px)
+    font-size: 13px
+
+.project-card__icon
+  width: 100px
+  height: 100px
+  display: flex
+  justify-content: center
+  align-items: center
+  border-radius: 20%
+  font-size: 32px
+  transition: .12s
+  cursor: pointer
+  color: #262c31
+
+.project-card__footer
+  position: absolute
+  bottom: 2px
+  font-size: 14px
+  color: #6a7076
+  left: 5px
+  font-family: monospace
+
+  @media all and (max-width: 500px)
+    font-size: 12px

@@ -1,0 +1,1 @@
+export const SWITCH_MODAL_STATE  = 'SWITCH_MODAL_STATE';
