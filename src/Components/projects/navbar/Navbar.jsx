@@ -10,7 +10,7 @@ export default class Navbar extends React.Component {
     return (
       <nav className="navbar">
         <div className="navbar__logo">
-          <img src="./images/appex.svg" alt="a" className="navbar__logo-img" />
+          <img src={ this.props.path } alt="a" className="navbar__logo-img" />
           <span className="navbar__logo-text"> ppex </span>
         </div>
         <div className="navbar__items">

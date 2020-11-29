@@ -1,0 +1,44 @@
+$background: #2B2B2B
+
+.code-editor
+  //width: calc(50% - 30px)
+  //margin: 10px
+  border-radius: 5px
+  padding-top: 24px
+  background: #1f1f1f
+  position: relative
+
+  &__text
+    position: absolute
+    top: 0
+    left: 0
+    color: #b0b8c1
+    display: flex
+    align-items: center
+    padding-left: 4px
+    font-weight: 600
+    font-size: 16px
+
+.CodeMirror
+  border-radius: 0 0 5px 5px
+
+.CodeMirror-linenumbers
+  border-right: .1px solid #565c61
+  background: $background
+
+/* Hints */
+
+.CodeMirror-hints
+  padding: 0
+  box-shadow: 2px 3px 5px rgba(0,0,0,.2)
+  border-radius: 0
+  border: 1px solid #80878e
+
+.CodeMirror-hint
+  color: #ececec
+  border-radius: 0
+  background: #6a7076
+
+li.CodeMirror-hint-active
+  background: #08f
+  color: #ececec

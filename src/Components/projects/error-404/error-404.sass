@@ -1,0 +1,40 @@
+.error-404
+  width: 100%
+  height: 100vh
+  animation: space 5s linear forwards
+  display: flex
+  justify-content: center
+  align-items: center
+  color: white
+  font-weight: bold
+  overflow: hidden
+
+  & div
+    padding: 30px
+
+  &__text
+    font-size: 20px
+    margin: auto
+    display: block
+    width: 100%
+    text-align: center
+    max-width: 90%
+
+  &__message
+    font-size: 420px
+    margin: auto
+    line-height: 90%
+    text-align: center
+
+    @media all and (max-width: 880px)
+      font-size: 310px
+
+    @media all and (max-width: 660px)
+      font-size: 200px
+
+    @media all and (max-width: 375px)
+      font-size: 180px
+
+@keyframes space
+  to
+    background: black

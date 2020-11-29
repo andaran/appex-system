@@ -40,7 +40,7 @@ class ProjectsWrap extends React.Component {
     return (
       <div className="project s-wrap">
         { modal }
-        <Navbar/>
+        <Navbar path="./images/appex.svg" />
         <article className="cards">
           {/*  <Card
             title="макароно-варка"
