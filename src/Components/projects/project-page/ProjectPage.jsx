@@ -22,6 +22,7 @@ import Button from "../../../tools/button/Button";
 import Error from '../error-404/Error404';
 import Navbar from '../navbar/Navbar';
 import CodeEditor from '../code-editor/CodeEditor';
+import Interpreter from '../../../tools/interpreter/Interpreter';
 
 /* Component */
 class ProjectPage extends React.Component {
@@ -29,9 +30,6 @@ class ProjectPage extends React.Component {
     super(props);
 
     this.id = this.props.match.params.id;
-
-    // bind
-    this.customSintaxeLight = this.customSintaxeLight.bind(this);
 
   }
 
@@ -54,9 +52,28 @@ class ProjectPage extends React.Component {
       <div>
         <Navbar path = '../images/appex.svg' />
         <div className="editors-wrap">
-          <CodeEditor id='code-editor-htmlembedded' type='htmlembedded' message='HTML' code={ this.app.code.html } />
-          <CodeEditor id='code-editor-javascript' type='javascript' message='JAVASCRIPT' code={ this.app.code.js } />
-          <CodeEditor id='code-editor-css' type='css' message='CSS' code={ this.app.code.css } />
+          <CodeEditor
+            id='code-editor-htmlembedded'
+            type='htmlembedded'
+            message='HTML'
+            code={ this.app.code.html }
+            appId={ this.id }/>
+          <CodeEditor
+            id='code-editor-javascript'
+            type='javascript'
+            message='JAVASCRIPT'
+            code={ this.app.code.js }
+            appId={ this.id }/>
+          <CodeEditor
+            id='code-editor-css'
+            type='css'
+            message='CSS'
+            code={ this.app.code.css }
+            appId={ this.id }/>
+        </div>
+        <div className="app-demo">
+          <Interpreter
+            app = { this.app }/>
         </div>
       </div>
     );
@@ -66,15 +83,6 @@ class ProjectPage extends React.Component {
     if (this.props.projects.length === 0 && !this.props.projectsIsFetching) {
       this.props.fetchProjects();
     }
-
-    process.nextTick(() => {
-      document.getElementById('code-editor-htmlembedded')
-        .addEventListener('change', this.customSintaxeLight);
-    })
-  }
-
-  customSintaxeLight(event) {
-    console.log(event);
   }
 }
 

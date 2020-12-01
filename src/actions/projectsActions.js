@@ -1,4 +1,4 @@
-import { FETCH_PROJECTS } from '../Constants/projectsConstants';
+import { FETCH_PROJECTS, CHANGE_PROJECTS } from '../Constants/projectsConstants';
 
 const projects = [
   {
@@ -29,5 +29,12 @@ export function fetchProjects() {
   return {
     type: FETCH_PROJECTS,
     payload: projects
+  }
+}
+
+export function changeProjects(changedProjects) {
+  return {
+    type: CHANGE_PROJECTS,
+    payload: changedProjects
   }
 }

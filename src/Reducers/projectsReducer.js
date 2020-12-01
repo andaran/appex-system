@@ -1,5 +1,4 @@
-
-import { FETCH_PROJECTS } from '../Constants/projectsConstants';
+import { FETCH_PROJECTS, CHANGE_PROJECTS } from '../Constants/projectsConstants';
 
 export function projectsReducer(state = {
   data: [],
@@ -7,6 +6,9 @@ export function projectsReducer(state = {
 }, action) {
   switch (action.type) {
     case FETCH_PROJECTS: {
+      return {...state, data: action.payload};
+    }
+    case CHANGE_PROJECTS: {
       return {...state, data: action.payload};
     }
   }

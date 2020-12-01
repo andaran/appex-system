@@ -1,1 +1,2 @@
 export const FETCH_PROJECTS = 'FETCH_PROJECTS';
+export const CHANGE_PROJECTS = 'CHANGE_PROJECTS';

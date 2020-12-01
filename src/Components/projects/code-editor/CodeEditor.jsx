@@ -2,9 +2,11 @@
 import React from 'react';
 
 import CodeMirror from "codemirror";
+import { changeProjects } from "../../../actions/projectsActions";
+import { connect } from "react-redux";
 
 /* Component */
-export default class CodeEditor extends React.Component {
+class CodeEditor extends React.Component {
   constructor(props) {
     super(props);
 
@@ -12,19 +14,21 @@ export default class CodeEditor extends React.Component {
     this.autocompleteSymbolsHTML = [/<\//, /<\w/];
     this.autocompleteSymbolsCSS = [/[a-z]+/, /:\s+/];
     this.autocompleteSymbolsJS = [/undefined[a-z]+/, /\s+[a-z]/, /[a-z]\.+/];
-    this.noAutocompleteFlag = false;
 
     this.linesLength = [];
+    this.awaitKey = false;
 
     // bind
     this.autocomplete = this.autocomplete.bind(this);
+    this.keydown = this.keydown.bind(this);
+    this.save = this.save.bind(this);
   }
 
   render() {
     return (
       <div className={`code-editor code-editor-${ this.props.type }`}>
         <div className="code-editor__text">{ this.props.message }</div>
-        <textarea name="code" id={ this.props.id }></textarea>
+        <textarea name="code" id={ this.props.id }/>
       </div>
     );
   }
@@ -41,11 +45,68 @@ export default class CodeEditor extends React.Component {
 
     this.editor.on('change', this.autocomplete);
     this.editor.setValue( this.props.code );
+
+    document.addEventListener('keydown', this.keydown);
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener('keydown', this.keydown);
+  }
+
+  keydown (event) {
+    if (event.key === 'Control') { this.awaitKey = true; }
+    if (!this.awaitKey) { return; }
+    switch (event.key) {
+      case 's': {
+        event.preventDefault();
+        this.awaitKey = false;
+        this.save();
+        break;
+      }
+      case 'Escape': {
+        this.awaitKey = false;
+        break;
+      }
+    }
+  }
+
+  save() {
+    if (this.props.projectsIsFetching) { return; }
+
+    let appNumber;
+    this.props.projects.map((project, index) => {
+      if (this.props.appId === project.id) {
+        appNumber = index;
+        return;
+      }
+    });
+    let value = this.editor.getValue();
+    let changedProjects = this.props.projects;
+
+    switch (this.props.type) {
+      case 'htmlembedded':
+        changedProjects[appNumber].code.html = value;
+        break;
+      case 'css':
+        changedProjects[appNumber].code.css = value;
+        break;
+      case 'javascript':
+        changedProjects[appNumber].code.js = value;
+        break;
+      default:
+        console.error('save error! ( 97 )');
+    }
+
+    this.props.changeProjects( changedProjects.slice() );
+
   }
 
   autocomplete() {
-    /* find symbol before cursor */
+
+    /* editor value */
     let value = this.editor.getValue();
+
+    /* find symbol before cursor */
     const line = this.editor.doc.getCursor().line;
     const ch = this.editor.doc.getCursor().ch;
 
@@ -97,3 +158,20 @@ export default class CodeEditor extends React.Component {
     this.linesLength[line] = value.split('\n')[line].length;
   }
 }
+
+function mapStateToProps(store) {
+  return {
+    projects: store.projects.data,
+    projectsIsFetching: store.projects.isFetching,
+  }
+}
+
+function mapDispatchToProps(dispatch) {
+  return {
+    changeProjects: ( changedProjects ) => {
+      dispatch(changeProjects( changedProjects ))
+    }
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(CodeEditor);
