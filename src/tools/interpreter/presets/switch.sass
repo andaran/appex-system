@@ -1,0 +1,38 @@
+.appex-preset-switch
+  display: block
+  width: 60px
+  height: 34px
+  margin: 10px
+  border-radius: 17px
+
+.appex-preset-switch__input
+  display: none
+
+.appex-preset-switch__handle
+  width: 60px
+  height: 34px
+  background: #ccc
+  border-radius: 17px
+  display: flex
+  justify-content: center
+  align-items: center
+  transition: .12s
+
+  &:after
+    content: ''
+    position: absolute
+    cursor: pointer
+    width: 26px
+    height: 26px
+    border-radius: 50%
+    background: white
+    box-shadow: 0 0 4px rgba(0, 0, 0, .2)
+    margin-left: -26px
+    transition: .12s
+
+.appex-preset-switch__input:checked + .appex-preset-switch__handle
+  background: #1abc9c
+
+  &:after
+    margin-left: 0
+    margin-right: -26px

@@ -1,8 +1,17 @@
-.editors-wrap
-  padding: 20px
+
+$row-height-one: calc(100vh - 120px)
+$row-height-any: calc((100vh - 140px) / 2)
+
+.editors-wrap-any
+  padding: 0 20px 20px 20px
   display: grid
-  grid-template-columns: 1.2fr 1.8fr 1fr
+  grid-template-columns: 1fr 1fr
+  grid-template-rows: $row-height-any $row-height-any
   grid-gap: 20px
+  margin: 0
+
+  .CodeMirror
+    height: 100% !important
 
   @media all and (max-width: 1100px)
     grid-template-columns: 1fr 1fr
@@ -13,8 +22,101 @@
   @media all and (max-width: 500px)
     padding: 0
 
+  #code-editor-htmlembedded-wrap
+    grid-column-start: 1
+    grid-column-end: 2
+    grid-row-start: 1
+    grid-row-end: 2
+
+  #code-editor-css-wrap
+    grid-column-start: 1
+    grid-column-end: 2
+    grid-row-start: 2
+    grid-row-end: 3
+
+  #code-editor-javascript-wrap
+    grid-column-start: 2
+    grid-column-end: 3
+    grid-row-start: 1
+    grid-row-end: 3
+
+.editors-wrap-one
+  padding: 0 20px 20px 20px
+  display: grid
+  grid-template-columns: 100% 100% 100%
+  grid-template-rows: $row-height-one $row-height-one $row-height-one
+  grid-gap: 20px
+  margin: 0
+  position: relative
+  transition: .3s ease-in-out
+
+  .CodeMirror
+    height: 100% !important
+
+  &_-1
+    animation: min ease-in-out .2s
+
+  &_0
+    left: 0
+
+  &_1
+    left: calc(-100% + 20px)
+
+  &_2
+    left: calc(-200% + 40px)
+
+  &_3
+    animation: max ease-in-out .2s
+
+
+@keyframes max
+  0%
+    left: calc(-200% + 40px)
+  50%
+    left: calc(-200%)
+  100%
+    left: calc(-200% + 40px)
+
+@keyframes min
+  0%
+    left: 0
+  50%
+    left: 40px
+  100%
+    left: 0
 
 .app-demo
-  width: 200px
-  height: 360px
-  margin: auto
+  width: 385px
+  height: 822px
+  padding: 10px 5px 0 5px
+  border-radius: 20px 20px 0 0
+  background: black
+  position: absolute
+  z-index: 201
+  bottom: -812px
+  border-top: 2px solid #3498db
+  margin-left: 20px
+  transition: .2s
+  box-shadow: 0 0 10px rgba(0, 0, 0, .4)
+
+  &:hover
+    bottom: 0 !important
+    border: none
+    box-shadow: 0 0 20px rgba(0, 0, 0, .7)
+
+  .interpreter
+    border-radius: 10px
+
+.app-demo-desktop
+  right: 20px
+  $width: calc(100% - 60px - 385px)
+  width: $width
+  border-radius: 8px 8px 0 0
+
+  .interpreter
+    border-radius: 4px 4px 0 0
+
+.project-page-container
+  height: 100vh
+  overflow: hidden
+  position: relative

@@ -26,7 +26,7 @@ class CodeEditor extends React.Component {
 
   render() {
     return (
-      <div className={`code-editor code-editor-${ this.props.type }`}>
+      <div className={`code-editor code-editor-${ this.props.type }`} id={`${ this.props.id }-wrap`}>
         <div className="code-editor__text">{ this.props.message }</div>
         <textarea name="code" id={ this.props.id }/>
       </div>

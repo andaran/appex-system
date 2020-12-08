@@ -7,8 +7,19 @@ const projects = [
     color: "#f1c40f",
     id: "hGud&snkxkhs&6467",
     code: {
-      html: '<div class="varka"> </div>',
-      css: '.varka {\n    background: orange;\n}',
+      html: '<div class="varka"> \n' +
+        '\t[[Button \n' +
+        '      size="md"\n' +
+        '      text="кнопка 1"\n' +
+        '      id="btn"\n' +
+        '      background="#1abc9c"\n' +
+        '    ]]\n' +
+        '    [[Switch\n' +
+        '      id="switch"\n' +
+        '      background="#1abc9c"\n' +
+        '    ]]\n' +
+        '</div>',
+      css: '',
       js: 'console.log(\'Hello, World!\');',
     },
   },
@@ -18,8 +29,19 @@ const projects = [
     color: "#3498db",
     id: "hGud&snkxkhs&6468",
     code: {
-      html: '<div class="varka"> </div>',
-      css: '.varka {\n    background: orange;\n}',
+      html: '<div class="varka"> \n' +
+        '\t[[Button \n' +
+        '      size="md"\n' +
+        '      text="кнопка 1"\n' +
+        '      id="btn"\n' +
+        '      background="#1abc9c"\n' +
+        '    ]]\n' +
+        '    [[Switch\n' +
+        '      id="switch"\n' +
+        '      background="#1abc9c"\n' +
+        '    ]]\n' +
+        '</div>',
+      css: '',
       js: 'console.log(\'Hello, World!\');',
     },
   },

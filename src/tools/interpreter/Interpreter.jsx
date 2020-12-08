@@ -17,7 +17,7 @@ export default class Interpreter extends React.Component {
     process.nextTick(() => this.renderApp());
 
     /* render app wrap */
-    return <div className="interpreter" id="interpreter-screen"/>;
+    return <div className="interpreter" id={ this.props.id }/>;
   }
 
   renderApp() {
@@ -44,7 +44,7 @@ export default class Interpreter extends React.Component {
       /* if preset is being */
       if (item.preset !== undefined) {
         const presetText = item.preset.replaceAll('\n', '');
-        let args = presetText.match(/\w+=".*"/g);
+        let args = presetText.match(/\w+\s?="[^"]+"/g);
         let type = presetText.match(/^\s*\w+\s/g)[0]
           .replaceAll(' ', '')
           .toLowerCase();
@@ -79,14 +79,15 @@ export default class Interpreter extends React.Component {
 
       /* if preset is here  */
       if (item.preset) {
-        promises.push(fetch(`../presets/${item.preset.type}.html`)
+        // console.log(item.preset);
+        promises.push(fetch(`../presets/${item.preset.type}.hbs`)
           .then(response => response.text())
           .then(text => {
             let presetHtml = text;
             item.preset.args.forEach(arg => {
               presetHtml = presetHtml.replaceAll(`{{ ${arg.name} }}`, arg.value);
             });
-            console.log('REPLACED: ', presetHtml);
+            // console.log('REPLACED:', presetHtml);
 
             /* add this html to another code */
             return item.code + presetHtml;
@@ -105,7 +106,7 @@ export default class Interpreter extends React.Component {
       codeArr.forEach((blockOfCode) => {
         finallyCode += blockOfCode;
       });
-      console.log(finallyCode);
+      // console.log(finallyCode);
 
       /* create code variable with styles */
       let code = `<div id="app">\n<style>\n ${ this.props.app.code.css } \n</style>\n`;
@@ -115,7 +116,7 @@ export default class Interpreter extends React.Component {
 
       /* render all of this !!! */
       document
-        .getElementById('interpreter-screen')
+        .getElementById( this.props.id )
         .innerHTML = code;
     });
   }
