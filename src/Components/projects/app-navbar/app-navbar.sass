@@ -2,9 +2,9 @@
   width: 100%
   height: 50px
   display: flex
-  justify-content: center
   align-items: center
   padding: 0 20px
+  margin-top: 50px
 
   &__block
     display: flex
@@ -14,7 +14,10 @@
   &__block-1
     position: absolute
     top: 0
-    left: 480px
+    left: 0
+    width: 100%
+    padding-left: 10px
+    background: #363b40
 
   &__block-2
     left: 20px
@@ -35,6 +38,24 @@
   display: inline-block
   position: relative
   top: -6px
+
+.app-navbar__item-link
+  span, a
+    font-size: 18px
+    color: #8f969e
+    font-weight: 400
+    cursor: pointer
+    margin-left: 24px
+
+    &:hover
+      color: #adb5bd
+      text-decoration: none
+
+.app-navbar__item-text
+  font-size: 18px
+  color: #8f969e
+  font-weight: 400
+  margin-left: 24px
 
 .app-navbar__item_text-button
   span:first-child

@@ -1,6 +1,16 @@
 import React from 'react';
 
+import {
+  faPlus,
+  faThumbtack,
+  faArrowsAlt,
+  faArrowsAltH,
+  faExpandArrowsAlt,
+  faCompressArrowsAlt,
+  faLock
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
 import { fetchProjects } from '../../../actions/projectsActions';
 import { connect } from "react-redux";
 
@@ -31,14 +41,35 @@ class ProjectPage extends React.Component {
     super(props);
 
     this.id = this.props.match.params.id;
+    this.mouseDown = false;
+    this.hotkey = true;
 
     this.state = {
       mode: 'any',
       page: 0,
+      emulator: {
+        positionMode: false,
+        resizeMode: false,
+        fullscreenMode: false,
+        width: 445,
+        marginLeft: 20,
+      }
     }
 
     // bind
+
+    /* hotkeys */
     this.keydown = this.keydown.bind(this);
+
+    /* emulator */
+    this.changeEmulatorPositionMode = this.changeEmulatorPositionMode.bind(this);
+    this.changeEmulatorResizeMode = this.changeEmulatorResizeMode.bind(this);
+    this.changeEmulatorFullscreenMode = this.changeEmulatorFullscreenMode.bind(this);
+    this.moveMouseDown = this.moveMouseDown.bind(this);
+    this.resizeMouseDown = this.resizeMouseDown.bind(this);
+    this.resizeEmulator = this.resizeEmulator.bind(this);
+    this.mouseUp = this.mouseUp.bind(this);
+    this.moveEmulator = this.moveEmulator.bind(this);
   }
 
   render() {
@@ -50,6 +81,7 @@ class ProjectPage extends React.Component {
       this.app = false;
     }
 
+    /* if app isn`t being */
     if(!this.app) {
       return (
         <Error/>
@@ -57,18 +89,48 @@ class ProjectPage extends React.Component {
     }
 
     return (
-      <div className="project-page-container">
-        <Navbar path = '../images/appex.svg' />
+      <div
+        className="project-page-container"
+        onMouseUp={ this.mouseUp }>
         <AppNavbar app = { this.app }/>
-        <div className="app-demo">
-          <Interpreter
-            app = { this.app }
-            id="interpreter-mobile"/>
-        </div>
-        <div className="app-demo app-demo-desktop" id="interpreter-desktop-wrap">
-          <Interpreter
-            app = { this.app }
-            id="interpreter-desktop"/>
+        <div
+          className={` app-demo
+            app-demo-position-${ this.state.emulator.positionMode }
+            app-demo-fullscreen-${ this.state.emulator.fullscreenMode } `}
+          style = {{
+            width: this.state.emulator.width + 'px',
+            marginLeft: this.state.emulator.marginLeft + 'px',
+          }}
+          id = 'app-demo'>
+          <div className="app-demo__emulator">
+            <Interpreter
+              app = { this.app }
+              id="interpreter-mobile"/>
+          </div>
+          <div className="app-demo__nav">
+            <div
+              className={`app-demo__nav-item app-demo__nav-item_${ this.state.emulator.positionMode }`}
+              onClick={ this.changeEmulatorPositionMode }>
+              <FontAwesomeIcon icon={ faThumbtack } className="app-demo__nav-item-icon"/>
+            </div>
+            <div
+              className="app-demo__nav-item"
+              onMouseDown={ this.moveMouseDown }>
+              <FontAwesomeIcon icon={ faArrowsAlt } className="app-demo__nav-item-icon"/>
+            </div>
+            <div className={`app-demo__nav-item app-demo__nav-item_${ this.state.emulator.resizeMode }`}
+                 onClick={ this.changeEmulatorResizeMode }>
+              <FontAwesomeIcon icon={ faLock } className="app-demo__nav-item-icon"/>
+            </div>
+            <div className="app-demo__nav-item"
+                 onMouseDown={ this.resizeMouseDown }>
+              <FontAwesomeIcon icon={ faArrowsAltH } className="app-demo__nav-item-icon"/>
+            </div>
+            <div className={`app-demo__nav-item app-demo__nav-item_${ this.state.emulator.fullscreenMode }`}
+                 onClick={ this.changeEmulatorFullscreenMode }>
+              <FontAwesomeIcon icon={ faExpandArrowsAlt } className="app-demo__nav-item-icon"/>
+            </div>
+          </div>
         </div>
         <div className={`editors-wrap-${ this.state.mode } editors-wrap-${ this.state.mode }_${ this.state.page }`}>
           <CodeEditor
@@ -76,19 +138,22 @@ class ProjectPage extends React.Component {
             type='htmlembedded'
             message='HTML'
             code={ this.app.code.html }
-            appId={ this.id }/>
+            appId={ this.id }
+            key={ 0 }/>
           <CodeEditor
             id='code-editor-css'
             type='css'
             message='CSS'
             code={ this.app.code.css }
-            appId={ this.id }/>
+            appId={ this.id }
+            key={ 1 }/>
           <CodeEditor
             id='code-editor-javascript'
             type='javascript'
             message='JAVASCRIPT'
             code={ this.app.code.js }
-            appId={ this.id }/>
+            appId={ this.id }
+            key={ 2 }/>
         </div>
       </div>
     );
@@ -99,58 +164,155 @@ class ProjectPage extends React.Component {
       this.props.fetchProjects();
     }
 
-    /* Set emulator size */
-    process.nextTick(() => {
-      let desktopEmu = document.getElementById('interpreter-desktop-wrap');
-      console.log('EMU', desktopEmu.offsetWidth);
-      const height = desktopEmu.offsetWidth * 0.56;
-    });
-
     /* hotkeys */
-    document.addEventListener('keydown', this.keydown);
+    /*document.addEventListener('keydown', this.keydown);*/
+    document.onkeydown = this.keydown;
     this.pressed = new Set();
   }
 
   componentWillUnmount() {
-    document.removeEventListener('keydown', this.keydown);
+    /*document.removeEventListener('keydown', this.keydown);*/
+    document.removeEventListener('mousemove', this.moveEmulator);
   }
+
+
+
+  /*   ---==== Emulator actions ====---   */
+
+  changeEmulatorPositionMode() {
+    const oldState = this.state.emulator;
+    if (oldState.fullscreenMode) { return; }
+    this.setState({ emulator: {...oldState, positionMode: !this.state.emulator.positionMode} });
+  }
+
+  changeEmulatorResizeMode() {
+    const oldState = this.state.emulator;
+    if (oldState.fullscreenMode) { return; }
+    if (oldState.resizeMode === true) {
+      this.setState({ emulator: {...oldState, resizeMode: false, width: 445} });
+    } else {
+      this.setState({ emulator: {...oldState, resizeMode: true} });
+    }
+  }
+
+  changeEmulatorFullscreenMode() {
+    const oldState = this.state.emulator;
+    this.setState({ emulator: {...oldState, fullscreenMode: !this.state.emulator.fullscreenMode} });
+  }
+
+  moveMouseDown() {
+    this.mouseDown = true;
+
+    document.addEventListener('mousemove', this.moveEmulator);
+    document.body.style.userSelect = 'none';
+    document.getElementById('app-demo').style.transition = '0s';
+  }
+
+  resizeMouseDown() {
+    this.mouseDown = true;
+
+    document.addEventListener('mousemove', this.resizeEmulator);
+    document.body.style.userSelect = 'none';
+    document.getElementById('app-demo').style.transition = '0s';
+  }
+
+  mouseUp() {
+    if (this.mouseDown) {
+      this.mouseDown = false;
+      document.removeEventListener('mousemove', this.moveEmulator);
+      document.removeEventListener('mousemove', this.resizeEmulator);
+      document.body.style.userSelect = 'auto';
+      document.getElementById('app-demo').style.transition = '0.2s';
+    }
+  }
+
+  moveEmulator(event) {
+    const oldState = this.state.emulator;
+    if (this.mouseDown && !oldState.fullscreenMode) {
+      const left = event.pageX - oldState.width + 20;
+      this.setState({ emulator: { ...oldState,
+        marginLeft: left,
+        positionMode: true
+      }});
+    } else {
+      document.removeEventListener('mousemove', this.moveEmulator);
+    }
+  }
+
+  resizeEmulator(event) {
+    const oldState = this.state.emulator;
+    if (this.mouseDown && !oldState.fullscreenMode) {
+      const newWidth = event.pageX - oldState.marginLeft + 20;
+      this.setState({ emulator: { ...oldState,
+        positionMode: true,
+        resizeMode: true,
+        width: newWidth
+      }});
+    } else {
+      document.removeEventListener('mousemove', this.resizeEmulator);
+    }
+  }
+
+
+
+  /*   ---==== Hotkey events ====---   */
 
   keydown(event) {
     this.pressed.add(event.code);
 
     /* alt + ... */
-    if (event.altKey && this.state.mode === 'one') {
+    if (event.altKey && this.state.mode === 'one' && this.hotkey) {
       switch (event.code) {
         case 'ArrowRight': {
           event.preventDefault();
           let page = this.state.page;
           page < 3 ? this.setState({ page: ++page }) : this.setState({ page: 0 });
           if (page === 3) {
-            setTimeout(() => this.setState({ page: 2 }), 200);
+            this.hotkey = false;
+            setTimeout(() => {
+              this.setState({ page: 2 });
+              this.hotkey = true;
+            }, 200);
           }
-          break;
+          return false;
         }
         case 'ArrowLeft': {
           event.preventDefault();
           let page = this.state.page;
           page > -1 ? this.setState({ page: --page }) : this.setState({ page: 2 });
           if (page === -1) {
-            setTimeout(() => this.setState({ page: 0 }), 200);
+            this.hotkey = false;
+            setTimeout(() => {
+              this.setState({ page: 0 });
+              this.hotkey = true;
+            }, 200);
           }
-          break;
+          return false;
         }
         default: {}
       }
     }
 
     /* Switch mode */
-    if (event.altKey && event.key === 'v') {
+    if (event.altKey && event.code === 'KeyV') {
       const mode = this.state.mode;
       mode === 'any' ? this.setState({ mode: 'one' }) : this.setState({ mode: 'any' });
+      return false;
+    }
+
+    /* full view */
+    if (event.altKey && event.code === 'KeyF') {
+      document.fullscreenElement
+        ? document.exitFullscreen()
+        : document.documentElement.requestFullscreen();
+      return false;
     }
   }
-
 }
+
+
+
+/*   ---==== Connect to redux ====---   */
 
 function mapStateToProps(store) {
   return {

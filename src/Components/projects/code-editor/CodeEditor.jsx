@@ -54,19 +54,10 @@ class CodeEditor extends React.Component {
   }
 
   keydown (event) {
-    if (event.key === 'Control') { this.awaitKey = true; }
-    if (!this.awaitKey) { return; }
-    switch (event.key) {
-      case 's': {
-        event.preventDefault();
-        this.awaitKey = false;
-        this.save();
-        break;
-      }
-      case 'Escape': {
-        this.awaitKey = false;
-        break;
-      }
+    if (event.ctrlKey && event.code === 'KeyS') {
+      this.save();
+      event.preventDefault();
+      return false;
     }
   }
 
@@ -129,12 +120,6 @@ class CodeEditor extends React.Component {
         if (exp.test(findChar)) { this.editor.execCommand("autocomplete"); }
       });
     }
-
-    /* autocomplete brackets */
-    // if (/(\w|\s){+/.test(findChar) && !this.noAutocompleteFlag) {
-    //   this.editor.setValue(value + '  }');
-    //   this.editor.setCursor({line, ch: ch + 1});
-    // }
 
     /* autocomplete css */
     if (this.props.type === 'css') {
