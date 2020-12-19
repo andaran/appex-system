@@ -11,7 +11,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-import { fetchProjects } from '../../../actions/projectsActions';
+import { fetchProjects, changeProjects } from '../../../actions/projectsActions';
 import { connect } from "react-redux";
 
 /* codemirror */
@@ -43,6 +43,7 @@ class ProjectPage extends React.Component {
     this.id = this.props.match.params.id;
     this.mouseDown = false;
     this.hotkey = true;
+    this.downloadFlag = false;
 
     this.state = {
       mode: 'any',
@@ -70,6 +71,9 @@ class ProjectPage extends React.Component {
     this.resizeEmulator = this.resizeEmulator.bind(this);
     this.mouseUp = this.mouseUp.bind(this);
     this.moveEmulator = this.moveEmulator.bind(this);
+
+    /* download */
+    this.download = this.download.bind(this);
   }
 
   render() {
@@ -293,6 +297,33 @@ class ProjectPage extends React.Component {
       }
     }
 
+    /* save to localStorage */
+    if (event.ctrlKey && event.code === 'KeyB') {
+      event.preventDefault();
+      process.nextTick(() => {
+        const value = JSON.stringify( this.app.code );
+        localStorage.setItem(this.app.id, value);
+      });
+      return false;
+    }
+
+    /* download from localStorage */
+    if (event.ctrlKey && event.code === 'KeyD') {
+      event.preventDefault();
+      let code = localStorage.getItem( this.app.id );
+      this.download(code);
+
+      return false;
+    }
+
+    /* release */
+    if (event.ctrlKey && event.code === 'KeyR') {
+      event.preventDefault();
+      this.download('_', false);
+
+      return false;
+    }
+
     /* Switch mode */
     if (event.altKey && event.code === 'KeyV') {
       const mode = this.state.mode;
@@ -302,11 +333,35 @@ class ProjectPage extends React.Component {
 
     /* full view */
     if (event.altKey && event.code === 'KeyF') {
+      event.preventDefault();
       document.fullscreenElement
         ? document.exitFullscreen()
         : document.documentElement.requestFullscreen();
       return false;
     }
+  }
+
+
+
+  /*   ---==== Download app code ====---   */
+
+  download(code, mode = true) {
+    if (this.props.projectsIsFetching && this.props.projects.length !== 0) { return; }
+
+    let appNumber;
+    this.props.projects.map((project, index) => {
+      if (this.app.id === project.id) {
+        appNumber = index;
+        return;
+      }
+    });
+
+    let changedProjects = this.props.projects;
+    mode
+      ? changedProjects[appNumber].code = JSON.parse(code)
+      : changedProjects[appNumber].releaseCode = changedProjects[appNumber].code;
+
+    this.props.changeProjects( changedProjects.slice() );
   }
 }
 
@@ -325,6 +380,9 @@ function mapDispatchToProps(dispatch) {
   return {
     fetchProjects: () => {
       dispatch(fetchProjects())
+    },
+    changeProjects: ( changedProjects ) => {
+      dispatch(changeProjects( changedProjects ))
     }
   }
 }

@@ -3,6 +3,8 @@ import React from 'react';
 
 import Button from '../button/Button';
 
+import App from './App';
+
 /* Component */
 export default class Interpreter extends React.Component {
   constructor(props) {
@@ -119,5 +121,14 @@ export default class Interpreter extends React.Component {
         .getElementById( this.props.id )
         .innerHTML = code;
     });
+
+
+
+    /*   ---==== Play JS ====---   */
+
+    const app = new App( this.props.app );
+
+    const appJS = new Function('App', this.props.app.code.js);
+    appJS(app);
   }
 }

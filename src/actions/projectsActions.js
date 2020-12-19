@@ -22,6 +22,12 @@ const projects = [
       css: '',
       js: 'console.log(\'Hello, World!\');',
     },
+    releaseCode: {
+      html: 'release!',
+      css: '',
+      js: 'console.log(\'Release!\');',
+    },
+    settings: [],
   },
   {
     title: "Автополив",
@@ -44,6 +50,12 @@ const projects = [
       css: '',
       js: 'console.log(\'Hello, World!\');',
     },
+    releaseCode: {
+      html: 'release!',
+      css: '',
+      js: 'console.log(\'Release!\');',
+    },
+    settings: [],
   },
 ];
 

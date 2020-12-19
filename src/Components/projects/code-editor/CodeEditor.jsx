@@ -36,6 +36,7 @@ class CodeEditor extends React.Component {
   componentDidMount() {
     this.editor = CodeMirror.fromTextArea(document.getElementById( this.props.id ), {
       lineNumbers: true,
+      lineWrapping: true,
       matchBrackets: true,
       mode: this.props.type,
       indentUnit: 4,
@@ -56,6 +57,11 @@ class CodeEditor extends React.Component {
   keydown (event) {
     if (event.ctrlKey && event.code === 'KeyS') {
       this.save();
+      event.preventDefault();
+      return false;
+    }
+    if (event.ctrlKey && event.code === 'KeyD') {
+      this.editor.setValue( this.props.code );
       event.preventDefault();
       return false;
     }

@@ -51,12 +51,20 @@ export default class Navbar extends React.Component {
             <span> Ctrl + S </span>
           </div>
           <div className="app-navbar__item app-navbar__item_text-button">
-            <span> Выгрузить </span>
-            <span> Ctrl + U </span>
+            <span> Бекап </span>
+            <span> Ctrl + B </span>
           </div>
           <div className="app-navbar__item app-navbar__item_text-button">
             <span> Восстановить </span>
             <span> Ctrl + D </span>
+          </div>
+          <div className="app-navbar__item app-navbar__item_text-button">
+            <span> Релиз </span>
+            <span> Ctrl + R </span>
+          </div>
+          <div className="app-navbar__item app-navbar__item_text-button">
+            <span> Выгрузить </span>
+            <span> Ctrl + U </span>
           </div>
           <div className="app-navbar__item app-navbar__item_text-button">
             <span> Сменить вид </span>
