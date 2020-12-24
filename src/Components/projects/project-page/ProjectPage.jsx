@@ -7,7 +7,8 @@ import {
   faArrowsAltH,
   faExpandArrowsAlt,
   faCompressArrowsAlt,
-  faLock
+  faLock,
+  faPlay,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
@@ -34,6 +35,7 @@ import Navbar from '../navbar/Navbar';
 import AppNavbar from '../app-navbar/AppNavbar';
 import CodeEditor from '../code-editor/CodeEditor';
 import Interpreter from '../../../tools/interpreter/Interpreter';
+import Message from '../../../tools/message/Message';
 
 /* Component */
 class ProjectPage extends React.Component {
@@ -44,10 +46,13 @@ class ProjectPage extends React.Component {
     this.mouseDown = false;
     this.hotkey = true;
     this.downloadFlag = false;
+    this.appJS = null;
+    this.playJSFlag = false;
 
     this.state = {
       mode: 'any',
       page: 0,
+      message: false,
       emulator: {
         positionMode: false,
         resizeMode: false,
@@ -71,6 +76,7 @@ class ProjectPage extends React.Component {
     this.resizeEmulator = this.resizeEmulator.bind(this);
     this.mouseUp = this.mouseUp.bind(this);
     this.moveEmulator = this.moveEmulator.bind(this);
+    this.playJS = this.playJS.bind(this);
 
     /* download */
     this.download = this.download.bind(this);
@@ -92,10 +98,24 @@ class ProjectPage extends React.Component {
       );
     }
 
+    /* render message */
+    let message = null;
+    if (this.state.message) {
+      message = <Message { ...this.state.message }/>;
+      setTimeout(() => {
+        this.setState({ message: false });
+      }, 1000);
+    }
+
+    process.nextTick(() => {
+      document.getElementById('app-demo__playJS').classList.remove('app-demo__nav-item_true');
+    });
+
     return (
       <div
         className="project-page-container"
         onMouseUp={ this.mouseUp }>
+        { message }
         <AppNavbar app = { this.app }/>
         <div
           className={` app-demo
@@ -133,6 +153,11 @@ class ProjectPage extends React.Component {
             <div className={`app-demo__nav-item app-demo__nav-item_${ this.state.emulator.fullscreenMode }`}
                  onClick={ this.changeEmulatorFullscreenMode }>
               <FontAwesomeIcon icon={ faExpandArrowsAlt } className="app-demo__nav-item-icon"/>
+            </div>
+            <div className='app-demo__nav-item'
+                 id='app-demo__playJS'
+                 onClick={ this.playJS }>
+              <FontAwesomeIcon icon={ faPlay } className="app-demo__nav-item-icon"/>
             </div>
           </div>
         </div>
@@ -177,6 +202,7 @@ class ProjectPage extends React.Component {
   componentWillUnmount() {
     /*document.removeEventListener('keydown', this.keydown);*/
     document.removeEventListener('mousemove', this.moveEmulator);
+    this.appJS = null;
   }
 
 
@@ -257,6 +283,18 @@ class ProjectPage extends React.Component {
     }
   }
 
+  playJS() {
+    this.playJSFlag = !this.playJSFlag;
+    if (this.playJSFlag) {
+      this.appJS = Function( this.app.code.js );
+      this.appJS();
+
+      document.getElementById('app-demo__playJS').classList.add('app-demo__nav-item_true');
+    } else {
+      this.forceUpdate();
+    }
+  }
+
 
 
   /*   ---==== Hotkey events ====---   */
@@ -295,6 +333,14 @@ class ProjectPage extends React.Component {
         }
         default: {}
       }
+    }
+
+    /* save */
+    if (event.ctrlKey && event.code === 'KeyS') {
+      event.preventDefault();
+
+      this.setState({message: { type: true, text: 'Сохранено!'}});
+      return false;
     }
 
     /* save to localStorage */
@@ -337,6 +383,13 @@ class ProjectPage extends React.Component {
       document.fullscreenElement
         ? document.exitFullscreen()
         : document.documentElement.requestFullscreen();
+      return false;
+    }
+
+    /* play JS */
+    if (event.ctrlKey && event.code === 'KeyP') {
+      event.preventDefault();
+      this.playJS();
       return false;
     }
   }

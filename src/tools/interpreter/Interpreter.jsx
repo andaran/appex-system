@@ -124,11 +124,12 @@ export default class Interpreter extends React.Component {
 
 
 
-    /*   ---==== Play JS ====---   */
+    /*/!*   ---==== Play JS ====---   *!/
 
     const app = new App( this.props.app );
 
-    const appJS = new Function('App', this.props.app.code.js);
+    let appJS = new Function('App', this.props.app.code.js);
     appJS(app);
+    appJS = null;*/
   }
 }
