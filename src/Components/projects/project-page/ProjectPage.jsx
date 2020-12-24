@@ -104,11 +104,12 @@ class ProjectPage extends React.Component {
       message = <Message { ...this.state.message }/>;
       setTimeout(() => {
         this.setState({ message: false });
-      }, 1000);
+      }, 600);
     }
 
     process.nextTick(() => {
       document.getElementById('app-demo__playJS').classList.remove('app-demo__nav-item_true');
+      this.playJSFlag = false;
     });
 
     return (
@@ -335,30 +336,31 @@ class ProjectPage extends React.Component {
       }
     }
 
-    /* save */
-    if (event.ctrlKey && event.code === 'KeyS') {
-      event.preventDefault();
-
-      this.setState({message: { type: true, text: 'Сохранено!'}});
-      return false;
-    }
-
     /* save to localStorage */
     if (event.ctrlKey && event.code === 'KeyB') {
       event.preventDefault();
-      process.nextTick(() => {
-        const value = JSON.stringify( this.app.code );
-        localStorage.setItem(this.app.id, value);
-      });
+      try {
+        process.nextTick(() => {
+          const value = JSON.stringify( this.app.code );
+          localStorage.setItem(this.app.id, value);
+          this.setState({message: { type: true, text: 'Бекап сохранен!'}});
+        });
+      } catch {
+        this.setState({message: { type: true, text: 'Ошибка создания бекапа :('}});
+      }
       return false;
     }
 
     /* download from localStorage */
     if (event.ctrlKey && event.code === 'KeyD') {
       event.preventDefault();
-      let code = localStorage.getItem( this.app.id );
-      this.download(code);
-
+      try {
+        let code = localStorage.getItem( this.app.id );
+        this.download(code);
+        this.setState({message: { type: true, text: 'Бекап загружен!'}});
+      } catch {
+        this.setState({message: { type: true, text: 'Ошибка загрузки бекапа :('}});
+      }
       return false;
     }
 
@@ -366,7 +368,7 @@ class ProjectPage extends React.Component {
     if (event.ctrlKey && event.code === 'KeyR') {
       event.preventDefault();
       this.download('_', false);
-
+      this.setState({message: { type: true, text: 'Релиз кода создан!'}});
       return false;
     }
 

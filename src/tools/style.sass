@@ -131,6 +131,46 @@
 /*   ---==== Message ====---   */
 
 .message
-  width: 50%
-  height: 50%
-  background: rgba(0, 0, 0, .3)
+  width: 100%
+  height: 100%
+  position: absolute
+  z-index: 10000
+  display: flex
+  justify-content: center
+  align-items: center
+
+  &-background
+    width: 70%
+    height: 70%
+    background: rgba(0, 0, 0, .6)
+    position: absolute
+    animation: message ease-out .5s forwards
+
+  &-box
+    position: absolute
+    max-width: 40%
+    animation: message ease-in .6s forwards
+
+    &__text
+      font-weight: bold
+      font-size: 18px
+      background: rgba(0, 0, 0, .12)
+      padding: 40px 60px
+
+    &__icon
+      font-size: 60px
+      text-align: center
+      padding: 40px 60px
+
+@keyframes message
+  0%
+    margin-top: -100%
+
+  20%
+    margin-top: 0
+
+  80%
+    margin-bottom: 0
+
+  100%
+    margin-bottom: -100%
