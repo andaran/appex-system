@@ -66,11 +66,6 @@ passport.deserializeUser((id, done) => {
   done(null, { name: 'Vasya', id})
 });
 
-const auth = passport.authenticate('local', {
-  successRedirect: '/main',
-  failureRedirect: '/login?message=err',
-});
-
 const mustBeAuth = (req, res, next) => {  // Is user authenticated
   req.isAuthenticated() ? next() : res.redirect('/login');
 }
@@ -82,7 +77,24 @@ app.use(passport.session({}));
 
 /*   ---==== Controller ====---   */
 
-app.post('/login', auth);
+app.post('/login', (req, res, next) => {
+  passport.authenticate('local', {}, (err, user, info) => {
+
+    /* if err or user isn`t being */
+    if (err) { return res.json({ status: 'err', text: err }); }
+    if (!user) { return res.json({ status: 'no_user', text: false }); }
+
+    /* login user */
+    req.logIn(user, err => {
+
+      /* if err */
+      if (err) { return res.json({ status: 'err', text: err }); }
+
+      /* return user object */
+      return res.json({ status: 'ок', user });
+    });
+  })(req, res, next);
+});
 
 app.all('/api', mustBeAuth);
 app.all('/api/*', mustBeAuth);
