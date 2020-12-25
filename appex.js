@@ -12,7 +12,7 @@ const app = express();
 app.use(express.static(path.join(__dirname, 'build')));
 
 /* start the server! */
-const server = app.listen(3001, (err) => {
+const server = app.listen(3000, (err) => {
   err ? console.error(err) : console.log('[+] Сервер поднят!');
 });
 
