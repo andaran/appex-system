@@ -7,6 +7,11 @@ const path = require("path");
 const jwt = require('jsonwebtoken');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
+const passport = require('passport');
+const session = require('cookie-session');
+
+/* settings */
+const SessionSecretKeys = ['*1hF5l07%4f@kBFj', 'djhg&hgaschg34nb'];
 
 
 
@@ -38,6 +43,52 @@ app.get('*', (req, res) => {
 
 
 
+/*   ---==== Passport local strategy ====---   */
+
+app.use(session({ keys: SessionSecretKeys }));
+const LocalStrategy = require('passport-local').Strategy;
+
+/* Authorisation */
+passport.use('local', new LocalStrategy({}, (username, password, done) => {
+  if (username === 'admin' && password === 'admin') {
+    return done(null, users[0]);
+  } else if (username === 'user' && password === 'user') {
+    return done(null, users[1]);
+  } else {
+    return done(null, false);
+  }
+}));
+
+/* Session */
+passport.serializeUser((user, done) => done(null, user.id));
+
+passport.deserializeUser((id, done) => {
+  done(null, { name: 'Vasya', id})
+});
+
+const auth = passport.authenticate('local', {
+  successRedirect: '/main',
+  failureRedirect: '/login?message=err',
+});
+
+const mustBeAuth = (req, res, next) => {  // Is user authenticated
+  req.isAuthenticated() ? next() : res.redirect('/login');
+}
+
+app.use(passport.initialize({}));
+app.use(passport.session({}));
+
+
+
+/*   ---==== Controller ====---   */
+
+app.post('/login', auth);
+
+app.all('/api', mustBeAuth);
+app.all('/api/*', mustBeAuth);
+
+
+
 /*   ---==== Use socket.io ====---   */
 
 const io = socketIo(server);
@@ -46,4 +97,3 @@ io.on('connection', (socket) => {
     console.log('CONNECT: ', data);
   });
 });
-
