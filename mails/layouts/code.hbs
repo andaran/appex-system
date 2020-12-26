@@ -1,62 +1,44 @@
-<link rel="preconnect" href="https://fonts.gstatic.com">
-<link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@300&display=swap" rel="stylesheet">
+<div class="wrap"
+     style="width: 100%;
+     height: 100%;
+     background: #4b6584;
+     margin: 0;
+     padding-top: 50px;
+     box-sizing: border-box;">
 
-<style>
-    .wrap {
-        width: 100%;
-        height: 100%;
-        background: #4b6584;
-        margin: 0;
-        padding-top: 50px;
-        box-sizing: border-box;
-    }
+    <div class="mail"
+         style="width: 90%;
+         background: #2c3338;
+         margin: auto;
+         box-sizing: border-box;
+         box-shadow: 0 0 20px rgba(0, 0, 0, .3);
+         border-radius: 2px;">
 
-    .mail {
-        width: 90%;
-        background: #2c3338;
-        margin: auto;
-        box-sizing: border-box;
-        box-shadow: 0 0 20px rgba(0, 0, 0, .3);
-        border-radius: 2px;
-    }
+        <h2
+            style="color: white;
+            font-size: 48px;
+            text-align: center;
+            font-weight: 300;
+            padding-top: 20px;"> appex </h2>
 
-    h2 {
-        font-family: 'Comfortaa', cursive;
-        color: white;
-        font-size: 48px;
-        text-align: center;
-        font-weight: 300;
-        padding-top: 20px;
-    }
+        <div class="message"
+            style="width: 100%;
+            background: #333c42;
+            padding: 10px;
+            color: #909090;
+            font-size: 20px;
+            box-sizing: border-box;">
 
-    .message {
-        width: 100%;
-        background: #333c42;
-        padding: 10px;
-        color: #909090;
-        font-size: 20px;
-        box-sizing: border-box;
-        font-family: 'Comfortaa', cursive;
-    }
-
-    .code {
-        padding: 30px 0;
-        font-size: 32px;
-        text-align: center;
-        font-family: monospace;
-        color: #3498db;
-        font-weight: bold;
-    }
-</style>
-
-<div class="wrap">
-    <div class="mail">
-        <h2> <span>a</span>ppex </h2>
-        <div class="message">
             Введите код из этого письма для регистрации в системе Appex.
             Проигнорируйте данное сообщение, если вы не регистрировались.
 
-            <div class="code"> {{ code }} </div>
+            <div class="code"
+                style="padding: 30px 0;
+                font-size: 32px;
+                text-align: center;
+                font-family: monospace;
+                color: #3498db;
+                font-weight: bold;"> {{ code }} </div>
         </div>
     </div>
 </div>

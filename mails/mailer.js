@@ -2,12 +2,24 @@
 /*   ---==== Send mails ====---   */
 
 const nodemailer = require('nodemailer');
+const hbs = require('nodemailer-express-handlebars');
 const handlebars = require('handlebars');
 const path = require('path');
-const fs = require('fs');
+
+/* options for .hbs engine */
+
+const options = {
+  viewEngine: {
+    extname: '.hbs',
+    layoutsDir: path.join(__dirname, 'layouts'),
+    defaultLayout : 'code.hbs',
+  },
+  viewPath: path.join(__dirname, 'layouts'),
+  extName: '.hbs'
+};
 
 /* send letter function */
-const mailer = (to, subject, layout, context) => {
+const mailer = (to, subject, template, context) => {
   return new Promise((resolve, reject) => {
 
     /* transporter settings */
@@ -20,15 +32,13 @@ const mailer = (to, subject, layout, context) => {
       },
     });
 
-    /* generate template */
-    const code = fs.readFileSync(path.join(__dirname, 'layouts', layout));
-    const template = handlebars.compile(code);
-    const html = template(context);
+    /* apply handlebars settings */
+    transporter.use('compile', hbs(options));
 
     /* send the mail */
     transporter.sendMail({
       from: '"Appex system" <appex.system@yandex.ru>',
-      to, subject, html,
+      to, subject, template, context,
     })
       .then(info => resolve(info))
       .catch(err => reject(err));

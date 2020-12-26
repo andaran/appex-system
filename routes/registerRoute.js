@@ -68,7 +68,7 @@ router.post('/secure_code', (req, res) => {
   console.log(codes, req.body.email);
 
   /* send the mail */
-  mailer(req.body.email, 'Секретный код', 'code.hbs', { code }).catch(err => console.error(err));
+  mailer(req.body.email, 'Секретный код', 'code', { code }).catch(err => console.error(err));
 
   res.send('ok');
 });
