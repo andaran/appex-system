@@ -13,11 +13,16 @@ export default class RegWindow extends React.Component {
 
     this.state = {
       errs: ['', '', '', ''],
+      emailCode: false,
+      password: '',
+      email: '',
+      username: '',
     }
 
     // bind
     this.btnClicked = this.btnClicked.bind(this);
     this.hotkey = this.hotkey.bind(this);
+    this.sendCode = this.sendCode.bind(this);
   }
 
   render() {
@@ -32,6 +37,15 @@ export default class RegWindow extends React.Component {
         );
       }
     });
+
+    let codeButton = null;
+    if (!this.state.emailCode) {
+      codeButton = (
+        <div className="reg-window__input-button" id="send-code-button">
+          <FontAwesomeIcon icon={ faPaperPlane } />
+        </div>
+      );
+    }
 
     return (
       <div className="reg-window reg-window_center">
@@ -63,9 +77,7 @@ export default class RegWindow extends React.Component {
           </div>
           <div className="reg-window__item-block">
             <input type="text" placeholder="почта" id="reg-email" className="reg-window__input"/>
-            <div className="reg-window__input-button">
-              <FontAwesomeIcon icon={ faPaperPlane } /> 
-            </div>
+            { codeButton }
           </div>
         </div>
         { errs[2] }
@@ -92,11 +104,17 @@ export default class RegWindow extends React.Component {
 
   componentDidMount() {
     document.getElementById('reg-btn').addEventListener('click', this.btnClicked);
+    if (!this.state.emailCode) {
+      document.getElementById('send-code-button').addEventListener('click', this.sendCode);
+    }
     document.addEventListener('keydown', this.hotkey);
   }
 
   componentWillUnmount() {
     document.getElementById('reg-btn').removeEventListener('click', this.btnClicked);
+    if (!this.state.emailCode) {
+      document.getElementById('send-code-button').removeEventListener('click', this.sendCode);
+    }
     document.removeEventListener('keydown', this.hotkey);
   }
 
@@ -113,17 +131,31 @@ export default class RegWindow extends React.Component {
     });
 
     const username = document.getElementById('reg-username').value;
-    if (false) {
-      this.setState({
-        errs: ['Такой пользователь уже есть в системе!', '', '', '']
-      });
-      return;
-    }
+
     if (username.length < 3) {
       this.setState({
         errs: ['Слишком короткое имя пользователя!', '', '', '']
       });
       return;
+    } else {
+
+      /* checking username available */
+      const body = JSON.stringify({ username });
+      fetch('/sign_up/is_param_available', {
+        method: "POST",
+        headers: {
+          'Accept': 'application/json, text/plain, */*',
+          'Content-Type': 'application/json',
+        },
+        body
+      }).then(res => res.text()).then(text => {
+        if (text === 'used') {
+          this.setState({
+            errs: ['Такой пользователь уже есть в системе!', '', '', '']
+          });
+          return;
+        }
+      }).catch(err => console.log('Ahtung in checking username!', new Error(err)));
     }
 
     const password = document.getElementById('reg-password').value;
@@ -140,6 +172,25 @@ export default class RegWindow extends React.Component {
         errs: ['', '', 'Неверно введен email адрес!', '']
       });
       return;
+    } else {
+
+      /* checking email available */
+      const body = JSON.stringify({ email });
+      fetch('/sign_up/is_param_available', {
+        method: "POST",
+        headers: {
+          'Accept': 'application/json, text/plain, */*',
+          'Content-Type': 'application/json',
+        },
+        body
+      }).then(res => res.text()).then(text => {
+        if (text === 'used') {
+          this.setState({
+            errs: ['', '', 'Такой email адрес уже есть в системе!', '']
+          });
+          return;
+        }
+      }).catch(err => console.log('Ahtung in checking email!', new Error(err)));
     }
 
     const code = document.getElementById('reg-key').value;
@@ -149,5 +200,29 @@ export default class RegWindow extends React.Component {
       });
       return;
     } 
+  }
+
+  sendCode() {
+    const email = document.getElementById('reg-email').value;
+    if (!/\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,6}/.test(email)) {
+      this.setState({
+        errs: ['', '', 'Неверно введен email адрес!', '']
+      });
+      return;
+    }
+
+    /* generate code and send email */
+    const body = JSON.stringify({ email });
+    fetch('/sign_up/secure_code', {
+      method: "POST",
+      headers: {
+        'Accept': 'application/json, text/plain, */*',
+        'Content-Type': 'application/json',
+      },
+      body
+    }).then(res => res.text()).then(text => {
+      if (text !== 'ok') { return; }
+      this.setState({ emailCode: true, email });
+    });
   }
 } 

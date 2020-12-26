@@ -11,13 +11,20 @@ const passport = require('passport');
 const session = require('cookie-session');
 
 /* settings */
-const SessionSecretKeys = ['*1hF5l07%4f@kBFj', 'djhg&hgaschg34nb'];
+const sessionSecretKey1 = process.env.sessionSecretKey1 || '0u@Fq|nTyaHG';
+const sessionSecretKey2 = process.env.sessionSecretKey2 || 'U99}G9zTsKDg';
+const port = +process.env.port || 3001;
+
+/* routes */
+const APIRoute = require(path.join(__dirname, 'routes', 'APIRoute.js'));
+const registerRoute = require(path.join(__dirname, 'routes', 'registerRoute.js'));
+const loginRoute = require(path.join(__dirname, 'routes', 'loginRoute.js'));
 
 
 
 /*   ---==== Connect to DB ====---   */
 
-mongoose.connect('mongodb://127.0.0.1', {
+mongoose.connect('mongodb://127.0.0.1/appex', {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 }, err => err ? console.error(err) : console.log('[+] База подключена!'));
@@ -33,7 +40,7 @@ app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, 'build')));
 
 /* start the server! */
-const server = app.listen(3000, (err) => {
+const server = app.listen(port, (err) => {
   err ? console.error(err) : console.log('[+] Сервер поднят!');
 });
 
@@ -45,19 +52,7 @@ app.get('*', (req, res) => {
 
 /*   ---==== Passport local strategy ====---   */
 
-app.use(session({ keys: SessionSecretKeys }));
-const LocalStrategy = require('passport-local').Strategy;
-
-/* Authorisation */
-passport.use('local', new LocalStrategy({}, (username, password, done) => {
-  if (username === 'admin' && password === 'admin') {
-    return done(null, users[0]);
-  } else if (username === 'user' && password === 'user') {
-    return done(null, users[1]);
-  } else {
-    return done(null, false);
-  }
-}));
+app.use(session({ keys: [sessionSecretKey1, sessionSecretKey2] }));
 
 /* Session */
 passport.serializeUser((user, done) => done(null, user.id));
@@ -77,27 +72,18 @@ app.use(passport.session({}));
 
 /*   ---==== Controller ====---   */
 
-app.post('/login', (req, res, next) => {
-  passport.authenticate('local', {}, (err, user, info) => {
+/* registration */
+app.use('/sign_up', registerRoute);
 
-    /* if err or user isn`t being */
-    if (err) { return res.json({ status: 'err', text: err }); }
-    if (!user) { return res.json({ status: 'no_user', text: false }); }
+/* sign in */
+app.use('/sign_in', loginRoute);
 
-    /* login user */
-    req.logIn(user, err => {
-
-      /* if err */
-      if (err) { return res.json({ status: 'err', text: err }); }
-
-      /* return user object */
-      return res.json({ status: 'ок', user });
-    });
-  })(req, res, next);
-});
-
+/* secure urls */
 app.all('/api', mustBeAuth);
 app.all('/api/*', mustBeAuth);
+
+/* api */
+app.use('/api', APIRoute);
 
 
 
