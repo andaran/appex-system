@@ -22,6 +22,6 @@ const userSchema = new mongoose.Schema({
   userSettings: { type: Array },
 });
 
-const user = mongoose.model('task', userSchema, 'tasks');
+const user = mongoose.model('user', userSchema, 'users');
 
 module.exports = user;

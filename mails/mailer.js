@@ -3,7 +3,6 @@
 
 const nodemailer = require('nodemailer');
 const hbs = require('nodemailer-express-handlebars');
-const handlebars = require('handlebars');
 const path = require('path');
 
 /* options for .hbs engine */
