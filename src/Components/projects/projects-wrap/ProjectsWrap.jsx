@@ -13,11 +13,16 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { connect } from 'react-redux';
 import { fetchProjects } from '../../../actions/projectsActions';
 import { switchModalState } from '../../../actions/projectsModalActions';
+import Message from "../../../tools/message/Message";
 
 /* Component */
 class ProjectsWrap extends React.Component {
   constructor(props) {
     super(props);
+
+    this.state = {
+      message: false,
+    }
 
     // bind
     this.newProject = this.newProject.bind(this);
@@ -27,15 +32,29 @@ class ProjectsWrap extends React.Component {
   render() {
 
     /* all cards */
-    const cards = this.props.projects.map((props, index) => {
-      return (
-        <Card { ...props } key = { index }/>
-      );
-    });
+    let cards = null;
+    if (!this.props.projectsIsFetching && !this.props.projectsError) {
+      cards = this.props.projects.map((props, index) => {
+        return (
+          <Card { ...props } key = { index }/>
+        );
+      });
+    }
 
     /* rendering window */
     let modal;
     this.props.modal.status? modal = <Wrap for={ <Window/> } />: modal = null;
+
+    /* render message */
+    let message = null;
+    if (this.state.message) {
+      message = <Message { ...this.state.message }/>;
+      if (!this.state.message.type) {
+        setTimeout(() => {
+          this.setState({ message: false });
+        }, 600);
+      }
+    }
 
     return (
       <div className="project s-wrap">
@@ -68,7 +87,12 @@ class ProjectsWrap extends React.Component {
     document.getElementById(`project-card-plus-wrap`).addEventListener('mouseleave', this.mouseleave);
 
     if (this.props.projects.length === 0 && !this.props.projectsIsFetching) {
-      this.props.fetchProjects();
+      this.props.fetchProjects(this.props.user.username, this.props.user.id);
+    }
+
+    if (this.props.projectsError) {
+      console.log('Неизвестная ошибка загрузки проектов!');
+      this.setState({message: { type: false, text: 'Неизвестная ошибка загрузки проектов!'}});
     }
 
     document.getElementById(`project-card-plus-wrap`).addEventListener('click', this.newProject);
@@ -116,14 +140,16 @@ function mapStateToProps(store) {
   return {
     projects: store.projects.data,
     projectsIsFetching: store.projects.isFetching,
+    projectsError: store.projects.error,
     modal: store.projectsModal,
+    user: store.userData.user,
   }
 }
 
 function mapDispatchToProps(dispatch) {
   return {
-    fetchProjects: () => {
-      dispatch(fetchProjects())
+    fetchProjects: (username, id) => {
+      dispatch(fetchProjects(username, id))
     },
     switchModalState: (state) => {
       dispatch(switchModalState(state))

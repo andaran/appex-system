@@ -5,9 +5,8 @@ export function projectsModalReducer(state = {
   status: false,
 }, action) {
   switch (action.type) {
-    case SWITCH_MODAL_STATE: {
+    case SWITCH_MODAL_STATE:
       return {...state, status: action.payload};
-    }
   }
 
   return state;

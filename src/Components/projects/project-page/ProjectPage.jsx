@@ -103,11 +103,12 @@ class ProjectPage extends React.Component {
     let message = null;
     if (this.state.message) {
       message = <Message { ...this.state.message }/>;
-      setTimeout(() => {
-        this.setState({ message: false });
-      }, 600);
+      if (!this.state.message.type) {
+        setTimeout(() => {
+          this.setState({ message: false });
+        }, 600);
+      }
     }
-
     process.nextTick(() => {
       document.getElementById('app-demo__playJS').classList.remove('app-demo__nav-item_true');
       this.playJSFlag = false;
@@ -192,7 +193,12 @@ class ProjectPage extends React.Component {
 
   componentDidMount() {
     if (this.props.projects.length === 0 && !this.props.projectsIsFetching) {
-      this.props.fetchProjects();
+      this.props.fetchProjects(this.props.user.username, this.props.user.id);
+    }
+
+    if (this.props.projectsError) {
+      console.log('Неизвестная ошибка загрузки проектов!');
+      this.setState({message: { type: false, text: 'Неизвестная ошибка загрузки проектов!'}});
     }
 
     /* hotkeys */
@@ -429,6 +435,8 @@ function mapStateToProps(store) {
   return {
     projects: store.projects.data,
     projectsIsFetching: store.projects.isFetching,
+    projectsError: store.projects.error,
+    user: store.userData.user,
   }
 }
 
