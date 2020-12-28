@@ -94,18 +94,14 @@ export default class RegWindow extends React.Component {
   }
 
   btnClicked() {
+
     /* Clear warnings */
     this.setState({
       errs: ['', '', '']
     });
 
+    /* check username */
     const username = document.getElementById('reg-username').value;
-    if (false) {
-      this.setState({
-        errs: ['Такого пользователя нет в системе!', '', '']
-      });
-      return;
-    }
     if (username.length === 0) {
       this.setState({
         errs: ['Введите имя пользователя!', '', '']
@@ -113,6 +109,7 @@ export default class RegWindow extends React.Component {
       return;
     }
 
+    /* check password */
     const password = document.getElementById('reg-password').value;
     if (!/(?=.*[0-9])(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z!@#$%^&*]{6,}/.test(password)) {
       this.setState({
@@ -121,11 +118,26 @@ export default class RegWindow extends React.Component {
       return;
     }
 
-    if (password !== '!23qweasdZXC') {
-      this.setState({
-        errs: ['', '', 'Неверный логин или пароль!']
-      });
-      return;
-    }
+    /* send to the server */
+    const body = JSON.stringify({
+      username: username,
+      password: password,
+    });
+    fetch('/sign_in/', {
+      method: "POST",
+      headers: {
+        'Accept': 'application/json, text/plain, */*',
+        'Content-Type': 'application/json',
+      },
+      body
+    }).then(response => response.json()).then(body => {
+      if (body.status === 'ok') {
+        console.log('ok');
+      } else {
+        this.setState({
+          errs: ['', '', 'Неверный логин или пароль!']
+        });
+      }
+    });
   }
 } 

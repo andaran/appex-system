@@ -4,12 +4,26 @@
 const express = require('express');
 const router = express.Router();
 const passport = require('passport');
+const bcrypt = require('bcrypt');
+const path = require('path');
+
+/* models */
+const User = require(path.join(__dirname, '../', 'models', 'user.js'));
 
 const LocalStrategy = require('passport-local').Strategy;
 
 /* Authorisation */
 passport.use('local', new LocalStrategy({}, (username, password, done) => {
-  // TODO: make user auth
+
+  /* find user by username */
+  User.findOne({ username }).then(foundUser => {
+    if (foundUser === null) { return done(null, false); }
+
+    /* check password */
+    bcrypt.compare(password, foundUser.password, (err, result) => {
+      result ? done(null, foundUser) : done(null, false);
+    });
+  });
 }));
 
 router.post('/', (req, res, next) => {
@@ -26,7 +40,14 @@ router.post('/', (req, res, next) => {
       if (err) { return res.json({ status: 'err', text: err }); }
 
       /* return user object */
-      return res.json({ status: 'ок', user });
+      return res.json({ status: 'ok', user: {
+        username: user.username,
+        email: user.email,
+        id: user.id,
+        rooms: user.rooms,
+        settings: user.settings,
+        userSettings: user.userSettings,
+      }});
     });
   })(req, res, next);
 });

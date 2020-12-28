@@ -20,6 +20,9 @@ const APIRoute = require(path.join(__dirname, 'routes', 'APIRoute.js'));
 const registerRoute = require(path.join(__dirname, 'routes', 'registerRoute.js'));
 const loginRoute = require(path.join(__dirname, 'routes', 'loginRoute.js'));
 
+/* models */
+const User = require(path.join(__dirname, 'models', 'user.js'));
+
 
 
 /*   ---==== Connect to DB ====---   */
@@ -58,11 +61,25 @@ app.use(session({ keys: [sessionSecretKey1, sessionSecretKey2] }));
 passport.serializeUser((user, done) => done(null, user.id));
 
 passport.deserializeUser((id, done) => {
-  done(null, { name: 'Vasya', id})
+
+  /* find user */
+  User.findOne({ id }).then(foundUser => {
+    if (foundUser === null) { return done(null, false); }
+
+    /* return user */
+    done(null, {
+      username: foundUser.username,
+      email: foundUser.email,
+      id: foundUser.id,
+      rooms: foundUser.rooms,
+      settings: foundUser.settings,
+      userSettings: foundUser.userSettings,
+    });
+  });
 });
 
 const mustBeAuth = (req, res, next) => {  // Is user authenticated
-  req.isAuthenticated() ? next() : res.redirect('/login');
+  req.isAuthenticated() ? next() : res.json({ status: 'err', text: 'no_auth' });;
 }
 
 app.use(passport.initialize({}));

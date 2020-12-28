@@ -42,7 +42,8 @@ class ProjectPage extends React.Component {
   constructor(props) {
     super(props);
 
-    this.id = this.props.match.params.id;
+    let id = window.location.href.split('/');
+    id[id.length - 1] !== '' ? this.id = id[id.length - 1] : this.id = id[id.length - 2];
     this.mouseDown = false;
     this.hotkey = true;
     this.downloadFlag = false;

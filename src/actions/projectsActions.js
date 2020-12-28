@@ -1,4 +1,4 @@
-import { FETCH_PROJECTS, CHANGE_PROJECTS } from '../Constants/projectsConstants';
+import * as Projects from '../Constants/projectsConstants';
 
 const projects = [
   {
@@ -27,7 +27,6 @@ const projects = [
       css: '',
       js: 'console.log(\'Release!\');',
     },
-    settings: [],
   },
   {
     title: "Автополив",
@@ -55,20 +54,22 @@ const projects = [
       css: '',
       js: 'console.log(\'Release!\');',
     },
-    settings: [],
   },
 ];
 
-export function fetchProjects() {
+export function fetchProjects(username, id) {
+  const body = JSON.stringify({ username, id });
   return {
-    type: FETCH_PROJECTS,
-    payload: projects
+    type: 'FETCH_PROJECTS',
+    payload: fetch('/api/get_projects', {
+      method: 'POST', body
+    }).then(res => res.json()),
   }
 }
 
 export function changeProjects(changedProjects) {
   return {
-    type: CHANGE_PROJECTS,
+    type: Projects.CHANGE_PROJECTS,
     payload: changedProjects
   }
 }
