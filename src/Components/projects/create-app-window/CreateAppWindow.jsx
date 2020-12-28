@@ -64,6 +64,15 @@ class CreateAppWindow extends React.Component {
           <span>Имя приложения: </span>
           <input type="text" autoComplete="false"/>
         </div>
+        <div className="create-app-window__item create-app-window__switch-item">
+          <span>Возможность скачивать в store: </span>
+          <div id="create-app-window__colors">
+            <label className="appex-preset-switch create-app-window__switch">
+              <input type="checkbox" className="appex-preset-switch__input"/>
+              <div className="appex-preset-switch__handle"/>
+            </label>
+          </div>
+        </div>
         <div className="create-app-window__item">
           <span>Цвет иконки: </span>
           <div id="create-app-window__colors">

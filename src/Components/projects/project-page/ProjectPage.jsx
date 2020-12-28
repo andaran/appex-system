@@ -103,12 +103,11 @@ class ProjectPage extends React.Component {
     let message = null;
     if (this.state.message) {
       message = <Message { ...this.state.message }/>;
-      if (!this.state.message.type) {
-        setTimeout(() => {
-          this.setState({ message: false });
-        }, 600);
-      }
+      setTimeout(() => {
+        this.setState({ message: false });
+      }, 600);
     }
+
     process.nextTick(() => {
       document.getElementById('app-demo__playJS').classList.remove('app-demo__nav-item_true');
       this.playJSFlag = false;

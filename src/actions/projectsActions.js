@@ -57,13 +57,20 @@ const projects = [
   },
 ];
 
+/* develop mode */
+const devMode = true;
+
 export function fetchProjects(username, id) {
   const body = JSON.stringify({ username, id });
+
+  let request;
+  devMode
+    ? request = new Promise((resolve, reject) => { resolve(projects) })
+    : request = fetch('/api/get_projects', { method: 'POST', body }).then(res => res.json());
+
   return {
     type: 'FETCH_PROJECTS',
-    payload: fetch('/api/get_projects', {
-      method: 'POST', body
-    }).then(res => res.json()),
+    payload: request,
   }
 }
 

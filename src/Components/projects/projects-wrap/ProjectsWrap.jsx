@@ -49,16 +49,15 @@ class ProjectsWrap extends React.Component {
     let message = null;
     if (this.state.message) {
       message = <Message { ...this.state.message }/>;
-      if (!this.state.message.type) {
-        setTimeout(() => {
-          this.setState({ message: false });
-        }, 600);
-      }
+      setTimeout(() => {
+        this.setState({ message: false });
+      }, 600);
     }
 
     return (
       <div className="project s-wrap">
         { modal }
+        { message }
         <Navbar path="./images/appex.svg" />
         <article className="cards">
           {/*  <Card
