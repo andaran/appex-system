@@ -12,6 +12,6 @@ export function fetchUser() {
 
   return {
     type: 'FETCH_USER',
-    payload: fetch('/api/get_user', { method: 'POST', cache: 'no-store' }).then(res => res.json()),
+    payload: request,  // Добавить строку с запросом сюда напрямую, а не через переменную request
   }
 }
