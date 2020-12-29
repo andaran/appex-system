@@ -40,7 +40,7 @@
   top: -6px
 
 .app-navbar__item-link
-  span, a
+  span:first-child, a
     font-size: 18px
     color: #8f969e
     font-weight: 400
@@ -50,6 +50,18 @@
     &:hover
       color: #adb5bd
       text-decoration: none
+
+  span:nth-child(2), span:nth-child(3)
+    font-size: 15px
+    padding: 1px
+    background: #c5ccd4
+    border-radius: 2px
+    color: black
+    letter-spacing: 0
+    margin-left: 2px
+    display: inline-block
+    width: 56px
+    text-align: center
 
 .app-navbar__item-text
   font-size: 18px
@@ -93,3 +105,51 @@
   align-items: center
   color: #262c31
   font-size: 16px
+
+.app-navbar__item-connect
+  .app-navbar__item-text-inputs
+    display: flex
+    margin: -150px auto 0 auto
+    position: absolute
+    z-index: 10
+    background: #858b92
+    height: 110px
+    top: 0
+    padding: 10px 20px
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.6)
+    border-radius: 0 0 6px 6px
+    transition: .3s
+
+    div
+      width: 200px
+
+      input
+        margin-top: 10px
+        border: none
+        background: white
+        padding-left: 4px
+        width: 200px
+        height: 30px
+        border-radius: 2px
+
+        &:focus
+          outline: none
+          border: none
+          border-radius: 0
+
+    button
+      height: 70px
+      width: 40px
+      margin: 10px 0 0 10px
+      border: none
+      background: white
+      border-radius: 2px
+
+      &:focus
+        outline: none
+        border: none
+        border-radius: 0
+
+  &:hover
+    .app-navbar__item-text-inputs
+      margin-top: 0

@@ -1,4 +1,5 @@
 import * as USER from '../Constants/userConstants';
+import { cloneDeep } from 'lodash';
 
 export function userReducer(state = {
   user: false,
@@ -8,13 +9,13 @@ export function userReducer(state = {
 }, action) {
   switch (action.type) {
     case USER.FETCH_USER_PENDING:
-      return { ...state, isFetching: true };
+      return cloneDeep({ ...state, isFetching: true });
 
     case USER.FETCH_USER_FULFILLED:
-      return { ...state, isFetching: false, ...action.payload  };
+      return cloneDeep({ ...state, isFetching: false, ...action.payload  });
 
     case USER.FETCH_USER_REJECTED:
-      return { ...state, isFetching: false, error: true };
+      return cloneDeep({ ...state, isFetching: false, error: true });
   }
 
   return state;

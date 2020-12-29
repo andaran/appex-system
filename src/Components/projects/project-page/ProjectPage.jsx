@@ -85,6 +85,22 @@ class ProjectPage extends React.Component {
 
   render() {
 
+    console.log('test');
+
+    /* if any err or projects isn`t loaded */
+    if (this.props.projects === undefined ||
+        this.props.projects.length === 0 ||
+        this.props.projectsIsFetching ||
+        this.props.projectsError) {
+      return (
+        <div className="loading-wrap">
+          <div className="loading">
+            <img src="/images/appex.svg" alt="appex" className="loading__img"/>
+          </div>
+        </div>
+      );
+    }
+
     /* find app */
     if (this.props.projects.length !== 0) {
       this.app = this.props.projects.find(elem => elem.id === this.id);
