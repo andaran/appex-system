@@ -86,7 +86,7 @@ class ProjectPage extends React.Component {
   render() {
 
     /* find app */
-    if (this.props.projects !== 0) {
+    if (this.props.projects.length !== 0) {
       this.app = this.props.projects.find(elem => elem.id === this.id);
     } else {
       this.app = false;
@@ -192,7 +192,7 @@ class ProjectPage extends React.Component {
 
   componentDidMount() {
     if (this.props.projects.length === 0 && !this.props.projectsIsFetching) {
-      this.props.fetchProjects(this.props.user.username, this.props.user.id);
+      this.props.fetchProjects();
     }
 
     if (this.props.projectsError) {

@@ -86,7 +86,7 @@ class ProjectsWrap extends React.Component {
     document.getElementById(`project-card-plus-wrap`).addEventListener('mouseleave', this.mouseleave);
 
     if (this.props.projects.length === 0 && !this.props.projectsIsFetching) {
-      this.props.fetchProjects(this.props.user.username, this.props.user.id);
+      this.props.fetchProjects();
     }
 
     if (this.props.projectsError) {
@@ -147,8 +147,8 @@ function mapStateToProps(store) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    fetchProjects: (username, id) => {
-      dispatch(fetchProjects(username, id))
+    fetchProjects: () => {
+      dispatch(fetchProjects())
     },
     switchModalState: (state, mode) => {
       dispatch(switchModalState(state, mode))

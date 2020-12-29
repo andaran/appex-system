@@ -268,9 +268,8 @@ class CreateAppWindow extends React.Component {
         text.innerText = 'Сохранено!';
 
         /* fetch new projects list */
-        this.props.fetchProjects(this.props.user.username, this.props.user.id).then(() => {
-          this.closeWindow();
-        });
+        this.props.fetchProjects();
+        this.closeWindow();
       } else {
         text.style.color = '#e74c3c';
         text.innerText = 'Неизвестная ошибка :(';
@@ -296,8 +295,8 @@ function mapDispatchToProps(dispatch) {
     switchModalState: (state, mode) => {
       dispatch(switchModalState(state, mode))
     },
-    fetchProjects: (username, id) => {
-      dispatch(fetchProjects(username, id))
+    fetchProjects: () => {
+      dispatch(fetchProjects())
     },
   }
 }

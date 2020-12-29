@@ -22,6 +22,8 @@ const appSchema = new mongoose.Schema({
     required: true,
   },
   author: {
+    type: Object,
+    required: true,
     username: {
       type: Boolean,
       required: true,
@@ -32,11 +34,15 @@ const appSchema = new mongoose.Schema({
     },
   },
   code: {
+    type: Object,
+    required: true,
     html: { type: String },
     css: { type: String },
     js: { type: String },
   },
   releaseCode: {
+    type: Object,
+    required: true,
     html: { type: String },
     css: { type: String },
     js: { type: String },
