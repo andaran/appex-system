@@ -104,7 +104,7 @@ class ProjectsWrap extends React.Component {
   }
 
   newProject() {
-    this.props.switchModalState(this.props.modal.status);
+    this.props.switchModalState(this.props.modal.status, 'new');
   }
 
   close() {
@@ -150,8 +150,8 @@ function mapDispatchToProps(dispatch) {
     fetchProjects: (username, id) => {
       dispatch(fetchProjects(username, id))
     },
-    switchModalState: (state) => {
-      dispatch(switchModalState(state))
+    switchModalState: (state, mode) => {
+      dispatch(switchModalState(state, mode))
     }
   }
 }

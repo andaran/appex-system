@@ -1,8 +1,8 @@
 import { SWITCH_MODAL_STATE } from '../Constants/newProjectModalConstants';
 
-export function switchModalState(state) {
+export function switchModalState(state, mode) {
   return {
     type: SWITCH_MODAL_STATE,
-    payload: !state
+    payload: { status: !state, mode },
   }
 }

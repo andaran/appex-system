@@ -18,9 +18,12 @@ class CreateAppWindow extends React.Component {
       search: '',
     }
 
+    this.icon = null;
+
     // bind
     this.tap = this.tap.bind(this);
     this.changeIcon = this.changeIcon.bind(this);
+    this.deleteActiveIcon = this.deleteActiveIcon.bind(this);
     this.elementMouseOver = this.elementMouseOver.bind(this);
     this.elementMouseLeave = this.elementMouseLeave.bind(this);
     this.closeWindow = this.closeWindow.bind(this);
@@ -65,8 +68,8 @@ class CreateAppWindow extends React.Component {
           <input type="text" autoComplete="false"/>
         </div>
         <div className="create-app-window__item create-app-window__switch-item">
-          <span>Возможность скачивать в store: </span>
-          <div id="create-app-window__colors">
+          <span>Возможность скачивать: </span>
+          <div>
             <label className="appex-preset-switch create-app-window__switch">
               <input type="checkbox" className="appex-preset-switch__input"/>
               <div className="appex-preset-switch__handle"/>
@@ -97,13 +100,16 @@ class CreateAppWindow extends React.Component {
           </small>
         </div>
         <div className="create-app-window__buttons">
-          <Button
-            size="md"
-            background="#e74c3c"
-            id="create-app-window__button-close"> Закрыть  </Button>
-          <Button
-            size="md"
-            background="#1abc9c"> Создать! </Button>
+          <div className="create-app-window__err-text" id="create-app-window__err-text"/>
+          <div id="buttons" className="create-app-window__buttons-wrap">
+            <Button
+              size="md"
+              background="#e74c3c"
+              id="create-app-window__button-close"> Закрыть  </Button>
+            <Button
+              size="md"
+              background="#1abc9c"> Создать! </Button>
+          </div>
         </div>
       </div>
     );
@@ -119,7 +125,7 @@ class CreateAppWindow extends React.Component {
   }
 
   closeWindow() {
-    this.props.switchModalState(true)
+    this.props.switchModalState(true, 'new')
   }
 
   componentWillUnmount() {
@@ -130,7 +136,26 @@ class CreateAppWindow extends React.Component {
   }
 
   changeIcon(event) {
-    console.log(event.target);
+    this.deleteActiveIcon();
+    if (event.target !== this.icon) {
+      this.icon = event.target;
+      event.target.classList.add('create-app-window__icon_active');
+    } else {
+      this.icon = null;
+      event.target.style.backgroundColor = '#3b4148';
+      event.target.querySelector('svg').style.backgroundColor = '#3b4148';
+      event.target.querySelector('svg').style.color = '#838a91';
+    }
+  }
+
+  deleteActiveIcon() {
+    let icons = document.getElementsByClassName('create-app-window__icon_active');
+    for (let icon of icons) {
+      icon.classList.remove('create-app-window__icon_active');
+      icon.style.backgroundColor = '#3b4148';
+      icon.querySelector('svg').style.backgroundColor = '#3b4148';
+      icon.querySelector('svg').style.color = '#838a91';
+    }
   }
 
   elementMouseOver(event) {
@@ -141,14 +166,19 @@ class CreateAppWindow extends React.Component {
 
     event.target.style.backgroundColor = color;
     event.target.querySelector('svg').style.backgroundColor = color;
+    event.target.querySelector('svg').style.color = '#262c31';
   }
 
   elementMouseLeave(event) {
+    if (event.target === this.icon) { return ;}
     event.target.style.backgroundColor = '#3b4148';
     event.target.querySelector('svg').style.backgroundColor = '#3b4148';
+    event.target.querySelector('svg').style.color = '#838a91';
   }
 
   tap(event) {
+    this.deleteActiveIcon();
+    this.icon = null;
     this.setState({search: event.target.value.toLowerCase()});
     
     /* set background */
@@ -169,8 +199,8 @@ function mapStateToProps(store) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    switchModalState: (state) => {
-      dispatch(switchModalState(state))
+    switchModalState: (state, mode) => {
+      dispatch(switchModalState(state, mode))
     }
   }
 }
