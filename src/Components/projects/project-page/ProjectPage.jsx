@@ -85,8 +85,6 @@ class ProjectPage extends React.Component {
 
   render() {
 
-    console.log('test');
-
     /* if any err or projects isn`t loaded */
     if (this.props.projects === undefined ||
         this.props.projects.length === 0 ||

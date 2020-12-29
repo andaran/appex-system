@@ -17,20 +17,12 @@ const App = require(path.join(__dirname, '../', 'models', 'app.js'));
 
 router.post('/get_user', (req, res) => {
   User.findOne({ id: req.user.id }).then(user => {
-    console.log('/get_user', user.settings[2].body);
     res.json({ status: 'ok', user });
   });
 });
 
 router.post('/change_user', (req, res) => {
   User.updateOne({ id: req.user.id }, { $set: req.body }).then(user => {  // Update the task
-
-    /* Выпилить ----- */
-    User.findOne({ id: req.user.id }).then(user => {
-      console.log('/change_user', user.settings[2].body);
-    });
-    /* -------------- */
-
     res.json({ status: 'ok' });
   }, err => {
     res.json({ status: 'err' });

@@ -2,16 +2,14 @@
 /* develop mode */
 const devMode = false;
 
-let request;
-devMode
-  ? request = fetch('../testJson/user.json').then(res => res.json())
-  : request = fetch('/api/get_user', { method: 'POST', cache: 'no-store' }).then(res => res.json());
-
 export function fetchUser() {
-  console.log('USER', request);
+  let request;
+  devMode
+    ? request = fetch('../testJson/user.json').then(res => res.json())
+    : request = fetch('/api/get_user', { method: 'POST' }).then(res => res.json());
 
   return {
     type: 'FETCH_USER',
-    payload: request,  // Добавить строку с запросом сюда напрямую, а не через переменную request
+    payload: request,
   }
 }
