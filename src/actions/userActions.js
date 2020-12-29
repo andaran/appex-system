@@ -1,6 +1,6 @@
 
 /* develop mode */
-const devMode = true;
+const devMode = false;
 
 let request;
 devMode

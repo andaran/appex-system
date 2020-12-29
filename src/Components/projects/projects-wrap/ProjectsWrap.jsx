@@ -104,7 +104,7 @@ class ProjectsWrap extends React.Component {
   }
 
   newProject() {
-    this.props.switchModalState(this.props.modal.status, 'new');
+    this.props.switchModalState(this.props.modal.status, 'new', {});
   }
 
   close() {

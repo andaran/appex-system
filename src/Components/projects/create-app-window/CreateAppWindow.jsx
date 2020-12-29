@@ -8,6 +8,7 @@ import Button from '../../../tools/button/Button';
 
 import { connect } from 'react-redux';
 import { switchModalState } from "../../../actions/projectsModalActions";
+import { fetchProjects } from "../../../actions/projectsActions";
 
 /* Component */
 class CreateAppWindow extends React.Component {
@@ -27,11 +28,49 @@ class CreateAppWindow extends React.Component {
     this.elementMouseOver = this.elementMouseOver.bind(this);
     this.elementMouseLeave = this.elementMouseLeave.bind(this);
     this.closeWindow = this.closeWindow.bind(this);
+    this.validate = this.validate.bind(this);
+    this.saveApp = this.saveApp.bind(this);
   }
 
   render() {
     let icons = [];
     let keyIndex = 0;
+
+    /* change modal mode */
+    let title = 'Создать новое приложение:';
+    if (this.props.modal.mode === 'set') { title = 'Настойки'; }
+
+    let buttons = (
+      <div id="buttons" className="create-app-window__buttons-wrap">
+        <Button
+          size="md"
+          background="#e67e22"
+          id="create-app-window__button-close"> Закрыть </Button>
+        <Button
+          size="md"
+          background="#1abc9c"
+          id="create-app-window__button-save"> Создать! </Button>
+      </div>
+    );
+
+    if (this.props.modal.mode === 'set') {
+      buttons = (
+        <div id="buttons" className="create-app-window__buttons-wrap">
+          <Button
+            size="md"
+            background="#e67e22"
+            id="create-app-window__button-close"> Закрыть </Button>
+          <Button
+            size="md"
+            background="#e74c3c"
+            id="create-app-window__button-delete"> Удалить </Button>
+          <Button
+            size="md"
+            background="#1abc9c"
+            id="create-app-window__button-save"> Сохранить </Button>
+        </div>
+      );
+    }
 
     /* search icons */
     if (this.state.search.length > 0) {
@@ -60,18 +99,16 @@ class CreateAppWindow extends React.Component {
 
     return (
       <div className="modal-content-wrapper create-app-window" id="create-app-window">
-        <div className="create-app-window__title"><h4>
-          Создать новое приложение:
-        </h4></div>
+        <div className="create-app-window__title"><h4> { title } </h4></div>
         <div className="create-app-window__input-item">
           <span>Имя приложения: </span>
-          <input type="text" autoComplete="false"/>
+          <input type="text" autoComplete="false" id="app-name"/>
         </div>
         <div className="create-app-window__item create-app-window__switch-item">
           <span>Возможность скачивать: </span>
           <div>
             <label className="appex-preset-switch create-app-window__switch">
-              <input type="checkbox" className="appex-preset-switch__input"/>
+              <input type="checkbox" className="appex-preset-switch__input" id="app-download"/>
               <div className="appex-preset-switch__handle"/>
             </label>
           </div>
@@ -101,15 +138,7 @@ class CreateAppWindow extends React.Component {
         </div>
         <div className="create-app-window__buttons">
           <div className="create-app-window__err-text" id="create-app-window__err-text"/>
-          <div id="buttons" className="create-app-window__buttons-wrap">
-            <Button
-              size="md"
-              background="#e74c3c"
-              id="create-app-window__button-close"> Закрыть  </Button>
-            <Button
-              size="md"
-              background="#1abc9c"> Создать! </Button>
-          </div>
+          { buttons }
         </div>
       </div>
     );
@@ -120,12 +149,17 @@ class CreateAppWindow extends React.Component {
     /* search icon by name */
     const input = document.getElementById('create-app-window__icon-name');
     input.addEventListener('keyup', this.tap);
-    document.getElementById('create-app-window__button-close').addEventListener('click', this.closeWindow);
+
+    document.getElementById('create-app-window__button-close')
+      .addEventListener('click', this.closeWindow);
+
+    document.getElementById('create-app-window__button-save')
+      .addEventListener('click', this.saveApp);
 
   }
 
   closeWindow() {
-    this.props.switchModalState(true, 'new')
+    this.props.switchModalState(true, 'new', {});
   }
 
   componentWillUnmount() {
@@ -180,20 +214,80 @@ class CreateAppWindow extends React.Component {
     this.deleteActiveIcon();
     this.icon = null;
     this.setState({search: event.target.value.toLowerCase()});
-    
-    /* set background */
-    /*if (event.target.value.length > 0) {
-      const icons = document.getElementsByClassName('create-app-window__icon-div');
-      for (let i = 0; i < icons.length; i++) {
-        icons[i].hover.style.background = 'red';
+  }
+
+  validate() {
+    const name = document.getElementById('app-name').value;
+    if (name.length === 0) { return { err: true, message: 'Введите имя приложения!' }; }
+
+    const downloadAvailable = document.getElementById('app-download').checked;
+
+    let color = document
+      .getElementById('create-app-window__colors')
+      .querySelector('input:checked');
+    if (color === null) { return { err: true, message: 'Выберите цвет иконки!' }; }
+    color = color.value;
+
+    let icon = this.icon;
+    if (this.icon === null) { return { err: true, message: 'Выберите значек иконки!' }; }
+    icon = icon.getAttribute('data-icon');
+
+    return { err: false, body: { name, downloadAvailable, color, icon } };
+  }
+
+  saveApp() {
+    let status = this.validate();
+    console.log(status);
+
+    if (status.err) {
+      document.getElementById('create-app-window__err-text').innerText = status.message;
+      return;
+    }
+
+    let text = document.getElementById('create-app-window__err-text');
+    text.style.color = '#3498db';
+    text.innerText = 'Сохранение ...';
+
+    document.getElementById('buttons').style.visibility = 'hidden';
+
+    let url = 'api/create_app';
+    if (this.props.modal.mode === 'set') { url = 'api/change_app'; }
+
+    /* send settings to the server */
+    const body = JSON.stringify(status.body);
+    fetch(url, {
+      method: "POST",
+      headers: {
+        'Accept': 'application/json, text/plain, */*',
+        'Content-Type': 'application/json',
+      },
+      body
+    }).then(res => res.json()).then(body => {
+      if (body.status === 'ok') {
+        text.style.color = '#2ecc71';
+        text.innerText = 'Сохранено!';
+
+        /* fetch new projects list */
+        this.props.fetchProjects(this.props.user.username, this.props.user.id).then(() => {
+          this.closeWindow();
+        });
+      } else {
+        text.style.color = '#e74c3c';
+        text.innerText = 'Неизвестная ошибка :(';
+        document.getElementById('buttons').style.visibility = 'visible';
       }
-    }*/
+    }).catch(err => {
+      text.style.color = '#e74c3c';
+      text.innerText = 'Ошибка запроса :(';
+      document.getElementById('buttons').style.visibility = 'visible';
+    });
   }
 }
 
 function mapStateToProps(store) {
   return {
     modal: store.projectsModal,
+    user: store.userData.user,
   }
 }
 
@@ -201,7 +295,10 @@ function mapDispatchToProps(dispatch) {
   return {
     switchModalState: (state, mode) => {
       dispatch(switchModalState(state, mode))
-    }
+    },
+    fetchProjects: (username, id) => {
+      dispatch(fetchProjects(username, id))
+    },
   }
 }
 

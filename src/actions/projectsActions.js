@@ -58,7 +58,7 @@ const projects = [
 ];
 
 /* develop mode */
-const devMode = true;
+const devMode = false;
 
 export function fetchProjects(username, id) {
   const body = JSON.stringify({ username, id });
