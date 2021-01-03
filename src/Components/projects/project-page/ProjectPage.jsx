@@ -376,6 +376,9 @@ class ProjectPage extends React.Component {
       event.preventDefault();
       try {
         let code = localStorage.getItem( this.app.id );
+        if (code === null) {
+          return this.setState({message: { type: false, text: 'Бекапа не найденно!'}});
+        }
         this.download(code);
         this.setState({message: { type: true, text: 'Бекап загружен!'}});
       } catch {

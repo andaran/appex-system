@@ -16,9 +16,7 @@ const App = require(path.join(__dirname, '../', 'models', 'app.js'));
 /*   ---==== User ====---   */
 
 router.post('/get_user', (req, res) => {
-  User.findOne({ id: req.user.id }).then(user => {
-    res.json({ status: 'ok', user });
-  });
+  res.json({ status: 'ok', user: req.user });
 });
 
 router.post('/change_user', (req, res) => {

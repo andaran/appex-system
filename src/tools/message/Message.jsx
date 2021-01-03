@@ -10,11 +10,11 @@ export default class Message extends React.Component {
 
     /* change BG color */
     let color = '#e74c3c';
-    if ( !this.props.mode ) { color = '#2ecc71'; }
+    if ( this.props.type ) { color = '#2ecc71'; }
 
     /* change icon */
     let icon = <FontAwesomeIcon icon={ faTimes }/>;
-    if ( !this.props.mode ) { icon = <FontAwesomeIcon icon={ faCheck }/>; }
+    if ( this.props.type ) { icon = <FontAwesomeIcon icon={ faCheck }/>; }
 
     let audio = new Audio();
     audio.preload = 'auto';
