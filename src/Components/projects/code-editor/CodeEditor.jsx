@@ -2,8 +2,11 @@
 import React from 'react';
 
 import CodeMirror from "codemirror";
+import emmet from '@emmetio/codemirror-plugin';
 import { changeProjects } from "../../../actions/projectsActions";
 import { connect } from "react-redux";
+
+emmet(CodeMirror);
 
 /* Component */
 class CodeEditor extends React.Component {
@@ -34,6 +37,17 @@ class CodeEditor extends React.Component {
   }
 
   componentDidMount() {
+
+    let keys = {'Ctrl-Space': 'autocomplete'};
+    if (this.props.type === 'htmlembedded') {
+      keys = {
+        'Tab': 'emmetExpandAbbreviation',
+        'Esc': 'emmetResetAbbreviation',
+        'Enter': 'emmetInsertLineBreak',
+        'Ctrl-Space': 'autocomplete'
+      }
+    }
+
     this.editor = CodeMirror.fromTextArea(document.getElementById( this.props.id ), {
       lineNumbers: true,
       lineWrapping: true,
@@ -41,7 +55,7 @@ class CodeEditor extends React.Component {
       mode: this.props.type,
       indentUnit: 4,
       theme: 'darcula',
-      extraKeys: {"Ctrl-Space": "autocomplete"},
+      extraKeys: keys,
     });
 
     this.editor.on('change', this.autocomplete);

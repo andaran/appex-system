@@ -85,6 +85,9 @@ class ProjectPage extends React.Component {
 
     /* download */
     this.download = this.download.bind(this);
+
+    /* upload */
+    this.upload = this.upload.bind(this);
   }
 
   render() {
@@ -331,6 +334,31 @@ class ProjectPage extends React.Component {
     this.props.switchModalState(this.props.modal.status, 'set');
   }
 
+  upload() {
+    const code = this.app.code;
+    const releaseCode = this.app.releaseCode;
+    const id = this.app.id;
+
+    /* send code to server */
+    const body = JSON.stringify({ code, releaseCode, id });
+    fetch('../api/change_app/code', {
+      method: "POST",
+      headers: {
+        'Accept': 'application/json, text/plain, */*',
+        'Content-Type': 'application/json',
+      },
+      body
+    }).then(res => res.json()).then(body => {
+      if (body.status === 'ok') {
+        this.setState({message: { type: true, text: 'Код отправлен!'}});
+      } else {
+        this.setState({message: { type: false, text: 'Ошибка отправки!'}});
+      }
+    }).catch(err => {
+      this.setState({message: { type: false, text: 'Ошибка отправки!'}});
+    });
+  }
+
 
 
   /*   ---==== Hotkey events ====---   */
@@ -437,6 +465,13 @@ class ProjectPage extends React.Component {
     if (event.altKey && event.code === 'KeyS') {
       event.preventDefault();
       this.settings();
+      return false;
+    }
+
+    /* upload */
+    if (event.altKey && event.code === 'KeyU') {
+      event.preventDefault();
+      this.upload();
       return false;
     }
   }
