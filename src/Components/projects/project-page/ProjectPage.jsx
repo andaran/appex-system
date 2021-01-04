@@ -24,11 +24,14 @@ import 'codemirror/addon/hint/show-hint.css';
 import 'codemirror/mode/javascript/javascript';
 import 'codemirror/mode/css/css';
 import 'codemirror/mode/htmlembedded/htmlembedded';
+import 'codemirror-minimap';
 
 import 'codemirror/addon/hint/show-hint.js';
 import 'codemirror/addon/hint/html-hint.js';
 import 'codemirror/addon/hint/css-hint';
 import 'codemirror/addon/hint/javascript-hint';
+
+import 'codemirror-minimap/src/minimap.css';
 
 import Button from "../../../tools/button/Button";
 import Error from '../error-404/Error404';
@@ -189,28 +192,33 @@ class ProjectPage extends React.Component {
             </div>
           </div>
         </div>
-        <div className={`editors-wrap-${ this.state.mode } editors-wrap-${ this.state.mode }_${ this.state.page }`}>
+        <div
+          className={`editors-wrap-${ this.state.mode } editors-wrap-${ this.state.mode }_${ this.state.page }`}
+          id="editors-wrap">
           <CodeEditor
             id='code-editor-htmlembedded'
             type='htmlembedded'
             message='HTML'
             code={ this.app.code.html }
             appId={ this.id }
-            key={ 0 }/>
+            key={ this.state.mode + '-1' }
+            mode={ this.state.mode }/>
           <CodeEditor
             id='code-editor-css'
             type='css'
             message='CSS'
             code={ this.app.code.css }
             appId={ this.id }
-            key={ 1 }/>
+            key={ this.state.mode + '-2' }
+            mode={ this.state.mode }/>
           <CodeEditor
             id='code-editor-javascript'
             type='javascript'
             message='JAVASCRIPT'
             code={ this.app.code.js }
             appId={ this.id }
-            key={ 2 }/>
+            key={ this.state.mode + '-3' }
+            mode={ this.state.mode }/>
         </div>
       </div>
     );
@@ -431,19 +439,32 @@ class ProjectPage extends React.Component {
     }
 
     /* release */
-    if (event.altKey && event.code === 'KeyR') {
-      event.preventDefault();
-      this.download('_', false);
-      this.setState({message: { type: true, text: 'Релиз кода создан!'}});
-      return false;
-    }
+    process.nextTick(() => {
+      if (event.altKey && event.code === 'KeyR') {
+        event.preventDefault();
+        this.download('_', false);
+        this.setState({message: { type: true, text: 'Релиз кода создан!'}});
+        return false;
+      }
+    });
 
     /* Switch mode */
-    if (event.altKey && event.code === 'KeyV') {
-      const mode = this.state.mode;
-      mode === 'any' ? this.setState({ mode: 'one' }) : this.setState({ mode: 'any' });
-      return false;
-    }
+    process.nextTick(() => {
+      if (event.altKey && event.code === 'KeyV') {
+        const mode = this.state.mode;
+        mode === 'any' ? this.setState({ mode: 'one' }) : this.setState({ mode: 'any' });
+        return false;
+      }
+    });
+
+    /* upload */
+    process.nextTick(() => {
+      if (event.altKey && event.code === 'KeyU') {
+        event.preventDefault();
+        this.upload();
+        return false;
+      }
+    });
 
     /* full view */
     if (event.altKey && event.code === 'KeyF') {
@@ -465,13 +486,6 @@ class ProjectPage extends React.Component {
     if (event.altKey && event.code === 'KeyS') {
       event.preventDefault();
       this.settings();
-      return false;
-    }
-
-    /* upload */
-    if (event.altKey && event.code === 'KeyU') {
-      event.preventDefault();
-      this.upload();
       return false;
     }
   }

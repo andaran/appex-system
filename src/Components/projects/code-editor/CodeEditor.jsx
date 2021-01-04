@@ -48,6 +48,11 @@ class CodeEditor extends React.Component {
       }
     }
 
+    let minimapSettings = false;
+    if (this.props.mode === 'one') {
+      minimapSettings = { scale: 6 };
+    }
+
     this.editor = CodeMirror.fromTextArea(document.getElementById( this.props.id ), {
       lineNumbers: true,
       lineWrapping: true,
@@ -56,6 +61,7 @@ class CodeEditor extends React.Component {
       indentUnit: 4,
       theme: 'darcula',
       extraKeys: keys,
+      minimap: minimapSettings,
     });
 
     this.editor.on('change', this.autocomplete);
@@ -69,7 +75,8 @@ class CodeEditor extends React.Component {
   }
 
   keydown (event) {
-    if (event.ctrlKey && event.code === 'KeyS') {
+    if ((event.ctrlKey && event.code === 'KeyS') ||
+        (event.altKey && (event.code === 'KeyR' || event.code === 'KeyU' || event.code === 'KeyV'))) {
       this.save();
       event.preventDefault();
       return false;
