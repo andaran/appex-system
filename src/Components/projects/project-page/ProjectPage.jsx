@@ -227,9 +227,9 @@ class ProjectPage extends React.Component {
     document.onkeydown = this.keydown;
     this.pressed = new Set();
 
-    process.nextTick(() => {
+    setTimeout(() => {
       document.getElementById('app-navbar__settings').onclick = this.settings;
-    });
+    }, 100);
   }
 
   componentWillUnmount() {

@@ -21,6 +21,10 @@ const appSchema = new mongoose.Schema({
     type: Boolean,
     required: true,
   },
+  createDate: {
+    type: String,
+    required: true,
+  },
   author: {
     type: Object,
     required: true,

@@ -119,4 +119,16 @@ router.post('/change_app/:mode', (req, res) => {
     .catch(err => res.json({ status: 'err' }));
 });
 
+router.post('/delete_app', ((req, res) => {
+
+  /* delete app */
+  App.deleteOne({
+    author: { username: req.user.username, id: req.user.id },
+    id: req.body.id,
+  }).then(changedApp => {
+    res.json({ status: 'ok' });
+  }, err => res.json({ status: 'err' }))
+    .catch(err => res.json({ status: 'err' }));
+}));
+
 module.exports = router;
