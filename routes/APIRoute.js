@@ -78,4 +78,45 @@ router.post('/create_app', (req, res) => {
     .catch(err => res.json({ status: 'err' }));
 });
 
+router.post('/change_app/:mode', (req, res) => {
+
+  /* switch change mode */
+  let updateObj;
+  switch (req.params.mode) {
+
+    /* app settings */
+    case 'settings':
+      updateObj = {
+        title: req.body.name,
+        icon: req.body.icon,
+        color: req.body.color,
+        storeVisibility: req.body.downloadAvailable,
+      }
+      break;
+
+    /* app code */
+    case 'code':
+      updateObj = {
+        code: req.body.code,
+        releaseCode: req.body.releaseCode,
+      }
+      break;
+
+    default:
+      updateObj = {};
+      break;
+  }
+
+  /* update app */
+  App.updateOne({
+    author: { username: req.user.username, id: req.user.id },
+    id: req.body.id,
+  }, {
+    $set: updateObj
+  }).then(changedApp => {
+    res.json({ status: 'ok' });
+  }, err => res.json({ status: 'err' }))
+    .catch(err => res.json({ status: 'err' }));
+});
+
 module.exports = router;

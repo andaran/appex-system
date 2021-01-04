@@ -17,6 +17,7 @@ class CreateAppWindow extends React.Component {
 
     this.state = {
       search: '',
+      deleteConfirm: false,
     }
 
     this.icon = null;
@@ -30,6 +31,8 @@ class CreateAppWindow extends React.Component {
     this.closeWindow = this.closeWindow.bind(this);
     this.validate = this.validate.bind(this);
     this.saveApp = this.saveApp.bind(this);
+    this.deleteConfirm = this.deleteConfirm.bind(this);
+    this.deleteApp = this.deleteApp.bind(this);
   }
 
   render() {
@@ -69,6 +72,19 @@ class CreateAppWindow extends React.Component {
             background="#1abc9c"
             id="create-app-window__button-save"> Сохранить </Button>
         </div>
+      );
+    }
+
+    let confirm = null;
+    if (this.state.deleteConfirm) {
+      confirm = (
+        <span className="delete-confirm">
+          Вы точно хотите удалить приложение?
+          <Button
+            size="sm"
+            background="#e74c3c"
+            id="delete-confirm"> Подтвердить </Button>
+        </span>
       );
     }
 
@@ -138,6 +154,7 @@ class CreateAppWindow extends React.Component {
         </div>
         <div className="create-app-window__buttons">
           <div className="create-app-window__err-text" id="create-app-window__err-text"/>
+          { confirm }
           { buttons }
         </div>
       </div>
@@ -156,6 +173,32 @@ class CreateAppWindow extends React.Component {
     document.getElementById('create-app-window__button-save')
       .addEventListener('click', this.saveApp);
 
+    /* set settings if mode === 'set' */
+    if (this.props.modal.mode === 'set') {
+      document.getElementById('app-name').value = this.props.title;
+      document.getElementById('app-download').checked = this.props.storeVisibility;
+
+      let color = document
+        .getElementById('create-app-window__colors')
+        .querySelector(`input[value="${ this.props.color }"]`);
+      color.checked = true;
+
+      document.getElementById('create-app-window__icon-name').value = this.props.icon.substring(2);
+      this.tap();
+
+      process.nextTick(() => {
+        let icon = document.querySelector(`.create-app-window__icon-div[data-icon="${ this.props.icon }"]`);
+        this.elementMouseOver({ target: icon });
+        this.changeIcon({ target: icon });
+        this.elementMouseLeave({ target: icon });
+      });
+
+      /* delete app */
+      document
+        .getElementById('create-app-window__button-delete')
+        .addEventListener('click', this.deleteConfirm);
+    }
+
   }
 
   closeWindow() {
@@ -167,6 +210,12 @@ class CreateAppWindow extends React.Component {
     input.removeEventListener('keyup', this.tap);
     document.getElementById('create-app-window__button-close')
       .removeEventListener('click', this.closeWindow);
+
+    if (this.props.modal.mode === 'set') {
+      document
+        .getElementById('create-app-window__button-delete')
+        .removeEventListener('click', this.deleteConfirm);
+    }
   }
 
   changeIcon(event) {
@@ -195,7 +244,7 @@ class CreateAppWindow extends React.Component {
   elementMouseOver(event) {
     const colorsWrap = document.getElementById('create-app-window__colors');
     const input = colorsWrap.querySelector('input:checked');
-    let color = 'red';
+    let color;
     input === null ? color = '#3498db' : color = input.value;
 
     event.target.style.backgroundColor = color;
@@ -204,16 +253,18 @@ class CreateAppWindow extends React.Component {
   }
 
   elementMouseLeave(event) {
-    if (event.target === this.icon) { return ;}
+    if (event.target === this.icon) { return; }
     event.target.style.backgroundColor = '#3b4148';
     event.target.querySelector('svg').style.backgroundColor = '#3b4148';
     event.target.querySelector('svg').style.color = '#838a91';
   }
 
-  tap(event) {
+  tap() {
     this.deleteActiveIcon();
     this.icon = null;
-    this.setState({search: event.target.value.toLowerCase()});
+    this.setState({
+      search: document.getElementById('create-app-window__icon-name').value.toLowerCase()
+    });
   }
 
   validate() {
@@ -237,21 +288,27 @@ class CreateAppWindow extends React.Component {
 
   saveApp() {
     let status = this.validate();
-    console.log(status);
+    this.setState({ deleteConfirm: false });
+
+    let text = document.getElementById('create-app-window__err-text');
+    text.innerHtml = '';
 
     if (status.err) {
-      document.getElementById('create-app-window__err-text').innerText = status.message;
+      text.innerText = status.message;
       return;
     }
 
-    let text = document.getElementById('create-app-window__err-text');
     text.style.color = '#3498db';
     text.innerText = 'Сохранение ...';
 
     document.getElementById('buttons').style.visibility = 'hidden';
 
     let url = 'api/create_app';
-    if (this.props.modal.mode === 'set') { url = 'api/change_app'; }
+    if (this.props.modal.mode === 'set') {
+      url = '../api/change_app/settings';
+      status.body.id = this.props.id;
+    }
+    console.log(status);
 
     /* send settings to the server */
     const body = JSON.stringify(status.body);
@@ -266,6 +323,48 @@ class CreateAppWindow extends React.Component {
       if (body.status === 'ok') {
         text.style.color = '#2ecc71';
         text.innerText = 'Сохранено!';
+
+        /* fetch new projects list */
+        this.props.fetchProjects();
+        this.closeWindow();
+      } else {
+        text.style.color = '#e74c3c';
+        text.innerText = 'Неизвестная ошибка :(';
+        document.getElementById('buttons').style.visibility = 'visible';
+      }
+    }).catch(err => {
+      text.style.color = '#e74c3c';
+      text.innerText = 'Ошибка запроса :(';
+      document.getElementById('buttons').style.visibility = 'visible';
+    });
+  }
+
+  deleteConfirm() {
+    let text = document.getElementById('create-app-window__err-text');
+    text.innerText = '';
+    this.setState({ deleteConfirm: true });
+    document.getElementById('delete-confirm').onclick = this.deleteApp;
+  }
+
+  deleteApp() {
+    console.log('delete');
+    this.setState({ deleteConfirm: false });
+
+    let text = document.getElementById('create-app-window__err-text');
+    text.style.color = '#3498db';
+    text.innerText = 'Удаление ...';
+
+    /* delete app */
+    const body = JSON.stringify({ id: this.props.id });
+    fetch('../api/delete_app', {
+      method: "POST",
+      headers: {
+        'Accept': 'application/json, text/plain, */*',
+        'Content-Type': 'application/json',
+      },
+      body
+    }).then(res => res.json()).then(body => {
+      if (body.status === 'ok') {
 
         /* fetch new projects list */
         this.props.fetchProjects();

@@ -6,6 +6,11 @@ const projects = [
     icon: "faUtensils",
     color: "#f1c40f",
     id: "hGud&snkxkhs&6467",
+    storeVisibility: true,
+    author: {
+      username: 'Andrey',
+      id: '12345',
+    },
     code: {
       html: '<div class="varka"> \n' +
         '\t[[Button \n' +
@@ -28,7 +33,7 @@ const projects = [
       js: 'console.log(\'Release!\');',
     },
   },
-  {
+  /*{
     title: "Автополив",
     icon: "faTint",
     color: "#3498db",
@@ -54,11 +59,11 @@ const projects = [
       css: '',
       js: 'console.log(\'Release!\');',
     },
-  },
+  },*/
 ];
 
 /* develop mode */
-const devMode = true;
+const devMode = false;
 
 export function fetchProjects(username, id) {
   const body = JSON.stringify({ username, id });

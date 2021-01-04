@@ -101,7 +101,7 @@ class AppNavbar extends React.Component {
               </div>
             </div>
           </div>
-          <div className="app-navbar__item app-navbar__item-link">
+          <div className="app-navbar__item app-navbar__item-link" id="app-navbar__settings">
             <span> Настойки </span>
             <span> Alt + S </span>
           </div>
@@ -143,15 +143,15 @@ class AppNavbar extends React.Component {
           </div>
           <div className="app-navbar__item app-navbar__item_text-button">
             <span> Релиз </span>
-            <span> Ctrl + R </span>
+            <span> Alt + R </span>
           </div>
           <div className="app-navbar__item app-navbar__item_text-button">
             <span> Выгрузить </span>
-            <span> Ctrl + U </span>
+            <span> Alt + U </span>
           </div>
           <div className="app-navbar__item app-navbar__item_text-button">
             <span> Запустить </span>
-            <span> Ctrl + P </span>
+            <span> Alt + P </span>
           </div>
           <div className="app-navbar__item app-navbar__item_text-button">
             <span> Сменить вид </span>

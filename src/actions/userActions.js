@@ -1,6 +1,6 @@
 
 /* develop mode */
-const devMode = true;
+const devMode = false;
 
 export function fetchUser() {
   let request;

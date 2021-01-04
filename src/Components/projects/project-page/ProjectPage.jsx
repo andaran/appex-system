@@ -13,6 +13,7 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import { fetchProjects, changeProjects } from '../../../actions/projectsActions';
+import { switchModalState } from "../../../actions/projectsModalActions";
 import { connect } from "react-redux";
 
 /* codemirror */
@@ -36,6 +37,8 @@ import AppNavbar from '../app-navbar/AppNavbar';
 import CodeEditor from '../code-editor/CodeEditor';
 import Interpreter from '../../../tools/interpreter/Interpreter';
 import Message from '../../../tools/message/Message';
+import Window from '../create-app-window/CreateAppWindow';
+import Wrap from '../../../tools/modal-wrap/ModalWrap';
 
 /* Component */
 class ProjectPage extends React.Component {
@@ -78,6 +81,7 @@ class ProjectPage extends React.Component {
     this.mouseUp = this.mouseUp.bind(this);
     this.moveEmulator = this.moveEmulator.bind(this);
     this.playJS = this.playJS.bind(this);
+    this.settings = this.settings.bind(this);
 
     /* download */
     this.download = this.download.bind(this);
@@ -122,6 +126,10 @@ class ProjectPage extends React.Component {
       }, 600);
     }
 
+    /* render settings window */
+    let modal;
+    this.props.modal.status? modal = <Wrap for={ <Window { ...this.app } /> } />: modal = null;
+
     process.nextTick(() => {
       document.getElementById('app-demo__playJS').classList.remove('app-demo__nav-item_true');
       this.playJSFlag = false;
@@ -132,6 +140,7 @@ class ProjectPage extends React.Component {
         className="project-page-container"
         onMouseUp={ this.mouseUp }>
         { message }
+        { modal }
         <AppNavbar app = { this.app }/>
         <div
           className={` app-demo
@@ -215,13 +224,15 @@ class ProjectPage extends React.Component {
     }
 
     /* hotkeys */
-    /*document.addEventListener('keydown', this.keydown);*/
     document.onkeydown = this.keydown;
     this.pressed = new Set();
+
+    process.nextTick(() => {
+      document.getElementById('app-navbar__settings').onclick = this.settings;
+    });
   }
 
   componentWillUnmount() {
-    /*document.removeEventListener('keydown', this.keydown);*/
     document.removeEventListener('mousemove', this.moveEmulator);
     this.appJS = null;
   }
@@ -316,6 +327,10 @@ class ProjectPage extends React.Component {
     }
   }
 
+  settings() {
+    this.props.switchModalState(this.props.modal.status, 'set');
+  }
+
 
 
   /*   ---==== Hotkey events ====---   */
@@ -388,7 +403,7 @@ class ProjectPage extends React.Component {
     }
 
     /* release */
-    if (event.ctrlKey && event.code === 'KeyR') {
+    if (event.altKey && event.code === 'KeyR') {
       event.preventDefault();
       this.download('_', false);
       this.setState({message: { type: true, text: 'Релиз кода создан!'}});
@@ -412,9 +427,16 @@ class ProjectPage extends React.Component {
     }
 
     /* play JS */
-    if (event.ctrlKey && event.code === 'KeyP') {
+    if (event.altKey && event.code === 'KeyP') {
       event.preventDefault();
       this.playJS();
+      return false;
+    }
+
+    /* settings */
+    if (event.altKey && event.code === 'KeyS') {
+      event.preventDefault();
+      this.settings();
       return false;
     }
   }
@@ -453,6 +475,7 @@ function mapStateToProps(store) {
     projectsIsFetching: store.projects.isFetching,
     projectsError: store.projects.error,
     user: store.userData.user,
+    modal: store.projectsModal,
   }
 }
 
@@ -463,7 +486,10 @@ function mapDispatchToProps(dispatch) {
     },
     changeProjects: ( changedProjects ) => {
       dispatch(changeProjects( changedProjects ))
-    }
+    },
+    switchModalState: (state, mode) => {
+      dispatch(switchModalState(state, mode))
+    },
   }
 }
 
