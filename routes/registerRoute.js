@@ -58,6 +58,7 @@ router.post('/', (req, res) => {
             id: userId,
             password: hash,
             registrationDate: Date.now(),
+            type: 'user',
             installedApps: [],
             settings: [],
             userSettings: {},

@@ -21,6 +21,10 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  type: {
+    type: String,
+    required: true,
+  },
   installedApps: { type: Array },
   settings: { type: Array },
   userSettings: { type: Object },
