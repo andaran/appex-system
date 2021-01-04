@@ -17,8 +17,13 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  registrationDate: {
+    type: String,
+    required: true,
+  },
+  installedApps: { type: Array },
   settings: { type: Array },
-  userSettings: { type: Array },
+  userSettings: { type: Object },
 });
 
 const user = mongoose.model('user', userSchema, 'users');

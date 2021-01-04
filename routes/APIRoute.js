@@ -53,6 +53,7 @@ router.post('/create_app', (req, res) => {
       color: req.body.color,
       id: appId,
       storeVisibility: req.body.downloadAvailable,
+      createDate: Date.now(),
       author: {
         username: req.user.username,
         id: req.user.id,

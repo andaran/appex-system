@@ -4,6 +4,8 @@
     "username": "Andrey",
     "email": "andrnovip@gmail.com",
     "id": "H2dv3hoel8Ij",
+    "registrationDate": "1234567",
+    "installedApps": [],
     "settings": [{
       "id": "hGud&snkxkhs&6467",
       "body": {
@@ -11,6 +13,6 @@
         "roomPass": "password"
       }
     }],
-    "userSettings": []
+    "userSettings": {}
   }
 }

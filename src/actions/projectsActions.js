@@ -7,6 +7,7 @@ const projects = [
     color: "#f1c40f",
     id: "hGud&snkxkhs&6467",
     storeVisibility: true,
+    createDate: '123456',
     author: {
       username: 'Andrey',
       id: '12345',

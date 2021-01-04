@@ -48,7 +48,7 @@ router.post('/', (req, res) => {
       /* generate id */
       generateUserId().then(userId => {
 
-        /*generate password hash */
+        /* generate password hash */
         bcrypt.hash(req.body.password, 10).then(hash => {
 
           /* create new user */
@@ -57,6 +57,10 @@ router.post('/', (req, res) => {
             email: req.body.email,
             id: userId,
             password: hash,
+            registrationDate: Date.now(),
+            installedApps: [],
+            settings: [],
+            userSettings: {},
           });
 
           /* save new user */
