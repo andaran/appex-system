@@ -1,1 +1,24 @@
-[]
+[
+  {
+    "title": "макароно-варка",
+    "icon": "faUtensils",
+    "color": "#f1c40f",
+    "id": "hGud&snkxkhs&6467",
+    "storeVisibility": true,
+    "createDate": "123456",
+    "author": {
+      "username": "Andrey",
+      "id": "12345"
+    },
+    "code": {
+      "html": "",
+      "css": "",
+      "js": "console.log('Hello, World!');"
+    },
+    "releaseCode": {
+      "html": "release!",
+      "css":"",
+      "js": "console.log('Release!');"
+    }
+  }
+]

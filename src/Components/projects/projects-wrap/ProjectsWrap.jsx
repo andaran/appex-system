@@ -13,6 +13,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import { connect } from 'react-redux';
 import { fetchProjects } from '../../../actions/projectsActions';
+import { fetchRooms } from '../../../actions/roomsActions';
 import { switchModalState } from '../../../actions/projectsModalActions';
 import Message from "../../../tools/message/Message";
 
@@ -31,6 +32,8 @@ class ProjectsWrap extends React.Component {
   }
 
   render() {
+
+    console.log(this.props.projects);
 
     /* all cards */
     let cards = null;
@@ -133,6 +136,15 @@ class ProjectsWrap extends React.Component {
       this.setState({message: { type: false, text: 'Неизвестная ошибка загрузки проектов!'}});
     }
 
+    if (this.props.rooms.length === 0 && !this.props.roomsIsFetching) {
+      this.props.fetchRooms();
+    }
+
+    if (this.props.roomsError) {
+      console.log('Неизвестная ошибка загрузки проектов!');
+      this.setState({message: { type: false, text: 'Неизвестная ошибка загрузки комнат!'}});
+    }
+
     document.getElementById(`project-card-plus-wrap`).addEventListener('click', this.newProject);
   }
 
@@ -179,11 +191,22 @@ class ProjectsWrap extends React.Component {
 
 function mapStateToProps(store) {
   return {
+
+    /* projects */
     projects: store.projects.data,
     projectsIsFetching: store.projects.isFetching,
     projectsError: store.projects.error,
+
+    /* modal */
     modal: store.projectsModal,
+
+    /* user */
     user: store.userData.user,
+
+    /* rooms */
+    rooms: store.rooms.data,
+    roomsIsFetching: store.rooms.isFetching,
+    roomsError: store.rooms.error,
   }
 }
 
@@ -191,6 +214,9 @@ function mapDispatchToProps(dispatch) {
   return {
     fetchProjects: () => {
       dispatch(fetchProjects())
+    },
+    fetchRooms: () => {
+      dispatch(fetchRooms())
     },
     switchModalState: (state, mode) => {
       dispatch(switchModalState(state, mode))
