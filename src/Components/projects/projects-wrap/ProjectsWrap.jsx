@@ -29,11 +29,10 @@ class ProjectsWrap extends React.Component {
     // bind
     this.newProject = this.newProject.bind(this);
     this.close = this.close.bind(this);
+    this.newRoom = this.newRoom.bind(this);
   }
 
   render() {
-
-    console.log(this.props.projects);
 
     /* all cards */
     let cards = null;
@@ -47,8 +46,8 @@ class ProjectsWrap extends React.Component {
 
     /* all rooms */
     let rooms = null;
-    if (!this.props.projectsIsFetching && !this.props.projectsError) {
-      rooms = this.props.projects.map((props, index) => {
+    if (!this.props.roomsIsFetching && !this.props.roomsError) {
+      rooms = this.props.rooms.map((props, index) => {
         return (
           <Room { ...props } key = { index }/>
         );
@@ -146,12 +145,14 @@ class ProjectsWrap extends React.Component {
     }
 
     document.getElementById(`project-card-plus-wrap`).addEventListener('click', this.newProject);
+    document.getElementById(`room-card-plus-wrap`).addEventListener('click', this.newRoom);
   }
 
   componentWillUnmount() {
     document.getElementById(`project-card-plus-wrap`).removeEventListener('mousemove', this.mousemove);
     document.getElementById(`project-card-plus-wrap`).removeEventListener('mouseleave', this.mouseleave);
     document.getElementById(`project-card-plus-wrap`).removeEventListener('click', this.newProject);
+    document.getElementById(`room-card-plus-wrap`).removeEventListener('click', this.newRoom);
 
     document.getElementById(`room-card-plus-wrap`).removeEventListener('mousemove', this.mousemove);
     document.getElementById(`room-card-plus-wrap`).removeEventListener('mouseleave', this.mouseleave);
@@ -159,6 +160,20 @@ class ProjectsWrap extends React.Component {
 
   newProject() {
     this.props.switchModalState(this.props.modal.status, 'new', {});
+  }
+
+  newRoom() {
+
+    /* create new room */
+    fetch('api/create_room', {
+      method: "POST",
+      headers: {
+        'Accept': 'application/json, text/plain, */*',
+        'Content-Type': 'application/json',
+      },
+    })
+      .then(res => res.json()).then(body => this.props.fetchRooms())
+      .catch(() => this.props.fetchRooms());
   }
 
   close() {

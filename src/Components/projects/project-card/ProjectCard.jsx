@@ -58,11 +58,17 @@ export default class ProjectCard extends React.Component {
     xCord /= -10; xCord += 11;
     yCord /= -14.2; yCord += 11;
 
+    /* Выглядит не особо удобно, но выпиливать пока не буду */
+    /*
     icon.style.marginLeft = `${xCord * 2}px`;
     icon.style.marginTop = `${yCord * 2}px`;
 
     card.style.marginLeft = `${xCord * 1.5}px`;
     card.style.marginTop = `${yCord * 1.5}px`;
+    */
+
+    card.style.marginTop = `-20px`;
+
   }
 
   mouseleave(event) {

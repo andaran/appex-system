@@ -40,15 +40,18 @@ class PrivateRoute extends React.Component {
       status[0] = 'ok';
     }
 
+
+
     /* projects */
     process.nextTick(() => {
       if (!this.props.projectsFulfilled && !this.props.projectsIsFetching) { this.props.fetchProjects() }
     });
 
-
     if (this.props.projectsError) {
       status[1] = 'err';
     } else if (this.props.projectsFulfilled) { status[1] = 'ok'; }
+
+
 
     /* rooms */
     process.nextTick(() => {
@@ -60,6 +63,8 @@ class PrivateRoute extends React.Component {
     } else if (this.props.roomsFulfilled) { status[2] = 'ok'; }
 
 
+
+    /* checking status */
     let ok = true;
     status.forEach(code => {
       if (code !== 'ok') { ok = false; }

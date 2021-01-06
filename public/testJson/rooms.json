@@ -1,6 +1,20 @@
-[{
-  "name": "light",
-  "roomId": "12345",
-  "roomPass": "315820",
-  "userId": "123"
-}]
+[
+  {
+    "name": "Освещение",
+    "roomId": "4h8dG0a7eJG5",
+    "roomPass": "315820",
+    "userId": "123"
+  },
+  {
+    "name": "Освещение",
+    "roomId": "4h8dG0a7eJG6",
+    "roomPass": "315820",
+    "userId": "123"
+  },
+  {
+    "name": "Освещение",
+    "roomId": "4h8dG0a7eJG7",
+    "roomPass": "315820",
+    "userId": "123"
+  }
+]

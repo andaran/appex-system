@@ -1,0 +1,55 @@
+.room-card
+  display: block
+  padding: 30px 5px
+  position: relative
+
+  pre
+    padding: 0
+    margin: 0
+    font-size: 14px
+    font-weight: 600
+    color: #3498db
+    font-family: monospace
+    cursor: pointer
+
+    width: 100%
+    overflow: scroll
+
+    input
+      font-weight: 400
+      color: #2980b9
+      font-family: -apple-system, BlinkMacSystemFont,"Segoe UI", Roboto,"Helvetica Neue", Arial
+      background: transparent
+      border: none
+      box-sizing: border-box
+
+      &:focus
+        outline: none
+        background: #32373d
+
+.room-card-wrap:hover
+  .room-card__text
+    text-shadow: 0 0 3px rgba(0, 0, 0, 0.2)
+
+.icons
+  position: absolute
+  bottom: 5px
+  right: 5px
+  display: flex
+  align-items: center
+
+  div
+    margin-left: 5px
+    background: #292d32
+    color: #8e959c
+    font-size: 20px
+    width: 32px
+    height: 32px
+    border-radius: 2px
+    display: flex
+    justify-content: center
+    align-items: center
+    cursor: pointer
+
+    &:hover
+      transform: scale(1.1)
