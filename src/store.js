@@ -8,6 +8,7 @@ import { createLogger } from 'redux-logger';
 import { projectsReducer } from './Reducers/projectsReducer';
 import { projectsModalReducer } from "./Reducers/projectsModalReducer";
 import { userReducer } from './Reducers/userReducer';
+import { roomsReducer } from './Reducers/roomsReducer';
 
 /*   --=== End reducers ===--   */
 
@@ -19,6 +20,7 @@ const reducers = combineReducers({
     projects: projectsReducer,
     projectsModal: projectsModalReducer,
     userData: userReducer,
+    rooms: roomsReducer,
 });
 
 export default createStore(reducers, middleware);

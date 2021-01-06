@@ -4,6 +4,7 @@ import React from 'react';
 /* Components */
 import Navbar from '../navbar/Navbar';
 import Card from '../project-card/ProjectCard';
+import Room from '../room-card/RoomCard';
 import Window from '../create-app-window/CreateAppWindow';
 import Wrap from '../../../tools/modal-wrap/ModalWrap';
 
@@ -41,6 +42,16 @@ class ProjectsWrap extends React.Component {
       });
     }
 
+    /* all rooms */
+    let rooms = null;
+    if (!this.props.projectsIsFetching && !this.props.projectsError) {
+      rooms = this.props.projects.map((props, index) => {
+        return (
+          <Room { ...props } key = { index }/>
+        );
+      });
+    }
+
     /* rendering window */
     let modal;
     this.props.modal.status? modal = <Wrap for={ <Window/> } />: modal = null;
@@ -55,35 +66,63 @@ class ProjectsWrap extends React.Component {
     }
 
     return (
-      <div className="project s-wrap">
+      <div>
         { modal }
         { message }
         <Navbar path="./images/appex.svg" />
-        <article className="cards">
-          {/*  <Card
+        <div className="project s-wrap">
+          <article className="cards">
+            {/*  <Card
             title="макароно-варка"
             icon="faUtensils"
             color="#3498db"
             id="hGud&snkxkhs&6467"
            />  */}
 
-          { cards }
+            { cards }
 
-          <div className="project-card-wrap"  id="project-card-plus-wrap">
-            <section className="project-card_plus" id="project-card__plus">
-              <div className="project-card__plus-wrap">
-                <FontAwesomeIcon icon={ faPlus } />
-              </div>
-            </section>
-          </div>
-        </article>
+            <div className="project-card-wrap"  id="project-card-plus-wrap">
+              <section className="project-card_plus" id="project-card__plus">
+                <div className="project-card__plus-wrap">
+                  <FontAwesomeIcon icon={ faPlus } />
+                </div>
+              </section>
+            </div>
+          </article>
+        </div>
+        <hr/>
+        <div className="project s-wrap">
+          <article className="cards">
+            {/*  <Room
+            title="макароно-варка"
+            icon="faUtensils"
+            color="#3498db"
+            id="hGud&snkxkhs&6467"
+           />  */}
+
+            { rooms }
+
+            <div className="project-card-wrap"  id="room-card-plus-wrap">
+              <section className="project-card_plus room-card_plus" id="room-card__plus">
+                <div className="project-card__plus-wrap room-card__plus-wrap">
+                  <FontAwesomeIcon icon={ faPlus } />
+                </div>
+              </section>
+            </div>
+          </article>
+        </div>
       </div>
     );
   }
 
   componentDidMount() {
-    document.getElementById(`project-card-plus-wrap`).addEventListener('mousemove', this.mousemove);
-    document.getElementById(`project-card-plus-wrap`).addEventListener('mouseleave', this.mouseleave);
+    const projectCard = document.getElementById(`project-card-plus-wrap`);
+    projectCard.addEventListener('mousemove', { handleEvent: this.mousemove, target: projectCard });
+    projectCard.addEventListener('mouseleave', { handleEvent: this.mouseleave, target: projectCard });
+
+    const roomCard = document.getElementById(`room-card-plus-wrap`);
+    roomCard.addEventListener('mousemove', { handleEvent: this.mousemove, target: roomCard });
+    roomCard.addEventListener('mouseleave', { handleEvent: this.mouseleave, target: roomCard });
 
     if (this.props.projects.length === 0 && !this.props.projectsIsFetching) {
       this.props.fetchProjects();
@@ -101,6 +140,9 @@ class ProjectsWrap extends React.Component {
     document.getElementById(`project-card-plus-wrap`).removeEventListener('mousemove', this.mousemove);
     document.getElementById(`project-card-plus-wrap`).removeEventListener('mouseleave', this.mouseleave);
     document.getElementById(`project-card-plus-wrap`).removeEventListener('click', this.newProject);
+
+    document.getElementById(`room-card-plus-wrap`).removeEventListener('mousemove', this.mousemove);
+    document.getElementById(`room-card-plus-wrap`).removeEventListener('mouseleave', this.mouseleave);
   }
 
   newProject() {
@@ -114,8 +156,8 @@ class ProjectsWrap extends React.Component {
   }
 
   mousemove(event) {
-    const iconWrap = document.getElementById(`project-card-plus-wrap`);
-    const icon = document.getElementById(`project-card__plus`);
+    let iconWrap = this.target;
+    let icon = iconWrap.querySelector('.project-card_plus');
 
     let targetCords = iconWrap.getBoundingClientRect();
     let xCord = event.clientX - targetCords.left;
@@ -130,7 +172,7 @@ class ProjectsWrap extends React.Component {
   }
 
   mouseleave(event) {
-    const icon = document.getElementById(`project-card__plus`);
+    let icon = this.target.querySelector('.project-card_plus');
     icon.style.margin = '0';
   }
 }
