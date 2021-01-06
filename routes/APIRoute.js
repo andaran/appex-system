@@ -3,13 +3,16 @@
 
 const express = require('express');
 const path = require('path');
+
 const generateAppId = require(path.join(__dirname, '../', 'IdActions', 'generateAppID.js'));
+const generateRoomId = require(path.join(__dirname, '../', 'IdActions', 'generateRoomID.js'));
 
 const router = express.Router();
 
 /* models */
 const User = require(path.join(__dirname, '../', 'models', 'user.js'));
 const App = require(path.join(__dirname, '../', 'models', 'app.js'));
+const Room = require(path.join(__dirname, '../', 'models', 'room.js'));
 
 
 
@@ -131,5 +134,69 @@ router.post('/delete_app', ((req, res) => {
   }, err => res.json({ status: 'err' }))
     .catch(err => res.json({ status: 'err' }));
 }));
+
+
+
+/*   ---==== Rooms ====---   */
+
+router.post('/get_rooms', (req, res) => {
+
+  /* find rooms by user id */
+  Room.find({ author: req.user.id }).then(foundRooms => {
+
+    /* send found rooms */
+    res.json(foundRooms);
+  });
+});
+
+router.post('/create_room', (req, res) => {
+
+  /* generate id */
+  generateRoomId().then(roomId => {
+
+    /* create app object */
+    let roomObj = {
+      author: req.user.id,
+      name: 'room',
+      roomId,
+      roomPass: 'room',
+      createDate: Date.now(),
+    }
+
+    /* save new app */
+    const room = new Room(roomObj);
+    room.save().then(newRoom => {
+      res.json({ status: 'ok' });
+    }, err => {
+      console.log(err);
+      res.json({ status: 'err' });
+    });
+
+  }, err => res.json({ status: 'err' }))
+    .catch(err => res.json({ status: 'err' }));
+});
+
+router.post('/change_room', (req, res) => {
+
+  const updateObj = {
+    name: req.body.name,
+    roomPass: req.body.roomPass,
+  }
+
+  /* update room */
+  Room.updateOne({ author: req.user.id, roomId: req.body.roomId }, { $set: updateObj }).then(changedRoom => {
+    res.json({ status: 'ok' });
+  }, err => res.json({ status: 'err' }))
+    .catch(err => res.json({ status: 'err' }));
+});
+
+router.post('/delete_room', (req, res) => {
+
+  /* delete app */
+  Room.deleteOne({ roomId: req.body.roomId }).then(removedRoom => {
+    res.json({ status: 'ok' });
+  }, err => res.json({ status: 'err' }))
+    .catch(err => res.json({ status: 'err' }));
+});
 
 module.exports = router;

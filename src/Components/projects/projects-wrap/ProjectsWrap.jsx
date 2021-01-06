@@ -126,7 +126,7 @@ class ProjectsWrap extends React.Component {
     roomCard.addEventListener('mousemove', { handleEvent: this.mousemove, target: roomCard });
     roomCard.addEventListener('mouseleave', { handleEvent: this.mouseleave, target: roomCard });
 
-    if (this.props.projects.length === 0 && !this.props.projectsIsFetching) {
+    if (!this.props.projectsFulfilled && !this.props.projectsIsFetching) {
       this.props.fetchProjects();
     }
 
@@ -135,7 +135,7 @@ class ProjectsWrap extends React.Component {
       this.setState({message: { type: false, text: 'Неизвестная ошибка загрузки проектов!'}});
     }
 
-    if (this.props.rooms.length === 0 && !this.props.roomsIsFetching) {
+    if (!this.props.roomsFulfilled && !this.props.roomsIsFetching) {
       this.props.fetchRooms();
     }
 
@@ -211,6 +211,7 @@ function mapStateToProps(store) {
     projects: store.projects.data,
     projectsIsFetching: store.projects.isFetching,
     projectsError: store.projects.error,
+    projectsFulfilled: store.projects.fulfilled,
 
     /* modal */
     modal: store.projectsModal,
@@ -222,6 +223,7 @@ function mapStateToProps(store) {
     rooms: store.rooms.data,
     roomsIsFetching: store.rooms.isFetching,
     roomsError: store.rooms.error,
+    roomsFulfilled: store.rooms.fulfilled,
   }
 }
 

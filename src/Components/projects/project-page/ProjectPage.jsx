@@ -97,7 +97,7 @@ class ProjectPage extends React.Component {
 
     /* if any err or projects isn`t loaded */
     if (this.props.projects === undefined ||
-        this.props.projects.length === 0 ||
+        this.props.projectsFulfilled === false ||
         this.props.projectsIsFetching ||
         this.props.projectsError) {
       return (
@@ -225,7 +225,7 @@ class ProjectPage extends React.Component {
   }
 
   componentDidMount() {
-    if (this.props.projects.length === 0 && !this.props.projectsIsFetching) {
+    if (!this.props.projectsFulfilled && !this.props.projectsIsFetching) {
       this.props.fetchProjects();
     }
 
@@ -238,9 +238,10 @@ class ProjectPage extends React.Component {
     document.onkeydown = this.keydown;
     this.pressed = new Set();
 
-    setTimeout(() => {
-      document.getElementById('app-navbar__settings').onclick = this.settings;
-    }, 100);
+    const settingsButton = document.getElementById('app-navbar__settings');
+    if (settingsButton !== null) {
+      setTimeout(() => settingsButton.onclick = this.settings, 100);
+    }
   }
 
   componentWillUnmount() {
@@ -520,10 +521,17 @@ class ProjectPage extends React.Component {
 
 function mapStateToProps(store) {
   return {
+
+    /* projects */
     projects: store.projects.data,
     projectsIsFetching: store.projects.isFetching,
     projectsError: store.projects.error,
+    projectsFulfilled: store.projects.fulfilled,
+
+    /* user */
     user: store.userData.user,
+
+    /* modal */
     modal: store.projectsModal,
   }
 }

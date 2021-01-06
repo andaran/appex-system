@@ -132,12 +132,12 @@ class RoomCard extends React.Component {
   saveRoom() {
 
     const name = document.getElementById(`room-name-${ this.props.roomId}`).value;
-    const pass = document.getElementById(`room-pass-${ this.props.roomId}`).value
+    const roomPass = document.getElementById(`room-pass-${ this.props.roomId}`).value
 
     /* save changes */
     const body = JSON.stringify({
       roomId: this.props.roomId,
-      name, pass
+      name, roomPass
     });
     fetch('api/change_room', {
       method: "POST",
