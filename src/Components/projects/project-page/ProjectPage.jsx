@@ -42,6 +42,7 @@ import Interpreter from '../../../tools/interpreter/Interpreter';
 import Message from '../../../tools/message/Message';
 import Window from '../create-app-window/CreateAppWindow';
 import Wrap from '../../../tools/modal-wrap/ModalWrap';
+import App from '../../../socketCore';
 
 /* Component */
 class ProjectPage extends React.Component {
@@ -330,8 +331,20 @@ class ProjectPage extends React.Component {
   playJS() {
     this.playJSFlag = !this.playJSFlag;
     if (this.playJSFlag) {
-      this.appJS = Function( this.app.code.js );
-      this.appJS();
+
+      /* find room settings */
+      const id = this.app.id;
+      const settings = this.props.user.settings.find(elem => elem.id === id);
+
+      /* set socketCore class */
+      const appObj = new App( this.app, settings );
+
+      try {
+        this.appJS = Function( 'App', this.app.code.js );
+        this.appJS(appObj);
+      } catch(e) {
+        console.error('Ошибка запуска приложения!! \n\n', e);
+      }
 
       document.getElementById('app-demo__playJS').classList.add('app-demo__nav-item_true');
     } else {

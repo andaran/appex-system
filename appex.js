@@ -22,6 +22,7 @@ const loginRoute = require(path.join(__dirname, 'routes', 'loginRoute.js'));
 
 /* models */
 const User = require(path.join(__dirname, 'models', 'user.js'));
+const Room = require(path.join(__dirname, 'models', 'room.js'));
 
 
 
@@ -108,7 +109,12 @@ app.use('/api', APIRoute);
 
 const io = socketIo(server);
 io.on('connection', (socket) => {
-  socket.on('test', data => {
-    console.log('CONNECT: ', data);
+
+  /* connect to room */
+  socket.on('connectToRoom', data => {
+
+    /* connect to room */
+    socket.join(data.room);
+    console.log('CONNECT: ', data.roomId, data.roomPass);
   });
 });

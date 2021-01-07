@@ -72,7 +72,7 @@ class ProjectsWrap extends React.Component {
         { modal }
         { message }
         <Navbar path="./images/appex.svg" />
-        <div className="project s-wrap">
+        <div className="projects-wrap">
           <article className="cards">
             {/*  <Card
             title="макароно-варка"
@@ -93,7 +93,7 @@ class ProjectsWrap extends React.Component {
           </article>
         </div>
         <hr/>
-        <div className="project s-wrap">
+        <div className="projects-wrap">
           <article className="cards">
             {/*  <Room
             title="макароно-варка"
