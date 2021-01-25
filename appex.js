@@ -112,9 +112,48 @@ io.on('connection', (socket) => {
 
   /* connect to room */
   socket.on('connectToRoom', data => {
+    console.log('CONNECTING: ', data);
 
-    /* connect to room */
-    socket.join(data.room);
-    console.log('CONNECT: ', data.roomId, data.roomPass);
+    /* find this room */
+    Room.findOne({ ...data }).then(room => {
+      if (room !== null) {
+
+        /* join to room */
+        socket.join(data.roomId);
+
+        /* send state */
+        const state = JSON.parse(room.state);
+        socket.emit('connectSuccess', state);
+      } else {
+        socket.emit('connectErrRoomNotFound', {});
+      }
+    }, err => socket.emit('connectError', {}));
+  });
+
+  /* update state */
+  socket.on('updateState', data => {
+
+    /* find this room */
+    Room.findOne({ roomId: data.roomId, roomPass: data.roomPass }).then(room => {
+      if (room !== null) {
+
+        /* update room */
+        try {
+          const oldState = JSON.parse(room.state);
+          const newState = JSON.stringify({ ...oldState, ...data.params, lastChange: Date.now() });
+
+          /* update room */
+          Room.updateOne({ roomId: data.roomId }, { $set: { state: newState }}).then(info => {}, err => {});
+
+          socket.to(data.roomId).emit('updateState', data);
+          socket.emit('updateState', data);
+        } catch(e) {}
+      }
+    });
+  });
+
+  /* disconnect */
+  socket.on('disconnectFromRoom', roomId => {
+    socket.leave(roomId);
   });
 });

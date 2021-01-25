@@ -21,6 +21,10 @@ const roomSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  state: {
+    type: String,
+    required: true,
+  },
 });
 
 const room = mongoose.model('room', roomSchema, 'rooms');

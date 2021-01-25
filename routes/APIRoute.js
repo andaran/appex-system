@@ -155,15 +155,17 @@ router.post('/create_room', (req, res) => {
   generateRoomId().then(roomId => {
 
     /* create app object */
+    const state = JSON.stringify({ lastChange: Date.now() });
     let roomObj = {
       author: req.user.id,
       name: 'room',
       roomId,
       roomPass: 'room',
       createDate: Date.now(),
+      state,
     }
 
-    /* save new app */
+    /* save new room */
     const room = new Room(roomObj);
     room.save().then(newRoom => {
       res.json({ status: 'ok' });

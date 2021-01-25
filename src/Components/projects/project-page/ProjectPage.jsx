@@ -42,7 +42,7 @@ import Interpreter from '../../../tools/interpreter/Interpreter';
 import Message from '../../../tools/message/Message';
 import Window from '../create-app-window/CreateAppWindow';
 import Wrap from '../../../tools/modal-wrap/ModalWrap';
-import App from '../../../socketCore';
+import { app } from '../../../socketCore';
 
 /* Component */
 class ProjectPage extends React.Component {
@@ -337,11 +337,13 @@ class ProjectPage extends React.Component {
       const settings = this.props.user.settings.find(elem => elem.id === id);
 
       /* set socketCore class */
-      const appObj = new App( this.app, settings );
+      // const appObj = new App( this.app, settings );
+      app.app = this.app;
+      app.roomSettings = settings;
 
       try {
         this.appJS = Function( 'App', this.app.code.js );
-        this.appJS(appObj);
+        this.appJS(app);
       } catch(e) {
         console.error('Ошибка запуска приложения!! \n\n', e);
       }
