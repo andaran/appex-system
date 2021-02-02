@@ -112,10 +112,9 @@ io.on('connection', (socket) => {
 
   /* connect to room */
   socket.on('connectToRoom', data => {
-    console.log('CONNECTING: ', data);
 
     /* find this room */
-    Room.findOne({ ...data }).then(room => {
+    Room.findOne({ roomId: data.roomId, roomPass: data.roomPass }).then(room => {
       if (room !== null) {
 
         /* join to room */
@@ -124,14 +123,33 @@ io.on('connection', (socket) => {
         /* send state */
         const state = JSON.parse(room.state);
         socket.emit('connectSuccess', state);
+
+        /* delete room trash */
+        if (data.currentState !== undefined) {
+
+          let keys = Object.keys(data.currentState);
+          let newState = {};
+
+          /* set new state obj */
+          keys.forEach(key => {
+            newState[key] = state[key] || data.currentState[key];
+          });
+          newState.lastChange = state.lastChange;
+
+          newState = JSON.stringify(newState);
+          Room.updateOne({ roomId: data.roomId }, { $set: { state: newState }})
+            .then(info => {}, err => {});
+        }
       } else {
-        socket.emit('connectErrRoomNotFound', {});
+        socket.emit('error', { type: 'RoomNotFound', roomId: data.roomId });
       }
-    }, err => socket.emit('connectError', {}));
+    }, err => socket.emit('error', { type: 'UnknownError', roomId: data.roomId }));
   });
 
   /* update state */
   socket.on('updateState', data => {
+
+    console.log(data);
 
     /* find this room */
     Room.findOne({ roomId: data.roomId, roomPass: data.roomPass }).then(room => {
@@ -145,6 +163,7 @@ io.on('connection', (socket) => {
           /* update room */
           Room.updateOne({ roomId: data.roomId }, { $set: { state: newState }}).then(info => {}, err => {});
 
+          data.params.lastChange = Date.now();
           socket.to(data.roomId).emit('updateState', data);
           socket.emit('updateState', data);
         } catch(e) {}
@@ -155,5 +174,10 @@ io.on('connection', (socket) => {
   /* disconnect */
   socket.on('disconnectFromRoom', roomId => {
     socket.leave(roomId);
+  });
+
+  /* error */
+  socket.on('error', data => {
+    socket.to(data.roomId).emit('updateState', data);
   });
 });

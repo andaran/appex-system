@@ -52,7 +52,7 @@ class App {
 
     /* connect to room */
     // socket.emit('disconnectFromRoom', { roomId });
-    socket.emit('connectToRoom', { roomId, roomPass });
+    socket.emit('connectToRoom', { roomId, roomPass, currentState: this.state });
   }
 
   send(params) {
@@ -91,12 +91,18 @@ class App {
     });
 
     /* error */
-    socket.on('connectError', err => {
-      console.log('[Err] Ошибка подключения!');
-    });
-
-    socket.on('connectErrRoomNotFound', err => {
-      console.log('[Err] Неверный id или пароль комнаты!');
+    socket.on('error', err => {
+      switch (err.type) {
+        case 'RoomNotFound':
+          console.log('[Err] Неверный id или пароль комнаты!');
+          break;
+        case 'UnknownError':
+          console.log('[Err] Ошибка подключения!');
+          break;
+        default:
+          console.log(`[Err] ${ err.type }`);
+          break;
+      }
     });
   }
 }

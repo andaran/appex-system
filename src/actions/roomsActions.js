@@ -1,6 +1,6 @@
 
 /* develop mode */
-const devMode = false;
+const devMode = true;
 
 export function fetchRooms() {
   let request;
