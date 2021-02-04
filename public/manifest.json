@@ -2,8 +2,8 @@
   "short_name": "Appex",
   "name": "Appex system",
   "icons": [],
-  "start_url": ".",
+  "start_url": "/main",
   "display": "standalone",
-  "theme_color": "#000000",
-  "background_color": "#ffffff"
+  "theme_color": "#000",
+  "background_color": "#000"
 }

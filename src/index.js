@@ -16,6 +16,7 @@ import ChangePass from './Components/change_pass/ChangePassWrap/change-pass-wrap
 import Projects from './Components/projects/projects-wrap/ProjectsWrap';
 import ProjectPage from './Components/projects/project-page/ProjectPage';
 import PrivateRoute from "./Components/additComponents/PrivateRoute";
+import MainPage from './Components/main/main-page/MainPage';
 
 /* Libraries */
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -54,6 +55,9 @@ ReactDOM.render(
         </Route>
         <Route exact path="/projects/:id">
           <PrivateRoute> <ProjectPage/> </PrivateRoute>
+        </Route>
+        <Route exact path="/main">
+          <PrivateRoute> <MainPage/> </PrivateRoute>
         </Route>
       </Switch>
     </Router>
