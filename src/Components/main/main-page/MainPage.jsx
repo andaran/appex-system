@@ -8,6 +8,7 @@ import { app } from '../../../socketCore';
 
 import SystemNavbar from '../system-navbar/SystemNavbar';
 import AppIcon from '../app-icon/AppIcon';
+import {Link} from "react-router-dom";
 
 /* Component */
 class MainPage extends React.Component {
@@ -29,6 +30,12 @@ class MainPage extends React.Component {
     let myApps = this.props.projects.map(app => {
       return <AppIcon { ...app }/>;
     });
+
+    /* my apps test */
+    /*let myApps = [];
+    for (let i = 0; i < 50; i++) {
+      myApps.push(<AppIcon { ...this.props.projects[0] }/>)
+    }*/
 
     /* installed apps */
     let installedApps = this.props.user.installedApps.map(app => {
@@ -61,15 +68,46 @@ class MainPage extends React.Component {
         </div>
         <div className="groups-wrap" id="groups-wrap">
           <div className="app-group">
-            <div className="app-group-title">Мои приложения: </div>
-            { myApps }
+            <div className="app-group-widget">
+              <div className="app-group-widget__title">Мои приложения:</div>
+              <div className="app-group-widget__main">
+                Здесь находятся приложения, которые вы создали. Хотите начать новый проект? Тогда вам
+                <Link to="/projects"> сюда</Link>.
+              </div>
+              <div className="app-group-widget__arrow"/>
+            </div>
+            <div className="app-group__icons"> 
+              { myApps }
+              {/*<div></div>*/}
+              {/*<div></div>*/}
+              {/*<div></div>*/}
+              {/*<div></div>*/}
+              {/*<div></div>*/}
+              {/*<div></div>*/}
+              {/*<div></div>*/}
+              {/*<div></div>*/}
+            </div>
           </div>
           <div className="app-group">
-            <div className="app-group-title">Сторонние приложения: </div>
-            { installedApps }
+            <div className="app-group-widget">
+              <div className="app-group-widget__title">Сторонние приложения:</div>
+              <div className="app-group-widget__main">
+                А здесь обитают приложения, которые вы скачали. Нужно загрузить ещё парочку? Тогда вам
+                <Link to="/projects"> сюда</Link>.
+              </div>
+              <div className="app-group-widget__arrow"/>
+            </div>
+            <div className="app-group__icons"> { installedApps } </div>
           </div>
           <div className="app-group">
-            <div className="app-group-title">Системные приложения: </div>
+            <div className="app-group-widget">
+              <div className="app-group-widget__title">Системные приложения:</div>
+              <div className="app-group-widget__main">
+                Тут располагаются системные приложения. Они нужны для настройки системы и для будущих функций.
+              </div>
+              <div className="app-group-widget__arrow"/>
+            </div>
+            <div className="app-group__icons"></div>
           </div>
         </div>
         <div className="page-number">
