@@ -5,7 +5,20 @@
     "email": "andrnovip@gmail.com",
     "id": "H2dv3hoel8Ij",
     "registrationDate": "1234567",
-    "installedApps": [],
+    "installedApps": [
+      {
+        "title": "Скачаное приложение",
+        "icon": "faUtensils",
+        "color": "#f1c40f",
+        "id": "hGud&snkxkhs&9467"
+      },
+      {
+        "title": "Приложение",
+        "icon": "faUtensils",
+        "color": "#f1c40f",
+        "id": "hGud&snkxkhs&9467"
+      }
+    ],
     "type": "user",
     "settings": [{
       "id": "hGud&snkxkhs&6467",
