@@ -56,8 +56,9 @@ class MainPage extends React.Component {
 
     return (
       <div className="main-system-page">
-        <SystemNavbar/>
-        <img src="./images/bg-vertical.jpg" id="system-background" className="system-background"/>
+        <div className="system-background-wrap">
+          <img src="./images/bg-horizontal.jpg" id="system-background" className="system-background"/>
+        </div>
         <div className="groups-wrap" id="groups-wrap">
           <div className="app-group">
             <div className="app-group-title">Мои приложения: </div>
