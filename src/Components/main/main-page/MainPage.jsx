@@ -130,6 +130,7 @@ class MainPage extends React.Component {
 
     /* constants */
     const wrap = document.getElementById('groups-wrap');
+    const background = document.getElementById('system-background');
     const width = wrap.offsetWidth;
     const deltaTime = Date.now() - this.state.lastMove;
     let deltaPage = 0;
@@ -149,12 +150,13 @@ class MainPage extends React.Component {
       deltaPage = -1;
     }
 
-    /* move page and save params */
+    /* move page, background and save params */
     const currentPage = this.state.currentPage + deltaPage;
     this.setState({ touchStart: 0, currentPage });
 
     wrap.style.transition = '.2s ease-out';
     wrap.style.left = (-1 * currentPage * width) + 'px';
+    background.style.marginLeft = (-20 * currentPage) + 'px';
   }
 
   touchMove(event) {
