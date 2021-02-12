@@ -3,7 +3,7 @@
   "name": "Appex system",
   "icons": [],
   "start_url": "/main",
-  "display": "standalone",
+  "display": "fullscreen",
   "theme_color": "#000",
   "background_color": "#000"
 }

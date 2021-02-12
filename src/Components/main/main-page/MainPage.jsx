@@ -80,7 +80,6 @@ class MainPage extends React.Component {
                 Здесь находятся приложения, которые вы создали. Хотите начать новый проект? Тогда вам
                 <Link to="/projects"> сюда</Link>.
               </div>
-              <div className="app-group-widget__arrow"/>
             </div>
             <div className="app-group__icons"> { myApps } </div>
           </div>
@@ -91,7 +90,6 @@ class MainPage extends React.Component {
                 А здесь обитают приложения, которые вы скачали. Нужно загрузить ещё парочку? Тогда вам
                 <Link to="/projects"> сюда</Link>.
               </div>
-              <div className="app-group-widget__arrow"/>
             </div>
             <div className="app-group__icons"> { installedApps } </div>
           </div>
@@ -101,7 +99,6 @@ class MainPage extends React.Component {
               <div className="app-group-widget__main">
                 Тут располагаются системные приложения. Они нужны для настройки системы и для будущих функций.
               </div>
-              <div className="app-group-widget__arrow"/>
             </div>
             <div className="app-group__icons"></div>
           </div>
@@ -121,12 +118,6 @@ class MainPage extends React.Component {
     wrap.addEventListener('touchstart', this.touchStart);
     wrap.addEventListener('touchend', this.touchEnd);
     wrap.addEventListener('touchmove', this.touchMove);
-
-    /* scroll points */
-    // document.querySelectorAll('.point').addEventListener('click', this.setScroll);
-    // for (let point of document.querySelectorAll('.point')) {
-    //   point.onclick = this.setScroll;
-    // }
   }
 
   touchStart(event) {
