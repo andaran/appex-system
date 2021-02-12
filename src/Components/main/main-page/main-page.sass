@@ -40,44 +40,36 @@
   overflow: hidden
 
 .groups-wrap
-  width: 100%
-  overflow-x: scroll
   display: grid
   grid-template-columns: 100% 100% 100%
   height: calc(100vh - 45px)
   padding: 0
   margin: 0
   grid-gap: 0
-  scroll-behavior: auto
   z-index: 1
   position: relative
+  left: 0
 
 .app-group
   width: 100%
-  //background-color: rgba(255, 255, 255, 0.5)
+  height: 100%
+  overflow-x: hidden
+  overflow-y: scroll
   padding: 0
   margin: 0
 
   &__icons
     width: 100%
-    //background: blue
-    //display: flex
-    //flex-wrap: wrap
-    //justify-content: space-around
-    //align-items: flex-start
-    //align-self: flex-start
-    //display: grid
-    //grid-template-columns: 50px 50px 50px 50px
-    //grid-gap: calc((100% - 200px) / 5)
-    //padding: calc((100% - 200px) / 5)
-    margin-left: calc((100% - 240px) / 10)
+    margin-left: calc((100% - 240px) / (5 * 2))
+    //background-color: rgba(255, 255, 255, 0.5)
+    //border-right: 1px solid crimson
 
+    @media all and (min-width: 520px)
+      margin-left: calc((100% - 300px) / (6 * 2))
 
-    //div
-    //  width: 50px
-    //  height: 50px
-    //  background: red
-    //  margin: 10px
+    @media all and (min-width: 1080px)
+      margin-left: calc((100% - 360px) / (7 * 2))
+
 
 
 .page-number

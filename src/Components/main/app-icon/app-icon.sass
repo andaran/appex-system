@@ -1,11 +1,17 @@
 
 .app-icon
   width: 60px
-  //display: inline-block
   padding: 5px
   vertical-align: top
   display: inline-block
-  margin: 0 calc((100% - 240px) / 10)
+  margin: 0 calc((100% - 240px) / (5 * 2))
+
+  @media all and (min-width: 520px)
+    margin: 0 calc((100% - 300px) / (6 * 2))
+
+  @media all and (min-width: 1080px)
+    margin: 0 calc((100% - 360px) / (7 * 2))
+
   //background: black
 
   div

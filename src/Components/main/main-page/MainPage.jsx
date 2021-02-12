@@ -76,17 +76,7 @@ class MainPage extends React.Component {
               </div>
               <div className="app-group-widget__arrow"/>
             </div>
-            <div className="app-group__icons"> 
-              { myApps }
-              {/*<div></div>*/}
-              {/*<div></div>*/}
-              {/*<div></div>*/}
-              {/*<div></div>*/}
-              {/*<div></div>*/}
-              {/*<div></div>*/}
-              {/*<div></div>*/}
-              {/*<div></div>*/}
-            </div>
+            <div className="app-group__icons"> { myApps } </div>
           </div>
           <div className="app-group">
             <div className="app-group-widget">
