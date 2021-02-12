@@ -17,11 +17,17 @@ class MainPage extends React.Component {
 
     this.state = {
       currentPage: 0,
+      touchStart: undefined,
+      touchMove: undefined,
+      lastMove: 0,
+      moveTo: 'center',
     }
 
+
     // bind
-    this.centerMenu = this.centerMenu.bind(this);
-    this.setScroll = this.setScroll.bind(this);
+    this.touchStart = this.touchStart.bind(this);
+    this.touchEnd = this.touchEnd.bind(this);
+    this.touchMove = this.touchMove.bind(this);
   }
 
   render() {
@@ -110,51 +116,86 @@ class MainPage extends React.Component {
   componentDidMount() {
 
     /* scroll the menu */
-    let timeout = false;
-    document.getElementById("groups-wrap").onscroll = () => {
-      timeout && clearTimeout(timeout);
+    const wrap = document.getElementById('groups-wrap');
 
-      timeout = setTimeout(() => this.centerMenu(), 50);
-    };
+    wrap.addEventListener('touchstart', this.touchStart);
+    wrap.addEventListener('touchend', this.touchEnd);
+    wrap.addEventListener('touchmove', this.touchMove);
 
     /* scroll points */
     // document.querySelectorAll('.point').addEventListener('click', this.setScroll);
-    for (let point of document.querySelectorAll('.point')) {
-      point.onclick = this.setScroll;
+    // for (let point of document.querySelectorAll('.point')) {
+    //   point.onclick = this.setScroll;
+    // }
+  }
+
+  touchStart(event) {
+
+    /* set finger cords */
+    this.setState({ touchStart: event.touches[event.touches.length - 1].pageX });
+  }
+
+  touchEnd(event) {
+
+    /* constants */
+    const wrap = document.getElementById('groups-wrap');
+    const width = wrap.offsetWidth;
+    const deltaTime = Date.now() - this.state.lastMove;
+    let deltaPage = 0;
+    let move = this.state.touchMove - this.state.touchStart;
+
+    /* natural flipping */
+    if (move > (width / 2) && this.state.currentPage > 0) {
+      deltaPage = -1;
+    } else if ((move * -1) > (width / 2) && this.state.currentPage < 2) {
+      deltaPage = 1;
     }
+
+    /* swipe flipping */
+    if (this.state.moveTo === 'right' && deltaTime < 50 && this.state.currentPage < 2) {
+      deltaPage = 1;
+    } else if (this.state.moveTo === 'left' && deltaTime < 50 && this.state.currentPage > 0) {
+      deltaPage = -1;
+    }
+
+    /* move page and save params */
+    const currentPage = this.state.currentPage + deltaPage;
+    this.setState({ touchStart: 0, currentPage });
+
+    wrap.style.transition = '.2s ease-out';
+    wrap.style.left = (-1 * currentPage * width) + 'px';
   }
 
-  centerMenu() {
+  touchMove(event) {
 
-    /* set phone params */
-    const wrap = document.getElementById("groups-wrap");
-    const width = document.getElementById('root').offsetWidth;
-    const currentScroll = wrap.scrollLeft;
-    const page = Math.round(currentScroll / width);
+    /* constants */
+    const cord = event.touches[event.touches.length - 1].pageX;
+    const wrap = document.getElementById('groups-wrap');
+    const width = wrap.offsetWidth;
 
-    /* set scroll */
-    wrap.scrollTo({
-      left: page * width,
-      behavior: "smooth"
-    });
+    /* move page under finger */
+    let moveTo;
+    let left = cord - this.state.touchStart;
 
-    /* set current page */
-    this.setState({ currentPage: page });
-  }
+    if (left > 0 && this.state.currentPage < 1) { left /= 4 }
+    else if (left < 0 && this.state.currentPage > 1) { left /= 4 }
 
-  setScroll(event) {
-    const page = [...document.querySelectorAll('.point')].findIndex(n => n === event.target);
-    const width = document.getElementById('root').offsetWidth;
-    const wrap = document.getElementById("groups-wrap");
+    left += -1 * this.state.currentPage * width;
 
-    /* set scroll */
-    wrap.scrollTo({
-      left: page * width,
-      behavior: "smooth"
-    });
+    wrap.style.left = left + 'px';
+    wrap.style.transition = '0s';
 
-    /* set current page */
-    this.setState({ currentPage: page });
+    /* calc swipe direction */
+    if (cord > this.state.touchMove) {
+      moveTo = 'left';
+    } else if (cord < this.state.touchMove) {
+      moveTo = 'right';
+    } else {
+      moveTo = 'center';
+    }
+
+    /* save params */
+    this.setState({ touchMove: cord, lastMove: Date.now(), moveTo });
   }
 
   // componentWillUnmount() {
