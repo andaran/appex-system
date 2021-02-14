@@ -8,7 +8,7 @@ import { app } from '../../../socketCore';
 
 import SystemNavbar from '../system-navbar/SystemNavbar';
 import AppIcon from '../app-icon/AppIcon';
-import {Link} from "react-router-dom";
+import { Link } from "react-router-dom";
 
 /* Component */
 class MainPage extends React.Component {
@@ -28,6 +28,9 @@ class MainPage extends React.Component {
     this.touchStart = this.touchStart.bind(this);
     this.touchEnd = this.touchEnd.bind(this);
     this.touchMove = this.touchMove.bind(this);
+    this.movePage = this.movePage.bind(this);
+    this.keydown = this.keydown.bind(this);
+    this.resize = this.resize.bind(this);
   }
 
   render() {
@@ -159,8 +162,8 @@ class MainPage extends React.Component {
       }
     }
 
-    // alert('SET COLOR!');
-    document.getElementById('theme-color').setAttribute('content', '#ffffff');
+    // // alert('SET COLOR!');
+    // document.getElementById('theme-color').setAttribute('content', '#ffffff');
 
     /* scroll the menu */
     const wrap = document.getElementById('groups-wrap');
@@ -179,6 +182,9 @@ class MainPage extends React.Component {
       systemBackground.classList.add('system-pc__active');
       systemBackground.style.width = width + 'px';
     }
+
+    window.addEventListener('resize', this.resize, device);
+    window.addEventListener('keydown', this.keydown);
   }
 
   touchStart(event) {
@@ -191,7 +197,6 @@ class MainPage extends React.Component {
 
     /* constants */
     const wrap = document.getElementById('groups-wrap');
-    const background = document.getElementById('system-background');
     const width = wrap.offsetWidth;
     const deltaTime = Date.now() - this.state.lastMove;
     let deltaPage = 0;
@@ -212,12 +217,8 @@ class MainPage extends React.Component {
     }
 
     /* move page, background and save params */
-    const currentPage = this.state.currentPage + deltaPage;
-    this.setState({ touchStart: 0, currentPage });
+    this.movePage(deltaPage);
 
-    wrap.style.transition = '.2s ease-out';
-    wrap.style.left = (-1 * currentPage * width) + 'px';
-    background.style.marginLeft = (-20 * currentPage) + 'px';
   }
 
   touchMove(event) {
@@ -252,9 +253,55 @@ class MainPage extends React.Component {
     this.setState({ touchMove: cord, lastMove: Date.now(), moveTo });
   }
 
-  // componentWillUnmount() {
-  //   document.querySelectorAll("point").removeEventListener('click', this.setScroll);
-  // }
+  movePage(deltaPage) {
+
+    const wrap = document.getElementById('groups-wrap');
+    const background = document.getElementById('system-background');
+    const width = wrap.offsetWidth;
+    const currentPage = this.state.currentPage + deltaPage;
+
+    if (currentPage > 2 || currentPage < 0) { return; }
+
+    this.setState({ touchStart: 0, currentPage });
+    wrap.style.transition = '.2s ease-out';
+    wrap.style.left = (-1 * currentPage * width) + 'px';
+    background.style.marginLeft = (-20 * currentPage) + 'px';
+
+  }
+
+  keydown(event) {
+    switch (event.key) {
+      case 'ArrowRight':
+        this.movePage(1);
+        break;
+      case 'ArrowLeft':
+        this.movePage(-1);
+        break;
+    }
+  }
+
+  resize(event) {
+    const wrap = document.getElementById('groups-wrap');
+    const background = document.getElementById('system-background');
+
+    if (wrap.offsetWidth > background.offsetWidth && !this.device) {
+      background.style.visibility = 'hidden';
+    } else {
+      background.style.visibility = 'visible';
+    }
+  }
+
+  componentWillUnmount() {
+
+    /* remove event listeners */
+    const wrap = document.getElementById('groups-wrap');
+
+    wrap.removeEventListener('touchstart', this.touchStart);
+    wrap.removeEventListener('touchend', this.touchEnd);
+    wrap.removeEventListener('touchmove', this.touchMove);
+
+    window.removeEventListener('keydown', this.keydown);
+  }
 }
 
 
