@@ -34,6 +34,12 @@
   height: 100vh
   box-shadow: inset 0 0 0 1000px rgba(0, 0, 0, 0.3)
   overflow: hidden
+  float: right
+  position: relative
+
+  &__pc-mode
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.6)
+    border-radius: 14px 0 0 14px
 
 .groups-wrap
   display: grid
@@ -103,3 +109,61 @@
 .system-background
   height: 100%
   transition: .2s ease-out
+
+.system-pc
+  display: none
+
+  &__active
+    float: left
+    height: 100vh
+    display: flex
+    justify-content: center
+    align-items: center
+
+.box-title
+  position: relative
+  height: 62px
+  width: 128px
+  margin: 18px auto
+
+  &__img
+    filter: drop-shadow( 2px 2px 1px rgba(0, 0, 0, 0.1) )
+    width: 50px
+    margin-right: -13px
+
+  &__text
+    font-family: 'comfortaa', roboto, monospace
+    font-size: 32px
+    color: white
+    position: relative
+    text-shadow: .5px .5px .5px rgba(0, 0, 0, 0.1)
+
+  &__under-text
+    //margin: -5px -20px 0 0
+    color: white
+    position: absolute
+    right: 2px
+    bottom: 0
+
+.box-main
+  margin-top: 4px
+
+  span:first-child
+    font-size: 16px
+    color: white
+    font-weight: 400
+    letter-spacing: -.5px
+    margin-right: 4px
+
+  span:nth-child(2), span:nth-child(3)
+    font-size: 13px
+    padding: 2px
+    background: #c5ccd4
+    border-radius: 2px
+    color: black
+    letter-spacing: 0
+    margin-left: 1px
+    display: inline-block
+    width: 50px
+    text-align: center
+

@@ -34,7 +34,7 @@ class MainPage extends React.Component {
 
     /* my apps */
     let myApps = this.props.projects.map(app => {
-      return <AppIcon { ...app }/>;
+      return <AppIcon { ...app } key={ app.id }/>;
     });
 
     /* my apps test */
@@ -45,8 +45,9 @@ class MainPage extends React.Component {
 
     /* installed apps */
     let installedApps = this.props.user.installedApps.map(app => {
-      return <AppIcon { ...app }/>;
+      return <AppIcon { ...app } key={ app.id }/>;
     });
+    // let installedApps = [];
 
     if(myApps.length) {
       myApps = <div className="apps-wrap">
@@ -68,43 +69,59 @@ class MainPage extends React.Component {
     }
 
     return (
-      <div className="main-system-page">
-        <div className="system-background-wrap">
-          <img src="./images/bg-horizontal.jpg" id="system-background" className="system-background"/>
-        </div>
-        <div className="groups-wrap" id="groups-wrap">
-          <div className="app-group">
-            <div className="app-group-widget">
-              <div className="app-group-widget__title">Мои приложения:</div>
-              <div className="app-group-widget__main">
-                Здесь находятся приложения, которые вы создали. Хотите начать новый проект? Тогда вам
-                <Link to="/projects"> сюда</Link>.
-              </div>
+      <div className="system-wrap" id="system-wrap">
+        <div className="system-pc" id="system-pc">
+          <div className="system-pc_box">
+            <div className="box-title">
+              <img src="./images/appex.svg" alt="a" className="box-title__img" />
+              <span className="box-title__text"> ppex </span>
+              <div className="box-title__under-text"> system </div>
             </div>
-            <div className="app-group__icons"> { myApps } </div>
-          </div>
-          <div className="app-group">
-            <div className="app-group-widget">
-              <div className="app-group-widget__title">Сторонние приложения:</div>
-              <div className="app-group-widget__main">
-                А здесь обитают приложения, которые вы скачали. Нужно загрузить ещё парочку? Тогда вам
-                <Link to="/projects"> сюда</Link>.
-              </div>
+            <div className="box-main">
+              <span> Листать </span>
+              <span> ⯇ </span>
+              <span> ⯈ </span>
             </div>
-            <div className="app-group__icons"> { installedApps } </div>
-          </div>
-          <div className="app-group">
-            <div className="app-group-widget">
-              <div className="app-group-widget__title">Системные приложения:</div>
-              <div className="app-group-widget__main">
-                Тут располагаются системные приложения. Они нужны для настройки системы и для будущих функций.
-              </div>
-            </div>
-            <div className="app-group__icons"></div>
           </div>
         </div>
-        <div className="page-number">
-          { points }
+        <div className="main-system-page" id="main-system-page">
+          <div className="system-background-wrap">
+            <img src="./images/bg-horizontal.jpg" id="system-background" className="system-background"/>
+          </div>
+          <div className="groups-wrap" id="groups-wrap">
+            <div className="app-group">
+              <div className="app-group-widget">
+                <div className="app-group-widget__title">Мои приложения:</div>
+                <div className="app-group-widget__main">
+                  Здесь находятся приложения, которые вы создали. Хотите начать новый проект? Тогда вам
+                  <Link to="/projects"> сюда</Link>.
+                </div>
+              </div>
+              <div className="app-group__icons"> { myApps } </div>
+            </div>
+            <div className="app-group">
+              <div className="app-group-widget">
+                <div className="app-group-widget__title">Сторонние приложения:</div>
+                <div className="app-group-widget__main">
+                  А здесь обитают приложения, которые вы скачали. Нужно загрузить ещё парочку? Тогда вам
+                  <Link to="/projects"> сюда</Link>.
+                </div>
+              </div>
+              <div className="app-group__icons"> { installedApps } </div>
+            </div>
+            <div className="app-group">
+              <div className="app-group-widget">
+                <div className="app-group-widget__title">Системные приложения:</div>
+                <div className="app-group-widget__main">
+                  Тут располагаются системные приложения. Они нужны для настройки системы и для будущих функций.
+                </div>
+              </div>
+              <div className="app-group__icons"></div>
+            </div>
+          </div>
+          <div className="page-number">
+            { points }
+          </div>
         </div>
       </div>
     );
@@ -112,12 +129,56 @@ class MainPage extends React.Component {
 
   componentDidMount() {
 
+    /*setInterval(() => {
+      document.getElementById('theme-color').setAttribute('content', '#000000');
+      setTimeout(() => {
+        document.getElementById('theme-color').setAttribute('content', '#ffffff');
+      }, 1000);
+    }, 2000);*/
+
+    /* find OS */
+    const userDeviceArray = [
+      {device: false, platform: /Android/},
+      {device: false, platform: /iPhone/},
+      {device: false, platform: /iPad/},
+      {device: false, platform: /Symbian/},
+      {device: false, platform: /Windows Phone/},
+      {device: false, platform: /Tablet OS/},
+      {device: true, platform: /Linux/},
+      {device: true, platform: /Windows NT/},
+      {device: true, platform: /Macintosh/}
+    ];
+
+    const platform = navigator.userAgent;
+    let device;
+
+    for (let i in userDeviceArray) {
+      if (userDeviceArray[i].platform.test(platform)) {
+        device = userDeviceArray[i].device;
+        break;
+      }
+    }
+
+    // alert('SET COLOR!');
+    document.getElementById('theme-color').setAttribute('content', '#ffffff');
+
     /* scroll the menu */
     const wrap = document.getElementById('groups-wrap');
+    const systemWindow = document.getElementById('main-system-page');
+    const systemBackground = document.getElementById('system-pc');
 
     wrap.addEventListener('touchstart', this.touchStart);
     wrap.addEventListener('touchend', this.touchEnd);
     wrap.addEventListener('touchmove', this.touchMove);
+
+    if (systemWindow.offsetWidth / systemWindow.offsetHeight > 1.6 && device) {
+      systemWindow.style.width = systemWindow.offsetHeight + 'px';
+      systemWindow.classList.add('main-system-page__pc-mode');
+
+      const width = document.getElementById('system-wrap').offsetWidth - systemWindow.offsetWidth;
+      systemBackground.classList.add('system-pc__active');
+      systemBackground.style.width = width + 'px';
+    }
   }
 
   touchStart(event) {
