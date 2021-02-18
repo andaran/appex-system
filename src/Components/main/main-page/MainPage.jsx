@@ -301,6 +301,7 @@ class MainPage extends React.Component {
     wrap.removeEventListener('touchmove', this.touchMove);
 
     window.removeEventListener('keydown', this.keydown);
+    window.removeEventListener('resize', this.resize);
   }
 }
 
