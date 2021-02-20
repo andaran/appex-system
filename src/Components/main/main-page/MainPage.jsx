@@ -37,7 +37,7 @@ class MainPage extends React.Component {
 
     /* my apps */
     let myApps = this.props.projects.map(app => {
-      return <AppIcon { ...app } key={ app.id }/>;
+      return <AppIcon { ...app } key={ app.id } type="my"/>;
     });
 
     /* my apps test */
@@ -48,7 +48,7 @@ class MainPage extends React.Component {
 
     /* installed apps */
     let installedApps = this.props.user.installedApps.map(app => {
-      return <AppIcon { ...app } key={ app.id }/>;
+      return <AppIcon { ...app } key={ app.id } type="downloaded"/>;
     });
     // let installedApps = [];
 

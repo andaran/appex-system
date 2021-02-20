@@ -12,8 +12,8 @@ export function fetchApp(appId) {
     : request = fetch('/api/get_projects', { method: 'POST', body }).then(res => res.json());
 
   return {
-    type: 'FETCH_PROJECTS',
-    payload: request,
+    type: 'FETCH_APPS',
+    payload: request
   }
 }
 

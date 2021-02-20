@@ -2,6 +2,7 @@ import React from 'react';
 
 import { fetchProjects, changeProjects } from '../../../actions/projectsActions';
 import { switchModalState } from "../../../actions/projectsModalActions";
+import { fetchApp } from "../../../actions/appsActions";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -11,6 +12,9 @@ import * as Icons from "@fortawesome/free-solid-svg-icons";
 class AppIcon extends React.Component {
   constructor(props) {
     super(props);
+
+    // bind
+    this.iconClicked = this.iconClicked.bind(this);
   }
 
   render() {
@@ -27,6 +31,25 @@ class AppIcon extends React.Component {
       </div>
     );
   }
+
+  componentDidMount() {
+    document.getElementById(`icon-${ this.props.id }`)
+      .addEventListener('click', this.iconClicked);
+  }
+
+  iconClicked() {
+
+    if (this.props.type !== 'downloaded') { return; }
+
+    /* fetch app if it isn`t downloaded */
+    const app = this.props.apps.find(app => app.id === this.props.id);
+    !app && this.props.fetchApp(this.props.id);
+  }
+
+  componentWillUnmount() {
+    document.getElementById(`icon-${ this.props.id }`)
+      .removeEventListener('click', this.iconClicked);
+  }
 }
 
 
@@ -37,30 +60,16 @@ function mapStateToProps(store) {
   return {
 
     /* projects */
-    projects: store.projects.data,
-    projectsIsFetching: store.projects.isFetching,
-    projectsError: store.projects.error,
-    projectsFulfilled: store.projects.fulfilled,
+    apps: store.apps.data,
 
-    /* user */
-    user: store.userData.user,
-
-    /* modal */
-    modal: store.projectsModal,
   }
 }
 
 function mapDispatchToProps(dispatch) {
   return {
-    fetchProjects: () => {
-      dispatch(fetchProjects())
-    },
-    changeProjects: ( changedProjects ) => {
-      dispatch(changeProjects( changedProjects ))
-    },
-    switchModalState: (state, mode) => {
-      dispatch(switchModalState(state, mode))
-    },
+    fetchApp: (appId) => {
+      dispatch(fetchApp(appId))
+    }
   }
 }
 

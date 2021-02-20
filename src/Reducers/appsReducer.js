@@ -11,7 +11,7 @@ export function appsReducer(state = {
       return { ...state, isFetching: true, error: false, fulfilled: false };
 
     case APPS.FETCH_APPS_FULFILLED:
-      return { ...state, isFetching: false, data: action.payload, error: false, fulfilled: true };
+      return { ...state, isFetching: false, data: [...state.data, action.payload], error: false, fulfilled: true };
 
     case APPS.FETCH_APPS_REJECTED:
       return { ...state, isFetching: false, data: action.payload, error: true };
