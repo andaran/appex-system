@@ -9,6 +9,7 @@ import { projectsReducer } from './Reducers/projectsReducer';
 import { projectsModalReducer } from "./Reducers/projectsModalReducer";
 import { userReducer } from './Reducers/userReducer';
 import { roomsReducer } from './Reducers/roomsReducer';
+import { appsReducer } from './Reducers/appsReducer';
 
 /*   --=== End reducers ===--   */
 
@@ -21,6 +22,8 @@ const reducers = combineReducers({
     projectsModal: projectsModalReducer,
     userData: userReducer,
     rooms: roomsReducer,
+    apps: appsReducer,
+
 });
 
 export default createStore(reducers, middleware);

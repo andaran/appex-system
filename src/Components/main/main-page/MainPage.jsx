@@ -125,6 +125,11 @@ class MainPage extends React.Component {
           <div className="page-number">
             { points }
           </div>
+
+          <div className="main-app-page" id="main-app-page" data-state="closed">
+            <div className="app-settings" id="app-settings"></div>
+            <div className="app-body" id="app-body" data-state="closed"></div>
+          </div>
         </div>
       </div>
     );
@@ -138,6 +143,14 @@ class MainPage extends React.Component {
         document.getElementById('theme-color').setAttribute('content', '#ffffff');
       }, 1000);
     }, 2000);*/
+
+    /*setTimeout(() => {
+      document.getElementById('main-app-page').setAttribute('data-state', 'clicked');
+    }, 1500);
+
+    setTimeout(() => {
+      document.getElementById('app-body').setAttribute('data-state', 'opened');
+    }, 1800);*/
 
     /* find OS */
     const userDeviceArray = [
