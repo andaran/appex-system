@@ -24,14 +24,23 @@ export default class Interpreter extends React.Component {
 
   renderApp() {
 
-    /**
-     * Appex interpreter v1 by https://github.com/andaran
-     **/
+    /*
+
+      Appex interpreter v1 by https://github.com/andaran
+
+    */
 
     /*   ---==== Parse presets ====---   */
 
+    /* render mode */
+    let appSourceCode;
+    this.props.devMode
+      ? appSourceCode = this.props.app.code
+      : appSourceCode = this.props.app.releaseCode;
+
     /* parsing */
-    let html = this.props.app.code.html;
+    let html = appSourceCode.html;
+
     html = html.split(']]');
     html = html.map(item => {
       return {
@@ -111,7 +120,7 @@ export default class Interpreter extends React.Component {
       // console.log(finallyCode);
 
       /* create code variable with styles */
-      let code = `<div id="app">\n<style>\n ${ this.props.app.code.css } \n</style>\n`;
+      let code = `<div id="app">\n<style>\n ${ appSourceCode.css } \n</style>\n`;
 
       /* add main code */
       code += `${ finallyCode } \n</div>`;

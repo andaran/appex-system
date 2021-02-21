@@ -161,7 +161,8 @@ class ProjectPage extends React.Component {
           <div className="app-demo__emulator">
             <Interpreter
               app = { this.app }
-              id="interpreter-mobile"/>
+              id="interpreter-mobile"
+              devMode={ true }/>
           </div>
           <div className="app-demo__nav">
             <div

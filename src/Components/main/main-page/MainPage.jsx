@@ -9,6 +9,7 @@ import { app } from '../../../socketCore';
 
 import SystemNavbar from '../system-navbar/SystemNavbar';
 import AppIcon from '../app-icon/AppIcon';
+import Interpreter from '../../../tools/interpreter/Interpreter';
 import { Link } from "react-router-dom";
 
 /* Component */
