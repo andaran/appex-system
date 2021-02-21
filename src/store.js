@@ -10,6 +10,7 @@ import { projectsModalReducer } from "./Reducers/projectsModalReducer";
 import { userReducer } from './Reducers/userReducer';
 import { roomsReducer } from './Reducers/roomsReducer';
 import { appsReducer } from './Reducers/appsReducer';
+import { appStateReducer } from './Reducers/appStateReducer';
 
 /*   --=== End reducers ===--   */
 
@@ -23,6 +24,7 @@ const reducers = combineReducers({
     userData: userReducer,
     rooms: roomsReducer,
     apps: appsReducer,
+    appState: appStateReducer,
 
 });
 

@@ -334,8 +334,10 @@ function mapStateToProps(store) {
     /* user */
     user: store.userData.user,
 
-    /* modal */
-    modal: store.projectsModal,
+    /* app state */
+    appState: store.appState.state,
+    appId: store.appState.id,
+    appType: store.appState.type,
   }
 }
 
