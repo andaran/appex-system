@@ -2,6 +2,7 @@ import React from 'react';
 
 import { fetchProjects, changeProjects } from '../../../actions/projectsActions';
 import { switchModalState } from "../../../actions/projectsModalActions";
+import { changeAppState } from "../../../actions/appStateActions";
 import { connect } from "react-redux";
 
 import { app } from '../../../socketCore';
@@ -71,6 +72,18 @@ class MainPage extends React.Component {
         : points.push(<div className="point" key={ i }/>);
     }
 
+    /* app */
+    let appReadyFlag = false;
+    if (this.props.appState === 'clicked') {
+      if (this.props.appType === 'my') { appReadyFlag = true; }
+      else if (this.props.apps.find(app => app.id === this.props.appId)) {
+        appReadyFlag = true;
+      }
+    }
+
+    /* open app if it's ready */
+    appReadyFlag && process.nextTick(() => this.props.changeAppState({ state: 'opened' }));
+
     return (
       <div className="system-wrap" id="system-wrap">
         <div className="system-pc" id="system-pc">
@@ -126,9 +139,9 @@ class MainPage extends React.Component {
             { points }
           </div>
 
-          <div className="main-app-page" id="main-app-page" data-state="closed">
+          <div className="main-app-page" id="main-app-page" data-state={ this.props.appState }>
             <div className="app-settings" id="app-settings"></div>
-            <div className="app-body" id="app-body" data-state="closed"></div>
+            <div className="app-body" id="app-body" data-state={ this.props.appState }></div>
           </div>
         </div>
       </div>
@@ -290,6 +303,9 @@ class MainPage extends React.Component {
       case 'ArrowLeft':
         this.movePage(-1);
         break;
+      case 'ArrowDown':
+        this.props.changeAppState({ state: 'closed' });
+        break;
     }
   }
 
@@ -338,19 +354,17 @@ function mapStateToProps(store) {
     appState: store.appState.state,
     appId: store.appState.id,
     appType: store.appState.type,
+
+    /* downloaded apps */
+    apps: store.apps.data,
+
   }
 }
 
 function mapDispatchToProps(dispatch) {
   return {
-    fetchProjects: () => {
-      dispatch(fetchProjects())
-    },
-    changeProjects: ( changedProjects ) => {
-      dispatch(changeProjects( changedProjects ))
-    },
-    switchModalState: (state, mode) => {
-      dispatch(switchModalState(state, mode))
+    changeAppState: (changedState) => {
+      dispatch(changeAppState(changedState))
     },
   }
 }
