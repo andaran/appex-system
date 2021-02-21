@@ -87,15 +87,15 @@ class MainPage extends React.Component {
 
     /* set Interpreter */
     let interpreter = null;
-    let app;
+    let appObj;
     if (this.props.appState === 'opened' || this.props.appState === 'customized') {
       this.props.appType === 'my'
-        ? app = this.props.projects.find(app => app.id === this.props.appId)
-        : app = this.props.apps.find(app => app.id === this.props.appId);
+        ? appObj = this.props.projects.find(foundApp => foundApp.id === this.props.appId)
+        : appObj = this.props.apps.find(foundApp => foundApp.id === this.props.appId);
 
       interpreter = (
         <Interpreter
-          app = { app }
+          app = { appObj }
           id="app-interpreter"
           devMode={ false }/>
       );
@@ -109,18 +109,18 @@ class MainPage extends React.Component {
       const settings = this.props.user.settings.find(elem => elem.id === id);
 
       /* set socketCore class */
-      app.app = app;
+      app.app = appObj;
       app.roomSettings = settings;
 
       /* start! */
-      process.nextTick(() => {
+      setTimeout(() => {
         try {
-          this.appJS = Function( 'App', app.releaseCode.js );
+          this.appJS = Function( 'App', appObj.releaseCode.js );
           this.appJS(app);
         } catch(e) {
           console.error('Ошибка запуска приложения!! \n\n', e);
         }
-      });
+      }, 100);
     }
 
     return (

@@ -201,4 +201,22 @@ router.post('/delete_room', (req, res) => {
     .catch(err => res.json({ status: 'err' }));
 });
 
+
+
+/*   ---==== Apps ====--- */
+
+router.post('/get_app', (req, res) => {
+
+  /* find rooms by user id */
+  App.findOne({
+    author: { username: req.user.username, id: req.user.id },
+    id: req.body.appId,
+    storeVisibility: true,
+  }).then(foundApp => {
+
+    /* send found rooms */
+    res.json(foundApp);
+  });
+});
+
 module.exports = router;
