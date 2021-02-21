@@ -1,10 +1,6 @@
 /* React */
 import React from 'react';
 
-import Button from '../button/Button';
-
-import App from './App';
-
 /* Component */
 export default class Interpreter extends React.Component {
   constructor(props) {

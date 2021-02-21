@@ -85,6 +85,44 @@ class MainPage extends React.Component {
     /* open app if it's ready */
     appReadyFlag && process.nextTick(() => this.props.changeAppState({ state: 'opened' }));
 
+    /* set Interpreter */
+    let interpreter = null;
+    let app;
+    if (this.props.appState === 'opened' || this.props.appState === 'customized') {
+      this.props.appType === 'my'
+        ? app = this.props.projects.find(app => app.id === this.props.appId)
+        : app = this.props.apps.find(app => app.id === this.props.appId);
+
+      interpreter = (
+        <Interpreter
+          app = { app }
+          id="app-interpreter"
+          devMode={ false }/>
+      );
+    }
+
+    /* play JS */
+    if (this.props.appState === 'opened') {
+
+      /* find room settings */
+      const id = this.props.appId;
+      const settings = this.props.user.settings.find(elem => elem.id === id);
+
+      /* set socketCore class */
+      app.app = app;
+      app.roomSettings = settings;
+
+      /* start! */
+      process.nextTick(() => {
+        try {
+          this.appJS = Function( 'App', app.releaseCode.js );
+          this.appJS(app);
+        } catch(e) {
+          console.error('Ошибка запуска приложения!! \n\n', e);
+        }
+      });
+    }
+
     return (
       <div className="system-wrap" id="system-wrap">
         <div className="system-pc" id="system-pc">
@@ -142,7 +180,9 @@ class MainPage extends React.Component {
 
           <div className="main-app-page" id="main-app-page" data-state={ this.props.appState }>
             <div className="app-settings" id="app-settings"></div>
-            <div className="app-body" id="app-body" data-state={ this.props.appState }></div>
+            <div className="app-body" id="app-body" data-state={ this.props.appState }>
+              { interpreter }
+            </div>
           </div>
         </div>
       </div>
@@ -212,6 +252,7 @@ class MainPage extends React.Component {
 
     window.addEventListener('resize', this.resize, device);
     window.addEventListener('keydown', this.keydown);
+
   }
 
   touchStart(event) {
@@ -299,9 +340,11 @@ class MainPage extends React.Component {
   keydown(event) {
     switch (event.key) {
       case 'ArrowRight':
+        if (this.props.appState !== 'closed') { return; }
         this.movePage(1);
         break;
       case 'ArrowLeft':
+        if (this.props.appState !== 'closed') { return; }
         this.movePage(-1);
         break;
       case 'ArrowDown':
