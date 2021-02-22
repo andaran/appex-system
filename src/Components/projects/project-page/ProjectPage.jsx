@@ -245,17 +245,21 @@ class ProjectPage extends React.Component {
     }
 
     /* hotkeys */
-    document.onkeydown = this.keydown;
+    document.addEventListener('keydown', this.keydown);
     this.pressed = new Set();
 
     const settingsButton = document.getElementById('app-navbar__settings');
     if (settingsButton !== null) {
       setTimeout(() => settingsButton.onclick = this.settings, 100);
     }
+
+    /* set app state */
+    this.props.changeAppState({ state: 'closed', id: this.app.id, type: 'my' });
   }
 
   componentWillUnmount() {
     document.removeEventListener('mousemove', this.moveEmulator);
+    document.removeEventListener('keydown', this.keydown);
     this.appJS = null;
   }
 

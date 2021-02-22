@@ -11,6 +11,7 @@ class Interpreter extends React.Component {
 
     // bind
     this.renderApp = this.renderApp.bind(this);
+    this.hotkey = this.hotkey.bind(this);
   }
 
   render() {
@@ -147,6 +148,24 @@ class Interpreter extends React.Component {
         } catch(e) { console.error('Ошибка запуска приложения!! \n\n', e); }
       }
     });
+  }
+
+  componentDidMount() {
+    document.addEventListener('keydown', this.hotkey);
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener('keydown', this.hotkey);
+  }
+
+  hotkey(event) {
+
+    /* update interpreter */
+    if (event.ctrlKey && event.code === 'KeyS' && this.props.devMode) {
+      event.preventDefault();
+      process.nextTick(() => this.forceUpdate());
+      return false;
+    }
   }
 }
 
