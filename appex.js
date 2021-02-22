@@ -134,7 +134,9 @@ io.on('connection', (socket) => {
 
           /* set new state obj */
           keys.forEach(key => {
-            newState[key] = state[key] || data.currentState[key];
+            state[key] === undefined
+              ? newState[key] = data.currentState[key]
+              : newState[key] = state[key];
           });
           newState.lastChange = state.lastChange;
 
