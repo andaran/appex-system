@@ -43,6 +43,7 @@ import Message from '../../../tools/message/Message';
 import Window from '../create-app-window/CreateAppWindow';
 import Wrap from '../../../tools/modal-wrap/ModalWrap';
 import { app } from '../../../socketCore';
+import {changeAppState} from "../../../actions/appStateActions";
 
 /* Component */
 class ProjectPage extends React.Component {
@@ -137,10 +138,17 @@ class ProjectPage extends React.Component {
     let modal;
     this.props.modal.status? modal = <Wrap for={ <Window { ...this.app } /> } />: modal = null;
 
-    process.nextTick(() => {
-      document.getElementById('app-demo__playJS').classList.remove('app-demo__nav-item_true');
-      this.playJSFlag = false;
-    });
+    if (this.props.appState !== 'closed') {
+      process.nextTick(() => {
+        document.getElementById('app-demo__playJS').classList.add('app-demo__nav-item_true');
+        this.playJSFlag = true;
+      });
+    } else {
+      process.nextTick(() => {
+        document.getElementById('app-demo__playJS').classList.remove('app-demo__nav-item_true');
+        this.playJSFlag = false;
+      });
+    }
 
     return (
       <div
@@ -332,26 +340,9 @@ class ProjectPage extends React.Component {
   playJS() {
     this.playJSFlag = !this.playJSFlag;
     if (this.playJSFlag) {
-
-      /* find room settings */
-      const id = this.app.id;
-      const settings = this.props.user.settings.find(elem => elem.id === id);
-
-      /* set socketCore class */
-      // const appObj = new App( this.app, settings );
-      app.app = this.app;
-      app.roomSettings = settings;
-
-      try {
-        this.appJS = Function( 'App', this.app.code.js );
-        this.appJS(app);
-      } catch(e) {
-        console.error('Ошибка запуска приложения!! \n\n', e);
-      }
-
-      document.getElementById('app-demo__playJS').classList.add('app-demo__nav-item_true');
+      this.props.changeAppState({ state: 'opened_dev' });
     } else {
-      this.forceUpdate();
+      this.props.changeAppState({ state: 'closed' });
     }
   }
 
@@ -547,6 +538,11 @@ function mapStateToProps(store) {
     /* user */
     user: store.userData.user,
 
+    /* app state */
+    appState: store.appState.state,
+    appId: store.appState.id,
+    appType: store.appState.type,
+
     /* modal */
     modal: store.projectsModal,
   }
@@ -562,6 +558,9 @@ function mapDispatchToProps(dispatch) {
     },
     switchModalState: (state, mode) => {
       dispatch(switchModalState(state, mode))
+    },
+    changeAppState: (changedState) => {
+      dispatch(changeAppState(changedState))
     },
   }
 }

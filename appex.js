@@ -4,7 +4,6 @@
 const express = require("express");
 const socketIo = require("socket.io");
 const path = require("path");
-const jwt = require('jsonwebtoken');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const passport = require('passport');

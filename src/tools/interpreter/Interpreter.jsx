@@ -1,8 +1,11 @@
 /* React */
 import React from 'react';
+import { changeAppState } from "../../actions/appStateActions";
+import { connect } from "react-redux";
+import { app } from "../../socketCore";
 
 /* Component */
-export default class Interpreter extends React.Component {
+class Interpreter extends React.Component {
   constructor(props) {
     super(props);
 
@@ -125,16 +128,52 @@ export default class Interpreter extends React.Component {
       document
         .getElementById( this.props.id )
         .innerHTML = code;
+
+      /* play JS */
+      if (this.props.appState === 'opened' || this.props.appState === 'opened_dev') {
+
+        /* find room settings */
+        const id = this.props.appId;
+        const settings = this.props.user.settings.find(elem => elem.id === id);
+
+        /* set socketCore class */
+        app.app = this.props.app;
+        app.roomSettings = settings;
+
+        /* start! */
+        try {
+          this.appJS = Function( 'App', appSourceCode.js );
+          this.appJS(app);
+        } catch(e) { console.error('Ошибка запуска приложения!! \n\n', e); }
+      }
     });
-
-
-
-    /*/!*   ---==== Play JS ====---   *!/
-
-    const app = new App( this.props.app );
-
-    let appJS = new Function('App', this.props.app.code.js);
-    appJS(app);
-    appJS = null;*/
   }
 }
+
+
+
+/*   ---==== Connect to redux ====---   */
+
+function mapStateToProps(store) {
+  return {
+
+    /* user */
+    user: store.userData.user,
+
+    /* app state */
+    appState: store.appState.state,
+    appId: store.appState.id,
+    appType: store.appState.type,
+
+  }
+}
+
+function mapDispatchToProps(dispatch) {
+  return {
+    changeAppState: (changedState) => {
+      dispatch(changeAppState(changedState))
+    },
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Interpreter);

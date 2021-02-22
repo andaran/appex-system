@@ -101,28 +101,6 @@ class MainPage extends React.Component {
       );
     }
 
-    /* play JS */
-    if (this.props.appState === 'opened') {
-
-      /* find room settings */
-      const id = this.props.appId;
-      const settings = this.props.user.settings.find(elem => elem.id === id);
-
-      /* set socketCore class */
-      app.app = appObj;
-      app.roomSettings = settings;
-
-      /* start! */
-      setTimeout(() => {
-        try {
-          this.appJS = Function( 'App', appObj.releaseCode.js );
-          this.appJS(app);
-        } catch(e) {
-          console.error('Ошибка запуска приложения!! \n\n', e);
-        }
-      }, 100);
-    }
-
     return (
       <div className="system-wrap" id="system-wrap">
         <div className="system-pc" id="system-pc">
