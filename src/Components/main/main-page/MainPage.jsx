@@ -10,6 +10,7 @@ import { app } from '../../../socketCore';
 import SystemNavbar from '../system-navbar/SystemNavbar';
 import AppIcon from '../app-icon/AppIcon';
 import Interpreter from '../../../tools/interpreter/Interpreter';
+import SuperButton from '../super-button/SuperButton';
 import { Link } from "react-router-dom";
 
 /* Component */
@@ -161,6 +162,7 @@ class MainPage extends React.Component {
             <div className="app-body" id="app-body" data-state={ this.props.appState }>
               { interpreter }
             </div>
+            <SuperButton/>
           </div>
         </div>
       </div>
