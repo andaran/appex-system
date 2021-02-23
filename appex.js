@@ -8,6 +8,7 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const passport = require('passport');
 const session = require('cookie-session');
+const cors = require('cors');
 
 /* settings */
 const sessionSecretKey1 = process.env.sessionSecretKey1 || '0u@Fq|nTyaHG';
@@ -38,6 +39,9 @@ mongoose.connect('mongodb://127.0.0.1/appex', {
 
 const app = express();
 app.use(bodyParser.json());
+
+/* set cors */
+app.use(cors({ origin: '*' }));
 
 /* set static dir */
 app.use(express.static(path.join(__dirname, 'build')));
@@ -107,8 +111,13 @@ app.use('/api', APIRoute);
 
 
 /*   ---==== Use socket.io ====---   */
+/*
+app.use(((req, res, next) => {
+  res.header("Access-Control-Allow-Origin", "*");
+  next();
+}));*/
 
-const io = socketIo(server);
+const io = socketIo(server, { log: false, origins: '*:*' });
 io.on('connection', (socket) => {
 
   /* connect to room */

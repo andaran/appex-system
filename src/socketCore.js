@@ -3,7 +3,7 @@
 import io from 'socket.io-client';
 
 const port = +process.env.port || 3001;
-const socket = io(`http://localhost:${ port }`);
+const socket = io(`http://192.168.1.36:${ port }`);
 
 export function test() {
   socket.emit('test', { name: 'Andrey' });
@@ -21,6 +21,7 @@ class App {
     this.roomId = false;
     this.roomPass = false;
     this.settings = {};
+    this.runFlag = false;
 
     this.socket = socket;
 
@@ -53,6 +54,7 @@ class App {
     /* connect to room */
     // socket.emit('disconnectFromRoom', { roomId });
     socket.emit('connectToRoom', { roomId, roomPass, currentState: this.state });
+    this.runFlag = true;
   }
 
   send(params) {
@@ -74,6 +76,7 @@ class App {
 
     /* init app */
     socket.on('connectSuccess', state => {
+      if (!this.runFlag) { return; }
       this.state = { ...this.state, ...state };
       console.log('[log] Приложение подключено!');
       this.update( this.state );
@@ -81,6 +84,7 @@ class App {
 
     /* update */
     socket.on('updateState', state => {
+      if (!this.runFlag) { return; }
 
       /* update if id is true */
       if (state.roomId === this.roomSettings.body.roomId) {
@@ -92,6 +96,7 @@ class App {
 
     /* error */
     socket.on('error', err => {
+      if (!this.runFlag) { return; }
       switch (err.type) {
         case 'RoomNotFound':
           console.log('[Err] Неверный id или пароль комнаты!');
@@ -104,6 +109,14 @@ class App {
           break;
       }
     });
+  }
+
+  exit() {
+
+    const roomId = this.roomSettings.body.roomId;
+    this.socket.emit('disconnectFromRoom', { roomId });
+    this.runFlag = false;
+    console.log('[Log] Выход из приложения.');
   }
 }
 

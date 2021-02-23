@@ -327,6 +327,7 @@ class MainPage extends React.Component {
         break;
       case 'ArrowDown':
         this.props.changeAppState({ state: 'closed' });
+        app.exit();
         break;
     }
   }

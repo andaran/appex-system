@@ -146,6 +146,8 @@ class Interpreter extends React.Component {
           this.appJS = Function( 'App', appSourceCode.js );
           this.appJS(app);
         } catch(e) { console.error('Ошибка запуска приложения!! \n\n', e); }
+      } else {
+        app.exit();
       }
     });
   }
