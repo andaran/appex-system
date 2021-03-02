@@ -13,6 +13,8 @@ import Interpreter from '../../../tools/interpreter/Interpreter';
 import SuperButton from '../super-button/SuperButton';
 import { Link } from "react-router-dom";
 
+import SettingsApp from '../system-apps/settings/SettingsApp';
+
 /* Component */
 class MainPage extends React.Component {
   constructor(props) {
@@ -43,17 +45,15 @@ class MainPage extends React.Component {
       return <AppIcon { ...app } key={ app.id } type="my"/>;
     });
 
-    /* my apps test */
-    /*let myApps = [];
-    for (let i = 0; i < 50; i++) {
-      myApps.push(<AppIcon { ...this.props.projects[0] }/>)
-    }*/
-
     /* installed apps */
     let installedApps = this.props.user.installedApps.map(app => {
       return <AppIcon { ...app } key={ app.id } type="downloaded"/>;
     });
-    // let installedApps = [];
+
+    /* system apps */
+    let systemApps = [
+      <AppIcon color="#95a5a6" icon="faCog" title="Настройки" key="settings-icon" type="settings"/>,
+    ]
 
     if(myApps.length) {
       myApps = <div className="apps-wrap">
@@ -89,7 +89,7 @@ class MainPage extends React.Component {
     /* set Interpreter */
     let interpreter = null;
     let appObj;
-    if (this.props.appState === 'opened' || this.props.appState === 'customized') {
+    if (this.props.appState === 'opened' && this.props.appType in ['my', 'downloaded']) {
       this.props.appType === 'my'
         ? appObj = this.props.projects.find(foundApp => foundApp.id === this.props.appId)
         : appObj = this.props.apps.find(foundApp => foundApp.id === this.props.appId);
@@ -100,6 +100,14 @@ class MainPage extends React.Component {
           id="app-interpreter"
           devMode={ false }/>
       );
+    } else if (this.props.appState === 'opened') {
+
+      /* switch system app */
+      switch (this.props.appType) {
+        case 'settings':
+          interpreter = <SettingsApp/>;
+          break;
+      }
     }
 
     return (
@@ -115,6 +123,10 @@ class MainPage extends React.Component {
               <span> Листать </span>
               <span> ⯇ </span>
               <span> ⯈ </span>
+            </div>
+            <div className="box-main">
+              <span> Свернуть </span>
+              <span> ▼ </span>
             </div>
           </div>
         </div>
@@ -150,7 +162,7 @@ class MainPage extends React.Component {
                   Тут располагаются системные приложения. Они нужны для настройки системы и для будущих функций.
                 </div>
               </div>
-              <div className="app-group__icons"></div>
+              <div className="app-group__icons"> { systemApps } </div>
             </div>
           </div>
           <div className="page-number">

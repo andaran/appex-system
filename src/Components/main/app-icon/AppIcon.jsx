@@ -48,7 +48,7 @@ class AppIcon extends React.Component {
     /* change app state */
     const appState = {
       state,
-      id: this.props.id,
+      id: this.props.id || 'system-app',
       type: this.props.type,
     }
     this.props.changeAppState(appState);

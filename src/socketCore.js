@@ -112,11 +112,14 @@ class App {
   }
 
   exit() {
-
-    const roomId = this.roomSettings.body.roomId;
-    this.socket.emit('disconnectFromRoom', { roomId });
-    this.runFlag = false;
-    console.log('[Log] Выход из приложения.');
+    try {
+      const roomId = this.roomSettings.body.roomId;
+      this.socket.emit('disconnectFromRoom', { roomId });
+      this.runFlag = false;
+      console.log('[Log] Выход из приложения.');
+    } catch {
+      console.log('[Err] Ошибка выхода из приложения!');
+    }
   }
 }
 
