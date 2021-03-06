@@ -14,6 +14,16 @@ const User = require(path.join(__dirname, '../', 'models', 'user.js'));
 const App = require(path.join(__dirname, '../', 'models', 'app.js'));
 const Room = require(path.join(__dirname, '../', 'models', 'room.js'));
 
+const clearParams = (params, scheme) => {
+  const updateObj = {};
+  scheme.forEach(param => {
+    if (params[param] !== undefined) {
+      updateObj[param] = params[param];
+    }
+  });
+  return updateObj;
+}
+
 
 
 /*   ---==== User ====---   */
@@ -23,7 +33,33 @@ router.post('/get_user', (req, res) => {
 });
 
 router.post('/change_user', (req, res) => {
-  User.updateOne({ id: req.user.id }, { $set: req.body }).then(user => {  // Update the task
+
+  /* public params */
+  const scheme = ['installedApps', 'settings'];
+
+  /* update user */
+  User.updateOne({ id: req.user.id }, { $set: clearParams(req.body, scheme) }).then(user => {
+    res.json({ status: 'ok' });
+  }, err => {
+    res.json({ status: 'err' });
+  });
+});
+
+router.post('/change_user_private', (req, res) => {
+
+  /* private params */
+  const scheme = ['username', 'email'];
+  const updateObj = clearParams(req.body, scheme);
+
+  /* check params available */
+  User.find(updateObj).then(users => {
+    if (!users.length) { return res.json({ status: 'err' }); }
+  }, err => {
+    return res.json({ status: 'err' });
+  });
+
+  /* update user */
+  User.updateOne({ id: req.user.id }, { $set: updateObj }).then(user => {
     res.json({ status: 'ok' });
   }, err => {
     res.json({ status: 'err' });
@@ -32,9 +68,9 @@ router.post('/change_user', (req, res) => {
 
 
 
-/*   ---==== Projects ====--- */
+/*   ---==== Projects ====---   */
 
-router.post('/get_projects', ((req, res) => {
+router.post('/get_projects', (req, res) => {
 
   /* find projects by user id */
   App.find({ author: { username: req.user.username, id: req.user.id } }).then(foundApps => {
@@ -42,7 +78,7 @@ router.post('/get_projects', ((req, res) => {
     /* send found app */
     res.json(foundApps);
   });
-}));
+});
 
 router.post('/create_app', (req, res) => {
 
@@ -123,7 +159,7 @@ router.post('/change_app/:mode', (req, res) => {
     .catch(err => res.json({ status: 'err' }));
 });
 
-router.post('/delete_app', ((req, res) => {
+router.post('/delete_app', (req, res) => {
 
   /* delete app */
   App.deleteOne({
@@ -133,7 +169,7 @@ router.post('/delete_app', ((req, res) => {
     res.json({ status: 'ok' });
   }, err => res.json({ status: 'err' }))
     .catch(err => res.json({ status: 'err' }));
-}));
+});
 
 
 
@@ -203,7 +239,7 @@ router.post('/delete_room', (req, res) => {
 
 
 
-/*   ---==== Apps ====--- */
+/*   ---==== Apps ====---   */
 
 router.post('/get_app', (req, res) => {
 
