@@ -57,7 +57,7 @@ class SettingsApp extends React.Component {
       <div className="input-menu">
         { closeButton }
         <div className="main-settings-title">Настройки приложений</div>
-        <AppsSettings/>
+        <AppsSettings { ...this.props }/>
       </div>,
     ];
 

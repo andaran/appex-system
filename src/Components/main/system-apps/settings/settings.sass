@@ -1,4 +1,5 @@
 
+
 .main-settings-wrap
   height: 100%
   width: 100%
@@ -60,6 +61,7 @@
   top: 0
   padding: 24px
   transition: .3s
+  overflow-y: scroll
 
   &_false
     left: 100%
@@ -70,9 +72,32 @@
   right: 24px
   position: absolute
 
+.input-menu .reg-window
+  max-width: 100%
+
 /* apps settings */
 .apps-settings-wrap
   width: 360px
   max-width: 100%
-  background: red
-  height: 300px
+  padding-top: 30px
+
+.app-block
+  width: 100%
+  background: #22262a
+  //height: 150px
+  margin-bottom: 30px
+  border-radius: 8px
+  padding: 14px
+
+  &__icon
+    color: #262c31
+    display: flex
+    justify-content: center
+    align-items: center
+    width: 32px
+    height: 32px
+    border-radius: 5px
+    font-size: 14px
+
+  .reg-window__item-block, .reg-window__button
+    margin: 6px 0
