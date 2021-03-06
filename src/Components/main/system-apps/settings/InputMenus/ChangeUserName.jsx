@@ -11,7 +11,7 @@ export default class ChangeUserName extends React.Component {
 
   render() {
 
-    let err = null;
+    let errs = [ null, null, null];
 
     return (
       <div className="reg-window">
@@ -23,10 +23,10 @@ export default class ChangeUserName extends React.Component {
             <input type="text" placeholder="никнейм" id="reg-username" className="reg-window__input"/>
           </div>
         </div>
-        { err }
+        { errs[0] }
         <div className="reg-window__input-item">
-          <div className="reg-window__button reg-window__button_blue" id="reg-btn">
-            Зарегистрироваться!
+          <div className="reg-window__button reg-window__button_blue">
+            Сменить имя пользователя!
           </div>
         </div>
       </div>

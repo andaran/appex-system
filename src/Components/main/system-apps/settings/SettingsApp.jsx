@@ -3,11 +3,18 @@ import React from 'react';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {faUser, faLock, faAt, faUserSlash, faMobile, faArrowLeft, faTimes} from "@fortawesome/free-solid-svg-icons";
 
+import { fetchUser } from "../../../../actions/userActions";
+import { connect } from "react-redux";
+
 /* input menus */
 import ChangeUserName from './InputMenus/ChangeUserName';
+import ChangeMail from './InputMenus/ChangeMail';
+import ChangePassword from './InputMenus/ChangePassword';
+import DeleteAccount from './InputMenus/DeleteAccount';
+import AppsSettings from './InputMenus/AppsSettings';
 
 /* Component */
-export default class SettingsApp extends React.Component {
+class SettingsApp extends React.Component {
   constructor(props) {
     super(props);
 
@@ -35,22 +42,22 @@ export default class SettingsApp extends React.Component {
       <div className="input-menu">
         { closeButton }
         <div className="main-settings-title">Сменить пароль</div>
-        <ChangeUserName/>
+        <ChangePassword/>
       </div>,
       <div className="input-menu">
         { closeButton }
         <div className="main-settings-title">Сменить почту</div>
-        <ChangeUserName/>
+        <ChangeMail/>
       </div>,
       <div className="input-menu">
         { closeButton }
         <div className="main-settings-title">Удалить аккаунт</div>
-        <ChangeUserName/>
+        <DeleteAccount/>
       </div>,
       <div className="input-menu">
         { closeButton }
         <div className="main-settings-title">Настройки приложений</div>
-        <ChangeUserName/>
+        <AppsSettings/>
       </div>,
     ];
 
@@ -105,3 +112,23 @@ export default class SettingsApp extends React.Component {
 
   }
 }
+
+
+function mapStateToProps(store) {
+  return {
+    user: store.userData.user,
+    projects: store.projects.data,
+    apps: store.apps.data,
+
+  }
+}
+
+function mapDispatchToProps(dispatch) {
+  return {
+    fetchUser: () => {
+      dispatch(fetchUser())
+    }
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(SettingsApp);

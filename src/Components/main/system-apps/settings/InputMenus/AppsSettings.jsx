@@ -10,7 +10,9 @@ export default class ChangeUserName extends React.Component {
   render() {
 
     return (
-      <div> test </div>
+      <div className="apps-settings-wrap">
+
+      </div>
     );
   }
 
