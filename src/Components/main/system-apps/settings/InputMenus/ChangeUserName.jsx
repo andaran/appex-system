@@ -1,6 +1,9 @@
 import React from 'react';
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faUser} from "@fortawesome/free-solid-svg-icons";
+import { fetchUser } from "../../../../../actions/userActions";
+
+import { request } from '../../../../../tools/apiRequest/apiRequest';
 
 /* Component */
 export default class ChangeUserName extends React.Component {
@@ -67,6 +70,8 @@ export default class ChangeUserName extends React.Component {
       return;
     } else {
 
+      return this.changeUsername(username); // TODO: delete this string
+
       /* checking username available */
       const body = JSON.stringify({ username });
       await fetch('/sign_up/is_param_available', {
@@ -92,7 +97,20 @@ export default class ChangeUserName extends React.Component {
   }
 
   changeUsername(username) {
-
+    console.log('change!');
+    request('change_user_private', { username }).then(body => {
+      if (body.status === 'ok') {
+        fetchUser();
+      } else {
+        this.setState({
+          errs: ['Ошибка смены имени пользователя!']
+        });
+      }
+    }).catch(err => {
+      this.setState({
+        errs: ['Ошибка запроса!']
+      });
+    });
   }
 
   componentWillUnmount() {
