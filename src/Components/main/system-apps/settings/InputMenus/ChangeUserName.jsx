@@ -70,7 +70,7 @@ export default class ChangeUserName extends React.Component {
       return;
     } else {
 
-      return this.changeUsername(username); // TODO: delete this string
+      /*return this.changeUsername(username); // TODO: delete this string*/
 
       /* checking username available */
       const body = JSON.stringify({ username });
@@ -97,10 +97,10 @@ export default class ChangeUserName extends React.Component {
   }
 
   changeUsername(username) {
-    console.log('change!');
     request('change_user_private', { username }).then(body => {
       if (body.status === 'ok') {
         fetchUser();
+        console.log('ok!');
       } else {
         this.setState({
           errs: ['Ошибка смены имени пользователя!']

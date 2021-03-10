@@ -41,7 +41,7 @@ const app = express();
 app.use(bodyParser.json());
 
 /* set cors */
-app.use(cors({ origin: '*' }));
+// app.use(cors({ origin: '*' }));  // TODO: хз че с этим делать
 
 /* set static dir */
 app.use(express.static(path.join(__dirname, 'build')));

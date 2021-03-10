@@ -26,16 +26,8 @@ const appSchema = new mongoose.Schema({
     required: true,
   },
   author: {
-    type: Object,
+    type: String,
     required: true,
-    username: {
-      type: Boolean,
-      required: true,
-    },
-    id: {
-      type: Boolean,
-      required: true,
-    },
   },
   code: {
     type: Object,

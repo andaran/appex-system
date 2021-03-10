@@ -2,7 +2,7 @@
 /*   ---==== Automatic user api request ====---   */
 
 const request = (url, params) => {
-  const body = JSON.stringify({ params });
+  const body = JSON.stringify({ ...params });
   return fetch(`/api/${ url }`, {
     method: "POST",
     headers: {

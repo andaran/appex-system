@@ -47,6 +47,8 @@ router.post('/change_user', (req, res) => {
 
 router.post('/change_user_private', (req, res) => {
 
+  console.log('/change_user_private', req.body);
+
   /* private params */
   const scheme = ['username', 'email'];
   const updateObj = clearParams(req.body, scheme);
@@ -61,6 +63,7 @@ router.post('/change_user_private', (req, res) => {
   /* update user */
   User.updateOne({ id: req.user.id }, { $set: updateObj }).then(user => {
     res.json({ status: 'ok' });
+    console.log('=> ', user);
   }, err => {
     res.json({ status: 'err' });
   });
@@ -73,7 +76,7 @@ router.post('/change_user_private', (req, res) => {
 router.post('/get_projects', (req, res) => {
 
   /* find projects by user id */
-  App.find({ author: { username: req.user.username, id: req.user.id } }).then(foundApps => {
+  App.find({ author: req.user.id }).then(foundApps => {
 
     /* send found app */
     res.json(foundApps);
@@ -93,10 +96,7 @@ router.post('/create_app', (req, res) => {
       id: appId,
       storeVisibility: req.body.downloadAvailable,
       createDate: Date.now(),
-      author: {
-        username: req.user.username,
-        id: req.user.id,
-      },
+      author: req.user.id,
       code: {
         html: 'Html is here ...',
         css: '// Css is here ...',
@@ -149,7 +149,7 @@ router.post('/change_app/:mode', (req, res) => {
 
   /* update app */
   App.updateOne({
-    author: { username: req.user.username, id: req.user.id },
+    author: req.user.id,
     id: req.body.id,
   }, {
     $set: updateObj
@@ -163,7 +163,7 @@ router.post('/delete_app', (req, res) => {
 
   /* delete app */
   App.deleteOne({
-    author: { username: req.user.username, id: req.user.id },
+    author: req.user.id,
     id: req.body.id,
   }).then(changedApp => {
     res.json({ status: 'ok' });
