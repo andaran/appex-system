@@ -89,7 +89,7 @@ class MainPage extends React.Component {
     /* set Interpreter */
     let interpreter = null;
     let appObj;
-    if (this.props.appState === 'opened' && this.props.appType in ['my', 'downloaded']) {
+    if (this.props.appState === 'opened' && ['my', 'downloaded'].includes(this.props.appType)) {
       this.props.appType === 'my'
         ? appObj = this.props.projects.find(foundApp => foundApp.id === this.props.appId)
         : appObj = this.props.apps.find(foundApp => foundApp.id === this.props.appId);
