@@ -54,6 +54,8 @@ class CodeEditor extends React.Component {
     }
 
     this.editor = CodeMirror.fromTextArea(document.getElementById( this.props.id ), {
+
+      /* CodeMirror settings */
       lineNumbers: true,
       lineWrapping: true,
       matchBrackets: true,
@@ -62,6 +64,11 @@ class CodeEditor extends React.Component {
       theme: 'darcula',
       extraKeys: keys,
       minimap: minimapSettings,
+
+      /* emmet settings */
+      emmet: {
+        preview: false,
+      },
     });
 
     this.editor.on('change', this.autocomplete);
