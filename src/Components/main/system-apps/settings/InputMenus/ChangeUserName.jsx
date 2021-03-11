@@ -97,9 +97,16 @@ export default class ChangeUserName extends React.Component {
   }
 
   changeUsername(username) {
-    request('change_user_private', { username }).then(body => {
+    const body = JSON.stringify({ username });
+    return fetch(`/api/change_user_private`, {
+      method: "POST",
+      headers: {
+        'Accept': 'application/json, text/plain, */*',
+        'Content-Type': 'application/json',
+      },
+      body
+    }).then(res => res.json()).then(body => {
       if (body.status === 'ok') {
-        fetchUser();
         console.log('ok!');
       } else {
         this.setState({

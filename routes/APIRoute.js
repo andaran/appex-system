@@ -47,26 +47,23 @@ router.post('/change_user', (req, res) => {
 
 router.post('/change_user_private', (req, res) => {
 
-  console.log('/change_user_private', req.body);
-
   /* private params */
   const scheme = ['username', 'email'];
   const updateObj = clearParams(req.body, scheme);
 
-  /* check params available */
+  /* check params available and update user */
   User.find(updateObj).then(users => {
-    if (!users.length) { return res.json({ status: 'err' }); }
-  }, err => {
-    return res.json({ status: 'err' });
-  });
 
-  /* update user */
-  User.updateOne({ id: req.user.id }, { $set: updateObj }).then(user => {
-    res.json({ status: 'ok' });
-    console.log('=> ', user);
-  }, err => {
-    res.json({ status: 'err' });
-  });
+    /* if username is used */
+    if (users.length !== 0) { return res.json({ status: 'err' }); }
+
+    /* update user */
+    User.updateOne({ id: req.user.id }, { $set: updateObj }).then(user => {
+      res.json({ status: 'ok' });
+    }, err => {
+      res.json({ status: 'err' });
+    });
+  }, err => res.json({ status: 'err' }));
 });
 
 
