@@ -10,6 +10,10 @@ const passport = require('passport');
 const session = require('cookie-session');
 const cors = require('cors');
 
+/* include .env settings */
+require('dotenv').config();
+console.log(process.env);
+
 /* settings */
 const sessionSecretKey1 = process.env.sessionSecretKey1 || '0u@Fq|nTyaHG';
 const sessionSecretKey2 = process.env.sessionSecretKey2 || 'U99}G9zTsKDg';

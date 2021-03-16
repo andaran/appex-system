@@ -17,6 +17,7 @@
     "codemirror-minimap": "^1.0.6",
     "cookie-session": "^1.4.0",
     "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
     "eslint-loader": "^4.0.2",
     "express": "^4.17.1",
     "handlebars": "^4.7.6",
