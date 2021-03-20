@@ -52,10 +52,6 @@ export default class ChangeUserName extends React.Component {
     );
   }
 
-  componentDidMount() {
-
-  }
-
   async send() {
 
     /* Clear warnings */
@@ -93,25 +89,18 @@ export default class ChangeUserName extends React.Component {
   changeUsername(username) {
     return request(`/api/change_user_private`, { username })
       .then(res => res.json()).then(body => {
-      if (body.status === 'ok') {
+        if (body.status === 'ok') {
+          this.props.fetchUser();
+        } else {
+          console.log(body);
+          this.setState({
+            errs: ['Ошибка смены имени пользователя!']
+          });
+        }
+      }).catch(err => {
         this.setState({
-          errs: ['Имя пользователя изменено!']
+          errs: ['Ошибка запроса!']
         });
-        this.props.fetchUser();
-      } else {
-        console.log(body);
-        this.setState({
-          errs: ['Ошибка смены имени пользователя!']
-        });
-      }
-    }).catch(err => {
-      this.setState({
-        errs: ['Ошибка запроса!']
       });
-    });
-  }
-
-  componentWillUnmount() {
-
   }
 }

@@ -42,17 +42,17 @@ class SettingsApp extends React.Component {
       <div className="input-menu">
         { closeButton }
         <div className="main-settings-title">Сменить пароль</div>
-        <ChangePassword/>
+        <ChangePassword fetchUser={ this.props.fetchUser }/>
       </div>,
       <div className="input-menu">
         { closeButton }
         <div className="main-settings-title">Сменить почту</div>
-        <ChangeMail/>
+        <ChangeMail fetchUser={ this.props.fetchUser }/>
       </div>,
       <div className="input-menu">
         { closeButton }
         <div className="main-settings-title">Удалить аккаунт</div>
-        <DeleteAccount/>
+        <DeleteAccount fetchUser={ this.props.fetchUser }/>
       </div>,
       <div className="input-menu">
         { closeButton }
