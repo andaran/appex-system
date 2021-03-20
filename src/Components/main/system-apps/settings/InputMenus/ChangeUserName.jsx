@@ -4,6 +4,7 @@ import {faUser} from "@fortawesome/free-solid-svg-icons";
 import { fetchUser } from "../../../../../actions/userActions";
 
 import { request } from '../../../../../tools/apiRequest/apiRequest';
+import {connect} from "react-redux";
 
 /* Component */
 export default class ChangeUserName extends React.Component {
@@ -73,15 +74,8 @@ export default class ChangeUserName extends React.Component {
       /*return this.changeUsername(username); // TODO: delete this string*/
 
       /* checking username available */
-      const body = JSON.stringify({ username });
-      await fetch('/sign_up/is_param_available', {
-        method: "POST",
-        headers: {
-          'Accept': 'application/json, text/plain, */*',
-          'Content-Type': 'application/json',
-        },
-        body
-      }).then(res => res.text()).then(text => {
+      await request('/sign_up/is_param_available', { username })
+        .then(res => res.text()).then(text => {
         if (text === 'used') {
           this.setState({
             errs: ['Такой пользователь уже есть в системе!']
@@ -97,18 +91,15 @@ export default class ChangeUserName extends React.Component {
   }
 
   changeUsername(username) {
-    const body = JSON.stringify({ username });
-    return fetch(`/api/change_user_private`, {
-      method: "POST",
-      headers: {
-        'Accept': 'application/json, text/plain, */*',
-        'Content-Type': 'application/json',
-      },
-      body
-    }).then(res => res.json()).then(body => {
+    return request(`/api/change_user_private`, { username })
+      .then(res => res.json()).then(body => {
       if (body.status === 'ok') {
-        console.log('ok!');
+        this.setState({
+          errs: ['Имя пользователя изменено!']
+        });
+        this.props.fetchUser();
       } else {
+        console.log(body);
         this.setState({
           errs: ['Ошибка смены имени пользователя!']
         });

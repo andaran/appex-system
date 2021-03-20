@@ -37,7 +37,7 @@ class SettingsApp extends React.Component {
       <div className="input-menu">
         { closeButton }
         <div className="main-settings-title">Сменить имя пользователя</div>
-        <ChangeUserName/>
+        <ChangeUserName fetchUser={ this.props.fetchUser }/>
       </div>,
       <div className="input-menu">
         { closeButton }

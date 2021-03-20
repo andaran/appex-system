@@ -55,15 +55,15 @@ router.post('/change_user_private', (req, res) => {
   User.find(updateObj).then(users => {
 
     /* if username is used */
-    if (users.length !== 0) { return res.json({ status: 'err' }); }
+    if (users.length !== 0) { return res.json({ status: 'err', message: 'username already used' }); }
 
     /* update user */
     User.updateOne({ id: req.user.id }, { $set: updateObj }).then(user => {
       res.json({ status: 'ok' });
     }, err => {
-      res.json({ status: 'err' });
+      res.json({ status: 'err', message: 'updating error' });
     });
-  }, err => res.json({ status: 'err' }));
+  }, err => res.json({ status: 'err', message: 'updating fatal error' }));
 });
 
 

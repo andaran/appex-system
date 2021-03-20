@@ -12,7 +12,6 @@ const cors = require('cors');
 
 /* include .env settings */
 require('dotenv').config();
-console.log(process.env);
 
 /* settings */
 const sessionSecretKey1 = process.env.sessionSecretKey1 || '0u@Fq|nTyaHG';
