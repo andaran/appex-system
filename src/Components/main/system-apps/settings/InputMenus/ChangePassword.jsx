@@ -102,7 +102,7 @@ export default class ChangeUserName extends React.Component {
   }
 
   changePassword(passwords) {
-    return request(`/api/change_password`, { ...passwords })
+    request(`/api/change_password`, { ...passwords })
       .then(res => res.json()).then(body => {
         if (body.status === 'ok') {
           this.props.fetchUser();

@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {faUser, faLock, faAt, faUserSlash, faMobile, faArrowLeft, faTimes} from "@fortawesome/free-solid-svg-icons";
+import {faUser, faLock, faAt, faUserSlash, faMobile, faArrowLeft, faInfoCircle} from "@fortawesome/free-solid-svg-icons";
 
 import { fetchUser } from "../../../../actions/userActions";
 import { connect } from "react-redux";
@@ -10,7 +10,7 @@ import { connect } from "react-redux";
 import ChangeUserName from './InputMenus/ChangeUserName';
 import ChangeMail from './InputMenus/ChangeMail';
 import ChangePassword from './InputMenus/ChangePassword';
-import DeleteAccount from './InputMenus/DeleteAccount';
+import AccountInfo from './InputMenus/AccountInfo';
 import AppsSettings from './InputMenus/AppsSettings';
 
 /* Component */
@@ -51,13 +51,13 @@ class SettingsApp extends React.Component {
       </div>,
       <div className="input-menu">
         { closeButton }
-        <div className="main-settings-title">Удалить аккаунт</div>
-        <DeleteAccount fetchUser={ this.props.fetchUser }/>
+        <div className="main-settings-title">Настройки приложений</div>
+        <AppsSettings { ...this.props } fetchUser={ this.props.fetchUser }/>
       </div>,
       <div className="input-menu">
         { closeButton }
-        <div className="main-settings-title">Настройки приложений</div>
-        <AppsSettings { ...this.props }/>
+        <div className="main-settings-title">Об аккаунте</div>
+        <AccountInfo { ...this.props } fetchUser={ this.props.fetchUser }/>
       </div>,
     ];
 
@@ -84,17 +84,20 @@ class SettingsApp extends React.Component {
             <span> Сменить почту </span>
             <div/>
           </li>
+        </ul>
+        <hr className="settings-line"/>
+        <ul className="settings-list">
           <li className="apps-params" onClick={ () => this.setState({ menu: 3 }) }>
-            <FontAwesomeIcon icon={ faUserSlash } style={{ color: '#e74c3c' }}/>
-            <span> Удалить аккаунт </span>
+            <FontAwesomeIcon icon={ faMobile } style={{ color: '#9b59b6' }}/>
+            <span> Настройки приложений </span>
             <div/>
           </li>
         </ul>
         <hr className="settings-line"/>
         <ul className="settings-list">
           <li className="apps-params" onClick={ () => this.setState({ menu: 4 }) }>
-            <FontAwesomeIcon icon={ faMobile } style={{ color: '#9b59b6' }}/>
-            <span> Настройки приложений </span>
+            <FontAwesomeIcon icon={ faInfoCircle } style={{ color: '#2ecc71' }}/>
+            <span> Об аккаунте </span>
             <div/>
           </li>
         </ul>

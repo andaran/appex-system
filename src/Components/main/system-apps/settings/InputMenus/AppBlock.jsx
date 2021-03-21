@@ -2,12 +2,19 @@ import React from 'react';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faKey, faIdBadge } from "@fortawesome/free-solid-svg-icons";
 import * as Icons from "@fortawesome/free-solid-svg-icons";
+import {request} from "../../../../../tools/apiRequest/apiRequest";
 
 /* Component */
 export default class AppBlock extends React.Component {
   constructor(props) {
     super(props);
 
+    this.state = {
+      errs: [''],
+    }
+
+    // bind
+    this.send = this.send.bind(this);
   }
 
   render() {
@@ -20,6 +27,17 @@ export default class AppBlock extends React.Component {
       this.roomId = settings.body.roomId;
       this.roomPass = settings.body.roomPass;
     }
+
+    let errs = [null];
+    errs = errs.map((item, index) => {
+      if (this.state.errs[index] !== '') {
+        return (
+          <div className="reg-window__err-item">
+            { this.state.errs[index] }
+          </div>
+        );
+      }
+    });
 
     return (
       <div className="app-block">
@@ -55,8 +73,9 @@ export default class AppBlock extends React.Component {
                    className="reg-window__input"/>
           </div>
         </div>
+        { errs[0] }
         <div className="reg-window__input-item">
-          <div className="reg-window__button reg-window__button_green" id="reg-btn">
+          <div className="reg-window__button reg-window__button_green" id="reg-btn" onClick={ this.send }>
             Сохранить
           </div>
         </div>
@@ -68,13 +87,63 @@ export default class AppBlock extends React.Component {
     const id = document.getElementById(`room-id-${ this.props.id }`);
     const pass = document.getElementById(`room-pass-${ this.props.id }`);
 
-    console.log(this.props);
-
     id.value = this.roomId || '';
     pass.value = this.roomPass || '';
   }
 
-  componentWillUnmount() {
+  send() {
 
+    /* clear errs */
+    this.setState({
+      errs: ['']
+    });
+
+    const roomId = document.getElementById(`room-id-${ this.props.id }`).value;
+    const roomPass = document.getElementById(`room-pass-${ this.props.id }`).value;
+
+    if (!roomId || !roomPass) {
+      return this.setState({
+        errs: ['Введите айди и пароль комнаты!']
+      });
+    }
+
+    const id = this.props.id;
+    const settings = this.props.user.settings.find(elem => elem.id === id);
+    let newUserSettings = this.props.user.settings;
+
+    /* change user settings */
+    if (settings !== undefined) {
+      newUserSettings = newUserSettings.map(setting => {
+        if (setting.id === id) {
+          return {
+            id, body: {
+              ...setting.body,
+              roomId, roomPass,
+            }
+          }
+        } else { return setting; }
+      });
+    } else {
+      newUserSettings.push({
+        id, body: { roomId, roomPass, }
+      });
+    }
+
+    /* do request */
+    request(`/api/change_user`, { settings: newUserSettings })
+      .then(res => res.json()).then(body => {
+        if (body.status === 'ok') {
+          this.props.fetchUser();
+        } else {
+          console.log(body);
+          this.setState({
+            errs: ['Ошибка!']
+          });
+        }
+      }).catch(err => {
+        this.setState({
+          errs: ['Ошибка запроса!']
+        });
+      });
   }
 }
