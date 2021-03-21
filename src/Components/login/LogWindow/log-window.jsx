@@ -4,7 +4,7 @@ import React from 'react';
 /* Components */
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser, faLock } from '@fortawesome/free-solid-svg-icons';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 
 /* Component */
 export default class RegWindow extends React.Component {
@@ -13,6 +13,7 @@ export default class RegWindow extends React.Component {
 
     this.state = {
       errs: ['', '', ''],
+      redirect: false,
     }
 
     // bind
@@ -33,8 +34,14 @@ export default class RegWindow extends React.Component {
       }
     });
 
+    let redirect = null;
+    if (this.state.redirect) {
+      redirect = <Redirect to="/main" />;
+    }
+
     return (
       <div className="reg-window reg-window_center">
+        { redirect }
         <div className="reg-window__text-item">
           <img src="./images/appex.svg" alt="a" className="appex-logo"/>
           <span className="logo-text">ppex</span>
@@ -133,6 +140,7 @@ export default class RegWindow extends React.Component {
     }).then(response => response.json()).then(body => {
       if (body.status === 'ok') {
         console.log('ok');
+        this.setState({ redirect: true });
       } else {
         this.setState({
           errs: ['', '', 'Неверный логин или пароль!']
