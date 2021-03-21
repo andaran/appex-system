@@ -3,6 +3,7 @@
 
 const express = require('express');
 const path = require('path');
+const bcrypt = require('bcrypt');
 
 const generateAppId = require(path.join(__dirname, '../', 'IdActions', 'generateAppID.js'));
 const generateRoomId = require(path.join(__dirname, '../', 'IdActions', 'generateRoomID.js'));
@@ -64,6 +65,30 @@ router.post('/change_user_private', (req, res) => {
       res.json({ status: 'err', message: 'updating error' });
     });
   }, err => res.json({ status: 'err', message: 'updating fatal error' }));
+});
+
+router.post('/change_password', (req, res) => {
+
+  /* find user */
+  User.findOne({ username: req.user.username }).then(foundUser => {
+    if (foundUser === null) { return res.json({ status: 'err' }); }
+
+    /* check password */
+    bcrypt.compare(req.body.oldPassword, foundUser.password, (err, result) => {
+      if (!result || err) { return res.json({ status: 'err', message: 'not coincide' }); }
+
+      /* generate password hash */
+      bcrypt.hash(req.body.newPassword, 10).then(hash => {
+
+        /* update user */
+        User.updateOne({ username: req.user.username }, { $set: { password: hash } }).then(user => {
+          res.json({ status: 'ok' });
+        }, err => {
+          res.json({ status: 'err' });
+        }).catch(err => res.json({ status: 'err' }));
+      });
+    });
+  });
 });
 
 
