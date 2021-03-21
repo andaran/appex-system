@@ -91,6 +91,21 @@ router.post('/change_password', (req, res) => {
   });
 });
 
+router.post('/log_out', (req, res) => {
+  req.logout();
+  res.json({ status: 'ok' });
+});
+
+router.post('/delete_user', (req, res) => {
+
+  /* delete user */
+  User.deleteOne({ ...req.user }).then((info) => {
+    res.json({ status: 'ok' });
+  }, err => {
+    res.json({ status: 'err' });
+  });
+});
+
 
 
 /*   ---==== Projects ====---   */

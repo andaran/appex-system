@@ -15,12 +15,18 @@ export default class ChangeUserName extends React.Component {
 
     /* my apps */
     let projects = this.props.projects.map(project => {
-      return <AppBlock { ...project } user={{ ...this.props.user }} key={ project.id }/>;
+      return <AppBlock { ...project }
+                       user={{ ...this.props.user }}
+                       key={ project.id }
+                       fetchUser={ this.props.fetchUser }/>;
     });
 
     /* installed apps */
     let apps = this.props.user.installedApps.map(app => {
-      return <AppBlock { ...app } user={{ ...this.props.user }} key={ app.id }/>;
+      return <AppBlock { ...app }
+                       user={{ ...this.props.user }}
+                       key={ app.id }
+                       fetchUser={ this.props.fetchUser }/>;
     });
 
     return (
