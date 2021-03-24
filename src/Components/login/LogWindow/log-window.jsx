@@ -13,7 +13,6 @@ export default class RegWindow extends React.Component {
 
     this.state = {
       errs: ['', '', ''],
-      redirect: false,
     }
 
     // bind
@@ -34,14 +33,8 @@ export default class RegWindow extends React.Component {
       }
     });
 
-    let redirect = null;
-    if (this.state.redirect) {
-      redirect = <Redirect to="/main" />;
-    }
-
     return (
       <div className="reg-window reg-window_center">
-        { redirect }
         <div className="reg-window__text-item">
           <img src="./images/appex.svg" alt="a" className="appex-logo"/>
           <span className="logo-text">ppex</span>
@@ -140,7 +133,10 @@ export default class RegWindow extends React.Component {
     }).then(response => response.json()).then(body => {
       if (body.status === 'ok') {
         console.log('ok');
-        this.setState({ redirect: true });
+
+        /* redirect to main page */
+        const location = window.location.href;
+        window.location.href = location.replace('sign_in', 'main');
       } else {
         this.setState({
           errs: ['', '', 'Неверный логин или пароль!']
