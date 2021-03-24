@@ -4,6 +4,7 @@
 const express = require('express');
 const path = require('path');
 const bcrypt = require('bcrypt');
+const fs = require('fs');
 
 const generateAppId = require(path.join(__dirname, '../', 'IdActions', 'generateAppID.js'));
 const generateRoomId = require(path.join(__dirname, '../', 'IdActions', 'generateRoomID.js'));
@@ -126,6 +127,7 @@ router.post('/create_app', (req, res) => {
   generateAppId().then(appId => {
 
     /* create app object */
+    const opt = { encoding:'utf8', flag:'r' };
     let appObj = {
       title: req.body.name,
       icon: req.body.icon,
@@ -135,9 +137,9 @@ router.post('/create_app', (req, res) => {
       createDate: Date.now(),
       author: req.user.id,
       code: {
-        html: 'Html is here ...',
-        css: '// Css is here ...',
-        js: '/* JS is here ... */',
+        html: fs.readFileSync(path.join(__dirname, '../', 'startCode', 'code.html'), opt),
+        css: fs.readFileSync(path.join(__dirname, '../', 'startCode', 'code.css'), opt),
+        js: fs.readFileSync(path.join(__dirname, '../', 'startCode', 'code.js'), opt),
       },
       releaseCode: { html: '', css: '', js: '' },
     }

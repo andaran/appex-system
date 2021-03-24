@@ -22,7 +22,7 @@ const appSchema = new mongoose.Schema({
     required: true,
   },
   createDate: {
-    type: String,
+    type: Number,
     required: true,
   },
   author: {

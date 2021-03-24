@@ -18,7 +18,7 @@ const roomSchema = new mongoose.Schema({
     required: true,
   },
   createDate: {
-    type: String,
+    type: Number,
     required: true,
   },
   state: {
