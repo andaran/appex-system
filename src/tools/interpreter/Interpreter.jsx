@@ -177,7 +177,7 @@ class Interpreter extends React.Component {
         .innerHTML = code;
 
       /* play JS */
-      if (this.props.appState === 'opened' || this.props.appState === 'opened_dev') {
+      if (true) {
 
         /* find room settings */
         const id = this.props.appId;

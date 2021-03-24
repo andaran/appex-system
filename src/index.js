@@ -17,6 +17,7 @@ import Projects from './Components/projects/projects-wrap/ProjectsWrap';
 import ProjectPage from './Components/projects/project-page/ProjectPage';
 import PrivateRoute from "./Components/additComponents/PrivateRoute";
 import MainPage from './Components/main/main-page/MainPage';
+import View from './Components/view/View';
 
 /* Libraries */
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -58,6 +59,9 @@ ReactDOM.render(
         </Route>
         <Route exact path="/main">
           <PrivateRoute> <MainPage/> </PrivateRoute>
+        </Route>
+        <Route exact path="/view/:id">
+          <PrivateRoute> <View/> </PrivateRoute>
         </Route>
       </Switch>
     </Router>

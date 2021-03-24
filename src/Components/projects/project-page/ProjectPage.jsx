@@ -50,6 +50,9 @@ class ProjectPage extends React.Component {
   constructor(props) {
     super(props);
 
+    /* settings */
+    this.host = window.location.href.split('projects')[0];
+
     let id = window.location.href.split('/');
     id[id.length - 1] !== '' ? this.id = id[id.length - 1] : this.id = id[id.length - 2];
     this.mouseDown = false;
@@ -167,10 +170,10 @@ class ProjectPage extends React.Component {
           }}
           id = 'app-demo'>
           <div className="app-demo__emulator">
-            <Interpreter
-              app = { this.app }
-              id="interpreter-mobile"
-              devMode={ true }/>
+            <iframe
+              src={`${ this.host }view/${ this.id }?devMode=true`}
+              frameBorder="0"
+              id="iframe"/>
           </div>
           <div className="app-demo__nav">
             <div
@@ -498,6 +501,14 @@ class ProjectPage extends React.Component {
     if (event.altKey && event.code === 'KeyS') {
       event.preventDefault();
       this.settings();
+      return false;
+    }
+
+    /* save */
+    if (event.ctrlKey && event.code === 'KeyS') {
+      event.preventDefault();
+      this.upload();
+      document.getElementById('iframe').contentWindow.location.reload(true);
       return false;
     }
   }

@@ -1,7 +1,7 @@
 import * as APPS from '../Constants/appsConstants';
 
 /* develop mode */
-const devMode = false;
+const devMode = true;
 
 export function fetchApp(appId) {
   const body = JSON.stringify({ appId });
