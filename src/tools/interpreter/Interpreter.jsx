@@ -3,6 +3,7 @@ import React from 'react';
 import { changeAppState } from "../../actions/appStateActions";
 import { connect } from "react-redux";
 import { app } from "../../socketCore";
+import * as Icons from "@fortawesome/free-solid-svg-icons";
 
 /* Component */
 class Interpreter extends React.Component {
@@ -55,11 +56,24 @@ class Interpreter extends React.Component {
       /* if preset is being */
       if (item.preset !== undefined) {
         const presetText = item.preset.replaceAll('\n', '');
-        let args = presetText.match(/\w+\s?="[^"]+"/g);
-        let type = presetText.match(/^\s*\w+\s/g)[0]
-          .replaceAll(' ', '')
-          .toLowerCase();
 
+        /* parse type */
+        let type;
+        try {
+          type = presetText.match(/^\s*\w+\s/g)[0]
+            .replaceAll(' ', '')
+            .toLowerCase();
+        } catch(e) {
+          return { code: item.code, preset: false };
+        }
+
+        /* parse args */
+        let args;
+        try {
+          args = presetText.match(/\w+\s?="[^"]+"/g);
+        } catch (e) {
+          args = null;
+        }
 
         /* if no args */
         if (args === null) { return { code: item.code, preset: { type, args: [] } }; }
@@ -90,22 +104,54 @@ class Interpreter extends React.Component {
 
       /* if preset is here  */
       if (item.preset) {
-        // console.log(item.preset);
-        promises.push(fetch(`../presets/${item.preset.type}.hbs`)
-          .then(response => response.text())
-          .then(text => {
-            let presetHtml = text;
-            item.preset.args.forEach(arg => {
-              presetHtml = presetHtml.replaceAll(`{{ ${arg.name} }}`, arg.value);
-            });
-            // console.log('REPLACED:', presetHtml);
 
-            /* add this html to another code */
-            return item.code + presetHtml;
-          }));
+        /* switch preset type */
+        switch (item.preset.type) {
+          case 'icon':
+
+            /* find icon or return promise with code without preset */
+            const iconArgs = item.preset.args.find(arg => arg.name === 'name');
+            if (iconArgs === undefined) {
+              promises.push(new Promise(resolve => resolve( item.code )));
+              break;
+            }
+
+            /* if icon not found, return promise with code without preset */
+            const icon = Icons[iconArgs.value];
+            if (icon === undefined) {
+              promises.push(new Promise(resolve => resolve( item.code )));
+              break;
+            }
+
+            /* set new args */
+            const args = [
+              { name: 'name', value: icon.iconName },
+              { name: 'vb1', value: icon.icon[0] },
+              { name: 'vb2', value: icon.icon[1] },
+              { name: 'd', value: icon.icon[4] },
+              { name: 'prefix', value: icon.prefix },
+            ];
+            item.preset.args = args;
+
+          default:
+            promises.push(fetch(`../presets/${item.preset.type}.hbs`)
+              .then(response => response.text())
+              .then(text => {
+                let presetHtml = text;
+                item.preset.args.forEach(arg => {
+                  presetHtml = presetHtml.replaceAll(`{{ ${arg.name} }}`, arg.value);
+                });
+                // console.log('REPLACED:', presetHtml);
+
+                /* add this html to another code */
+                return item.code + presetHtml;
+              }));
+            break;
+        }
 
       /* else if preset is empty  */
       } else {
+
         /* send promise with code without preset */
         promises.push(new Promise(resolve => resolve( item.code )));
       }

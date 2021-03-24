@@ -2,8 +2,8 @@
 /* import sockets */
 import io from 'socket.io-client';
 
-const port = +process.env.port || 3001;
-const socket = io(`http://localhost:${ port }`);
+const port = 3001;
+const socket = io(`http://192.168.1.36:${ port }`);
 
 export function test() {
   socket.emit('test', { name: 'Andrey' });
