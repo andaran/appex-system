@@ -1,17 +1,17 @@
 
 /* начальное состояние */
 let state = {
-  isOnline: false,
+    isOnline: false,
 }
 
 /* настройки */
 const settings = {
-  awaitResponse: true,
+    awaitResponse: true,
 }
 
 /* обновление состояния */
 const update = (newState) => {
-  state = newState;
+    state = newState;
 }
 
 App.settings = settings;
