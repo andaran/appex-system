@@ -88,7 +88,6 @@ class ProjectPage extends React.Component {
     this.resizeEmulator = this.resizeEmulator.bind(this);
     this.mouseUp = this.mouseUp.bind(this);
     this.moveEmulator = this.moveEmulator.bind(this);
-    this.playJS = this.playJS.bind(this);
     this.settings = this.settings.bind(this);
 
     /* download */
@@ -141,18 +140,6 @@ class ProjectPage extends React.Component {
     let modal;
     this.props.modal.status? modal = <Wrap for={ <Window { ...this.app } /> } />: modal = null;
 
-    if (this.props.appState !== 'closed') {
-      process.nextTick(() => {
-        document.getElementById('app-demo__playJS').classList.add('app-demo__nav-item_true');
-        this.playJSFlag = true;
-      });
-    } else {
-      process.nextTick(() => {
-        document.getElementById('app-demo__playJS').classList.remove('app-demo__nav-item_true');
-        this.playJSFlag = false;
-      });
-    }
-
     return (
       <div
         className="project-page-container"
@@ -197,11 +184,6 @@ class ProjectPage extends React.Component {
             <div className={`app-demo__nav-item app-demo__nav-item_${ this.state.emulator.fullscreenMode }`}
                  onClick={ this.changeEmulatorFullscreenMode }>
               <FontAwesomeIcon icon={ faExpandArrowsAlt } className="app-demo__nav-item-icon"/>
-            </div>
-            <div className='app-demo__nav-item'
-                 id='app-demo__playJS'
-                 onClick={ this.playJS }>
-              <FontAwesomeIcon icon={ faPlay } className="app-demo__nav-item-icon"/>
             </div>
           </div>
         </div>
@@ -257,7 +239,7 @@ class ProjectPage extends React.Component {
     }
 
     /* connect do devRoom to update interpreter */
-    if (!this.devMode || socket.listeners('updateAppCode').length > 0) { return; }
+    if (socket.listeners('updateAppCode').length > 0) { return; }
 
     /* connect to devRoom */
     connectToDevRoom(this.id);
@@ -266,6 +248,7 @@ class ProjectPage extends React.Component {
     socket.on('updateAppCode', data => {
       if (data.roomId === 'dev=' + this.id) {
         this.props.fetchProjects();
+        console.log('UPDATE'); // TODO: sync mode
       }
     });
   }
@@ -273,7 +256,6 @@ class ProjectPage extends React.Component {
   componentWillUnmount() {
     document.removeEventListener('mousemove', this.moveEmulator);
     document.removeEventListener('keydown', this.keydown);
-    this.appJS = null;
   }
 
 
@@ -351,15 +333,6 @@ class ProjectPage extends React.Component {
       }});
     } else {
       document.removeEventListener('mousemove', this.resizeEmulator);
-    }
-  }
-
-  playJS() {
-    this.playJSFlag = !this.playJSFlag;
-    if (this.playJSFlag) {
-      this.props.changeAppState({ state: 'opened_dev' });
-    } else {
-      this.props.changeAppState({ state: 'closed' });
     }
   }
 
@@ -474,22 +447,14 @@ class ProjectPage extends React.Component {
     });
 
     /* Switch mode */
-    process.nextTick(() => {
-      if (event.altKey && event.code === 'KeyV') {
+    if (event.altKey && event.code === 'KeyV') {
+      event.preventDefault();
+      process.nextTick(() => {
         const mode = this.state.mode;
         mode === 'any' ? this.setState({ mode: 'one' }) : this.setState({ mode: 'any' });
-        return false;
-      }
-    });
-
-    /* upload */
-    process.nextTick(() => {
-      if (event.altKey && event.code === 'KeyU') {
-        event.preventDefault();
-        this.upload();
-        return false;
-      }
-    });
+      });
+      return false;
+    }
 
     /* full view */
     if (event.altKey && event.code === 'KeyF') {
@@ -497,13 +462,6 @@ class ProjectPage extends React.Component {
       document.fullscreenElement
         ? document.exitFullscreen()
         : document.documentElement.requestFullscreen();
-      return false;
-    }
-
-    /* play JS */
-    if (event.altKey && event.code === 'KeyP') {
-      event.preventDefault();
-      this.playJS();
       return false;
     }
 

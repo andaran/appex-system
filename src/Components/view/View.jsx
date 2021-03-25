@@ -59,7 +59,7 @@ class View extends React.Component {
 
   componentDidMount() {
 
-    if (!this.devMode || socket.listeners('updateAppCode').length > 0) { return; }
+    if (!this.devMode) { return; }
 
     /* connect to devRoom */
     connectToDevRoom(this.id);
