@@ -146,14 +146,6 @@ class AppNavbar extends React.Component {
             <span> Alt + R </span>
           </div>
           <div className="app-navbar__item app-navbar__item_text-button">
-            <span> Выгрузить </span>
-            <span> Alt + U </span>
-          </div>
-          <div className="app-navbar__item app-navbar__item_text-button">
-            <span> Запустить </span>
-            <span> Alt + P </span>
-          </div>
-          <div className="app-navbar__item app-navbar__item_text-button">
             <span> Сменить вид </span>
             <span> Alt + V </span>
           </div>

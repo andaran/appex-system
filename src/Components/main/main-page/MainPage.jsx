@@ -18,6 +18,9 @@ class MainPage extends React.Component {
   constructor(props) {
     super(props);
 
+    /* settings */
+    this.host = window.location.href.split('main')[0];
+
     this.state = {
       currentPage: 0,
       touchStart: undefined,
@@ -25,7 +28,6 @@ class MainPage extends React.Component {
       lastMove: 0,
       moveTo: 'center',
     }
-
 
     // bind
     this.touchStart = this.touchStart.bind(this);
@@ -88,13 +90,12 @@ class MainPage extends React.Component {
     let interpreter = null;
     let appObj;
     if (this.props.appState === 'opened' && ['my', 'downloaded'].includes(this.props.appType)) {
-      // TODO: delete this fucking code
-/*      this.props.appType === 'my'
-        ? appObj = this.props.projects.find(foundApp => foundApp.id === this.props.appId)
-        : appObj = this.props.apps.find(foundApp => foundApp.id === this.props.appId);*/
-
       interpreter = (
-        <div>interpreter!</div>
+        <iframe
+          src={`${ this.host }view/${ this.props.appId }?devMode=true`}
+          frameBorder="0"
+          id="app-iframe"
+          style={{ width: '100%', height: '100%' }}/>
       );
     } else if (this.props.appState === 'opened') {
 

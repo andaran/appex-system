@@ -30,7 +30,7 @@ class View extends React.Component {
 
   render() {
 
-    /* find app */
+    /* find app in projects */
     if (this.props.projects.length !== 0) {
       this.app = this.props.projects.find(elem => elem.id === this.id);
     } else {
@@ -58,6 +58,8 @@ class View extends React.Component {
   }
 
   componentDidMount() {
+
+    console.log('\n\n\n---=== VIEW_PROPS ===---\n\n\n', this.props);
 
     if (!this.devMode) { return; }
 
@@ -93,6 +95,9 @@ function mapStateToProps(store) {
     appState: store.appState.state,
     appId: store.appState.id,
     appType: store.appState.type,
+
+    /* downloaded apps */
+    apps: store.apps.data,
 
     /* modal */
     modal: store.projectsModal,

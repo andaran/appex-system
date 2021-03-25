@@ -238,6 +238,9 @@ class ProjectPage extends React.Component {
       setTimeout(() => settingsButton.onclick = this.settings, 100);
     }
 
+    /* set app state */
+    this.props.changeAppState({ state: 'opened', type: 'my', id: this.id });
+
     /* connect do devRoom to update interpreter */
     if (socket.listeners('updateAppCode').length > 0) { return; }
 
