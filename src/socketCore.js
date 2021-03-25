@@ -5,16 +5,21 @@ import io from 'socket.io-client';
 const port = 3001;
 const socket = io(`http://192.168.1.36:${ port }`);
 
-export function test() {
-  socket.emit('test', { name: 'Andrey' });
+export function connectToDevRoom(roomId) {
+  socket.emit('connectToDevRoom', { roomId: 'dev=' + roomId });
 }
 
-const rooms = new Set();
+export function updateAppCode(roomId) {
+  socket.emit('updateAppCode', { roomId: 'dev=' + roomId });
+}
 
-class App {
-  constructor() {
-    // this.app = app;
-    // this.roomSettings = roomSettings;
+export { socket };
+
+export class App {
+  constructor(app, roomSettings) {
+
+    this.app = app;
+    this.roomSettings = roomSettings;
 
     this.state = false;
     this.update = false;
@@ -124,8 +129,3 @@ class App {
     }
   }
 }
-
-let app = new App();
-app.init();
-
-export { app };

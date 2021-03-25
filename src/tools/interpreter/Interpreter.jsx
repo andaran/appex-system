@@ -2,11 +2,11 @@
 import React from 'react';
 import { changeAppState } from "../../actions/appStateActions";
 import { connect } from "react-redux";
-import { app } from "../../socketCore";
+import { App } from "../../socketCore";
 import * as Icons from "@fortawesome/free-solid-svg-icons";
 
 /* Component */
-class Interpreter extends React.Component {
+export default class Interpreter extends React.Component {
   constructor(props) {
     super(props);
 
@@ -176,25 +176,24 @@ class Interpreter extends React.Component {
         .getElementById( this.props.id )
         .innerHTML = code;
 
-      /* play JS */
-      if (true) {
 
-        /* find room settings */
-        const id = this.props.appId;
-        const settings = this.props.user.settings.find(elem => elem.id === id);
 
-        /* set socketCore class */
-        app.app = this.props.app;
-        app.roomSettings = settings;
+      /*   ---==== play JS ====---   */
 
-        /* start! */
-        try {
-          this.appJS = Function( 'App', appSourceCode.js );
-          this.appJS(app);
-        } catch(e) { console.error('Ошибка запуска приложения!! \n\n', e); }
-      } else {
-        app.exit();
-      }
+      /* find room settings */
+      const id = this.props.appId;
+      const settings = this.props.user.settings.find(elem => elem.id === id);
+      console.log(settings, id, this.props);
+
+      /* set socketCore class */
+      const app = new App(this.props.app, settings);
+      app.init()
+
+      /* start! */
+      try {
+        this.appJS = Function( 'App', appSourceCode.js );
+        this.appJS(app);
+      } catch(e) { console.error('Ошибка запуска приложения!! \n\n', e); }
     });
   }
 
@@ -216,31 +215,3 @@ class Interpreter extends React.Component {
     }
   }
 }
-
-
-
-/*   ---==== Connect to redux ====---   */
-
-function mapStateToProps(store) {
-  return {
-
-    /* user */
-    user: store.userData.user,
-
-    /* app state */
-    appState: store.appState.state,
-    appId: store.appState.id,
-    appType: store.appState.type,
-
-  }
-}
-
-function mapDispatchToProps(dispatch) {
-  return {
-    changeAppState: (changedState) => {
-      dispatch(changeAppState(changedState))
-    },
-  }
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(Interpreter);

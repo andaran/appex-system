@@ -5,9 +5,6 @@ import { connect } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
 
-import { app } from '../../../socketCore';
-import * as Icons from "@fortawesome/free-solid-svg-icons";
-
 /* Component */
 class SuperButton extends React.Component {
   constructor(props) {
@@ -16,7 +13,6 @@ class SuperButton extends React.Component {
     this.state = {
       startTime: Date.now(),
       touch: false,
-
     }
 
 
@@ -77,7 +73,6 @@ class SuperButton extends React.Component {
   close() {
     if (Date.now() - this.state.startTime >= 300) { return; }
     this.props.changeAppState({ state: 'closed' });
-    app.exit();
   }
 
   componentWillUnmount() {

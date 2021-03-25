@@ -5,8 +5,6 @@ import { switchModalState } from "../../../actions/projectsModalActions";
 import { changeAppState } from "../../../actions/appStateActions";
 import { connect } from "react-redux";
 
-import { app } from '../../../socketCore';
-
 import SystemNavbar from '../system-navbar/SystemNavbar';
 import AppIcon from '../app-icon/AppIcon';
 import Interpreter from '../../../tools/interpreter/Interpreter';
@@ -90,15 +88,13 @@ class MainPage extends React.Component {
     let interpreter = null;
     let appObj;
     if (this.props.appState === 'opened' && ['my', 'downloaded'].includes(this.props.appType)) {
-      this.props.appType === 'my'
+      // TODO: delete this fucking code
+/*      this.props.appType === 'my'
         ? appObj = this.props.projects.find(foundApp => foundApp.id === this.props.appId)
-        : appObj = this.props.apps.find(foundApp => foundApp.id === this.props.appId);
+        : appObj = this.props.apps.find(foundApp => foundApp.id === this.props.appId);*/
 
       interpreter = (
-        <Interpreter
-          app = { appObj }
-          id="app-interpreter"
-          devMode={ false }/>
+        <div>interpreter!</div>
       );
     } else if (this.props.appState === 'opened') {
 
@@ -341,7 +337,6 @@ class MainPage extends React.Component {
         break;
       case 'ArrowDown':
         this.props.changeAppState({ state: 'closed' });
-        app.exit();
         break;
     }
   }

@@ -123,6 +123,10 @@ app.use(((req, res, next) => {
 const io = socketIo(server, { log: false, origins: '*:*' });
 io.on('connection', (socket) => {
 
+  /*   ---==== Apps ====---   */
+
+
+
   /* connect to room */
   socket.on('connectToRoom', data => {
 
@@ -194,5 +198,23 @@ io.on('connection', (socket) => {
   /* error */
   socket.on('error', data => {
     socket.to(data.roomId).emit('updateState', data);
+  });
+
+  /*   ---==== Development ====---   */
+
+
+
+  /* connect to devRoom */
+  socket.on('connectToDevRoom', data => {
+
+    /* join to room */
+    socket.join(data.roomId);
+    console.log('JOIN', data);
+  });
+
+  /* send update event */
+  socket.on('updateAppCode', data => {
+    socket.to(data.roomId).emit('updateAppCode', data);
+    console.log('UPDATE_APP_CODE', data);
   });
 });

@@ -8,6 +8,11 @@ import {switchModalState} from "../../actions/projectsModalActions";
 import {changeAppState} from "../../actions/appStateActions";
 import {connect} from "react-redux";
 
+import { socket, connectToDevRoom } from '../../socketCore';
+
+import { faPlay } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
 /* Component */
 class View extends React.Component {
   constructor(props) {
@@ -41,12 +46,30 @@ class View extends React.Component {
 
     return (
       <div style={{ width: '100vw', height: '100vh' }}>
+        <FontAwesomeIcon icon={ faPlay } style={{ display: 'none'}}/>
         <Interpreter
           app = { this.app }
           id="interpreter-mobile"
-          devMode={ this.devMode }/>
+          devMode={ this.devMode }
+          user={ this.props.user }
+          appId={ this.id }/>
       </div>
     );
+  }
+
+  componentDidMount() {
+
+    if (!this.devMode || socket.listeners('updateAppCode').length > 0) { return; }
+
+    /* connect to devRoom */
+    connectToDevRoom(this.id);
+
+    /* update appCode */
+    socket.on('updateAppCode', data => {
+      if (data.roomId === 'dev=' + this.id) {
+        window.location.reload();
+      }
+    });
   }
 }
 

@@ -42,8 +42,8 @@ import Interpreter from '../../../tools/interpreter/Interpreter';
 import Message from '../../../tools/message/Message';
 import Window from '../create-app-window/CreateAppWindow';
 import Wrap from '../../../tools/modal-wrap/ModalWrap';
-import { app } from '../../../socketCore';
-import {changeAppState} from "../../../actions/appStateActions";
+import {connectToDevRoom, socket, updateAppCode} from '../../../socketCore';
+import { changeAppState } from "../../../actions/appStateActions";
 
 /* Component */
 class ProjectPage extends React.Component {
@@ -256,8 +256,18 @@ class ProjectPage extends React.Component {
       setTimeout(() => settingsButton.onclick = this.settings, 100);
     }
 
-    /* set app state */
-    this.props.changeAppState({ state: 'closed', id: this.app.id, type: 'my' });
+    /* connect do devRoom to update interpreter */
+    if (!this.devMode || socket.listeners('updateAppCode').length > 0) { return; }
+
+    /* connect to devRoom */
+    connectToDevRoom(this.id);
+
+    /* update appCode */
+    socket.on('updateAppCode', data => {
+      if (data.roomId === 'dev=' + this.id) {
+        this.props.fetchProjects();
+      }
+    });
   }
 
   componentWillUnmount() {
@@ -379,7 +389,7 @@ class ProjectPage extends React.Component {
       }
     }).catch(err => {
       this.setState({message: { type: false, text: 'Ошибка отправки!'}});
-    });
+    }).finally(() => updateAppCode(this.id));
   }
 
 
@@ -507,8 +517,7 @@ class ProjectPage extends React.Component {
     /* save */
     if (event.ctrlKey && event.code === 'KeyS') {
       event.preventDefault();
-      this.upload();
-      document.getElementById('iframe').contentWindow.location.reload(true);
+      process.nextTick(() => this.upload());
       return false;
     }
   }
