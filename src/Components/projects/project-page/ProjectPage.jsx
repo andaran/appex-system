@@ -9,6 +9,9 @@ import {
   faCompressArrowsAlt,
   faLock,
   faPlay,
+  faPaperPlane,
+  faSyncAlt,
+  faExternalLinkAlt,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
@@ -44,6 +47,7 @@ import Window from '../create-app-window/CreateAppWindow';
 import Wrap from '../../../tools/modal-wrap/ModalWrap';
 import {connectToDevRoom, socket, updateAppCode} from '../../../socketCore';
 import { changeAppState } from "../../../actions/appStateActions";
+import { Link } from "react-router-dom";
 
 /* Component */
 class ProjectPage extends React.Component {
@@ -185,6 +189,17 @@ class ProjectPage extends React.Component {
                  onClick={ this.changeEmulatorFullscreenMode }>
               <FontAwesomeIcon icon={ faExpandArrowsAlt } className="app-demo__nav-item-icon"/>
             </div>
+            <Link to={`../view/${ this.id }?devMode=true`}
+                  className={`app-demo__nav-item`}>
+              <FontAwesomeIcon icon={ faExternalLinkAlt } className="app-demo__nav-item-icon"/>
+            </Link>
+            <div className={`app-demo__nav-item`}
+                 onClick={() => {
+                   document.getElementById('iframe')
+                     .contentWindow.location.reload(true)
+                 }}>
+              <FontAwesomeIcon icon={ faSyncAlt } className="app-demo__nav-item-icon"/>
+            </div>
           </div>
         </div>
         <div
@@ -250,7 +265,7 @@ class ProjectPage extends React.Component {
     /* update appCode */
     socket.on('updateAppCode', data => {
       if (data.roomId === 'dev=' + this.id) {
-        this.props.fetchProjects();
+        /*this.props.fetchProjects();*/
         console.log('UPDATE'); // TODO: sync mode
       }
     });
