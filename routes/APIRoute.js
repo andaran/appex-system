@@ -282,16 +282,27 @@ router.post('/delete_room', (req, res) => {
 
 router.post('/get_app', (req, res) => {
 
-  /* find rooms by user id */
+  /* find app by user id */
   App.findOne({
-    author: { username: req.user.username, id: req.user.id },
-    id: req.body.appId,
-    storeVisibility: true,
+    $or: [
+      {
+        author: req.user.id,
+        id: req.body.appId,
+      },
+      {
+        id: req.body.appId,
+        storeVisibility: true,
+      }
+    ]
   }).then(foundApp => {
 
     /* send found rooms */
-    res.json(foundApp);
-  });
+    if (foundApp === null) {
+      res.json({ status: 'err' });
+    } else {
+      res.json({ status: 'ok', app: foundApp });
+    }
+  }).catch(err => res.json({ status: 'err' }));
 });
 
 module.exports = router;

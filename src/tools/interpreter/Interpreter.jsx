@@ -9,10 +9,6 @@ import * as Icons from "@fortawesome/free-solid-svg-icons";
 export default class Interpreter extends React.Component {
   constructor(props) {
     super(props);
-
-    // bind
-    this.renderApp = this.renderApp.bind(this);
-    this.hotkey = this.hotkey.bind(this);
   }
 
   render() {
@@ -180,6 +176,9 @@ export default class Interpreter extends React.Component {
 
       /*   ---==== play JS ====---   */
 
+      /* if no user */
+      if (!this.props.user) { return; }
+
       /* find room settings */
       const id = this.props.appId;
       const settings = this.props.user.settings.find(elem => elem.id === id);
@@ -195,23 +194,5 @@ export default class Interpreter extends React.Component {
         this.appJS(app);
       } catch(e) { console.error('Ошибка запуска приложения!! \n\n', e); }
     });
-  }
-
-  componentDidMount() {
-    document.addEventListener('keydown', this.hotkey);
-  }
-
-  componentWillUnmount() {
-    document.removeEventListener('keydown', this.hotkey);
-  }
-
-  hotkey(event) {
-
-    /* update interpreter */
-    if (event.ctrlKey && event.code === 'KeyS' && this.props.devMode) {
-      event.preventDefault();
-      process.nextTick(() => this.forceUpdate());
-      return false;
-    }
   }
 }

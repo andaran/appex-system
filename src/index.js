@@ -51,6 +51,7 @@ ReactDOM.render(
         <Route exact path="/sign_up" component={ Register }/>
         <Route exact path="/sign_in" component={ Login }/>
         <Route exact path="/change_password" component={ ChangePass }/>
+        <Route exact path="/view/:id" component={ View }/>
         <Route exact path="/projects">
           <PrivateRoute> <Projects/> </PrivateRoute>
         </Route>
@@ -59,9 +60,6 @@ ReactDOM.render(
         </Route>
         <Route exact path="/main">
           <PrivateRoute> <MainPage/> </PrivateRoute>
-        </Route>
-        <Route exact path="/view/:id">
-          <PrivateRoute> <View/> </PrivateRoute>
         </Route>
       </Switch>
     </Router>

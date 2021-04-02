@@ -12,16 +12,21 @@ import { socket, connectToDevRoom } from '../../socketCore';
 
 import { faPlay } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { request } from "../../tools/apiRequest/apiRequest";
 
 /* Component */
 class View extends React.Component {
   constructor(props) {
     super(props);
 
+    this.state = {
+      app: false,
+      user: false,
+    }
+
     /* find app id and devMode */
-    let id = window.location.href.split('/');
-    this.id = id[id.length - 1].split('?devMode=')[0];
-    let devMode = id[id.length - 1].split('?devMode=')[1];
+    this.id = this.props.location.pathname.split('/')[2];
+    let devMode = this.props.location.search.split('?devMode=')[1];
     devMode === 'false'
       ? this.devMode = false
       : this.devMode = true;
@@ -30,17 +35,10 @@ class View extends React.Component {
 
   render() {
 
-    /* find app in projects */
-    if (this.props.projects.length !== 0) {
-      this.app = this.props.projects.find(elem => elem.id === this.id);
-    } else {
-      this.app = false;
-    }
-
     /* if app isn`t being */
-    if(!this.app) {
+    if(!this.state.app) {
       return (
-        <Error/>
+        <div style={{ width: '100vw', height: '100vh', backgroundColor: 'white' }}/>
       );
     }
 
@@ -48,10 +46,10 @@ class View extends React.Component {
       <div style={{ width: '100vw', height: '100vh' }}>
         <FontAwesomeIcon icon={ faPlay } style={{ display: 'none'}}/>
         <Interpreter
-          app = { this.app }
+          app = { this.state.app }
           id="interpreter-mobile"
           devMode={ this.devMode }
-          user={ this.props.user }
+          user={ this.state.user }
           appId={ this.id }/>
       </div>
     );
@@ -60,6 +58,34 @@ class View extends React.Component {
   componentDidMount() {
 
     console.log('\n\n\n---=== VIEW_PROPS ===---\n\n\n', this.props);
+
+    /* download app */
+    if (!this.state.app) {
+      request('/api/get_app', { appId: this.id })
+        .then(res => res.json()).then(body => {
+          if (body.status === 'ok') {
+            console.log('ok');
+            console.log(body.app);
+            this.setState({ app: body.app });
+          } else {
+            console.log('Ahtung in downloading app!');
+          }
+      }).catch(err => console.log('Ahtung in downloading app!'));
+    }
+
+    /* download user */
+    if (!this.state.user) {
+      request('/api/get_user', {})
+        .then(res => res.json()).then(body => {
+          if (body.status === 'ok') {
+            console.log('ok');
+            console.log(body.app);
+            this.setState({ user: body.user });
+          } else {
+            console.log('Ahtung in downloading user!');
+          }
+      }).catch(err => console.log('Ahtung in downloading user!'));
+    }
 
     if (!this.devMode) { return; }
 
