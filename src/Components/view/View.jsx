@@ -3,10 +3,6 @@ import React from 'react';
 
 import Interpreter from "../../tools/interpreter/Interpreter";
 import Error from "../projects/error-404/Error404";
-import {changeProjects, fetchProjects} from "../../actions/projectsActions";
-import {switchModalState} from "../../actions/projectsModalActions";
-import {changeAppState} from "../../actions/appStateActions";
-import {connect} from "react-redux";
 
 import { socket, connectToDevRoom } from '../../socketCore';
 
@@ -15,7 +11,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { request } from "../../tools/apiRequest/apiRequest";
 
 /* Component */
-class View extends React.Component {
+export default class View extends React.Component {
   constructor(props) {
     super(props);
 
@@ -36,11 +32,13 @@ class View extends React.Component {
   render() {
 
     /* if app isn`t being */
-    if(!this.state.app) {
+    if(!this.state.app || !this.state.user) {
       return (
         <div style={{ width: '100vw', height: '100vh', backgroundColor: 'white' }}/>
       );
     }
+
+    console.log('\n\n   ---==== Запускаем! ====---   \n\n', this.state);
 
     return (
       <div style={{ width: '100vw', height: '100vh' }}>
@@ -57,7 +55,7 @@ class View extends React.Component {
 
   componentDidMount() {
 
-    console.log('\n\n\n---=== VIEW_PROPS ===---\n\n\n', this.props);
+    console.log('\n\n---=== VIEW_PROPS ===---\n\n', this.props);
 
     /* download app */
     if (!this.state.app) {
@@ -79,7 +77,6 @@ class View extends React.Component {
         .then(res => res.json()).then(body => {
           if (body.status === 'ok') {
             console.log('ok');
-            console.log(body.app);
             this.setState({ user: body.user });
           } else {
             console.log('Ahtung in downloading user!');
@@ -95,56 +92,9 @@ class View extends React.Component {
     /* update appCode */
     socket.on('updateAppCode', data => {
       if (data.roomId === 'dev=' + this.id) {
+        console.log('\nreload!\n');
         window.location.reload();
       }
     });
   }
 }
-
-
-
-/*   ---==== Connect to redux ====---   */
-
-function mapStateToProps(store) {
-  return {
-
-    /* projects */
-    projects: store.projects.data,
-    projectsIsFetching: store.projects.isFetching,
-    projectsError: store.projects.error,
-    projectsFulfilled: store.projects.fulfilled,
-
-    /* user */
-    user: store.userData.user,
-
-    /* app state */
-    appState: store.appState.state,
-    appId: store.appState.id,
-    appType: store.appState.type,
-
-    /* downloaded apps */
-    apps: store.apps.data,
-
-    /* modal */
-    modal: store.projectsModal,
-  }
-}
-
-function mapDispatchToProps(dispatch) {
-  return {
-    fetchProjects: () => {
-      dispatch(fetchProjects())
-    },
-    changeProjects: ( changedProjects ) => {
-      dispatch(changeProjects( changedProjects ))
-    },
-    switchModalState: (state, mode) => {
-      dispatch(switchModalState(state, mode))
-    },
-    changeAppState: (changedState) => {
-      dispatch(changeAppState(changedState))
-    },
-  }
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(View);

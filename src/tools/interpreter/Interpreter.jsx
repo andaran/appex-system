@@ -12,8 +12,9 @@ export default class Interpreter extends React.Component {
   }
 
   render() {
+
     /* render app */
-    process.nextTick(() => this.renderApp());
+    process.nextTick(() => this.renderApp(this.props.user));
 
     /* render app wrap */
     return <div className="interpreter" id={ this.props.id }/>;
@@ -28,6 +29,7 @@ export default class Interpreter extends React.Component {
     */
 
     /*   ---==== Parse presets ====---   */
+    console.log('\n\n -== Render ==- \n\n');
 
     /* render mode */
     let appSourceCode;
