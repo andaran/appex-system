@@ -374,7 +374,7 @@ class ProjectPage extends React.Component {
       body
     }).then(res => res.json()).then(body => {
       if (body.status === 'ok') {
-        this.setState({message: { type: true, text: 'Код отправлен!'}});
+        /*this.setState({message: { type: true, text: 'Код отправлен!'}});*/ // TODO: make message
       } else {
         this.setState({message: { type: false, text: 'Ошибка отправки!'}});
       }
