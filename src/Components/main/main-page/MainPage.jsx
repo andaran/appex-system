@@ -28,6 +28,7 @@ class MainPage extends React.Component {
       touchMove: undefined,
       lastMove: 0,
       moveTo: 'center',
+      interpreters: null,
     }
 
     // bind
@@ -61,6 +62,7 @@ class MainPage extends React.Component {
       { myApps }
       </div>;
     }
+
     if(installedApps.length) {
       installedApps = <div className="apps-wrap">
       { installedApps }
@@ -87,10 +89,32 @@ class MainPage extends React.Component {
       ? this.devMode = true
       : this.devMode = false;
 
-    /* set Interpreter */
+    /* multiTasking */
+    this.multiTasking = true;
+
+    /* close all apps */
+    if (this.props.appState === 'closed') {
+      const nodeList = document.querySelectorAll('.multiTasking-interpreter');
+      const interpreters = Array.from(nodeList);
+
+      interpreters.forEach(node => {
+        node.style.display = 'none';
+      });
+    }
+
+    /* set multiTasking Interpreter */
+    if (['opened', 'closing'].includes(this.props.appState) &&
+        ['my', 'downloaded'].includes(this.props.appType) &&
+        this.multiTasking) {
+
+      document.getElementById(this.props.appId).style.display = 'block';
+    }
+
+    /* set oneTasking Interpreter */
     let interpreter = null;
     if (['opened', 'closing'].includes(this.props.appState) &&
-        ['my', 'downloaded'].includes(this.props.appType)) {
+        ['my', 'downloaded'].includes(this.props.appType) &&
+        !this.multiTasking) {
 
       interpreter = (
         <iframe
@@ -99,6 +123,8 @@ class MainPage extends React.Component {
           id="app-iframe"
           style={{ width: '100%', height: '100%', backgroundColor: 'white' }}/>
       );
+
+    /* set system app Interpreter */
     } else if (['opened', 'closing'].includes(this.props.appState)) {
 
       /* switch system app */
@@ -169,7 +195,8 @@ class MainPage extends React.Component {
           </div>
 
           <div className="main-app-page" id="main-app-page" data-state={ this.props.appState }>
-            { interpreter }
+            { interpreter } {/* oneTasking */}
+            { this.state.interpreters } {/* multiTasking */}
             <SuperButton/>
           </div>
         </div>
@@ -178,21 +205,6 @@ class MainPage extends React.Component {
   }
 
   componentDidMount() {
-
-    /*setInterval(() => {
-      document.getElementById('theme-color').setAttribute('content', '#000000');
-      setTimeout(() => {
-        document.getElementById('theme-color').setAttribute('content', '#ffffff');
-      }, 1000);
-    }, 2000);*/
-
-    /*setTimeout(() => {
-      document.getElementById('main-app-page').setAttribute('data-state', 'clicked');
-    }, 1500);
-
-    setTimeout(() => {
-      document.getElementById('app-body').setAttribute('data-state', 'opened');
-    }, 1800);*/
 
     /* find OS */
     const userDeviceArray = [
@@ -216,9 +228,6 @@ class MainPage extends React.Component {
         break;
       }
     }
-
-    // // alert('SET COLOR!');
-    // document.getElementById('theme-color').setAttribute('content', '#ffffff');
 
     /* scroll the menu */
     const wrap = document.getElementById('groups-wrap');
@@ -273,6 +282,41 @@ class MainPage extends React.Component {
         }
       }).catch(err => console.log('err in caching app ' + app.id));
     });
+
+
+
+    /*   ---==== MultiTasking ====---   */
+
+    /* if multiTasking if off */
+    if (!this.multiTasking) { return; }
+
+    const interpreters = [];
+
+    /* my apps */
+    this.props.projects.forEach(app => {
+      const interpreter = <iframe
+        src={`${ this.host }view/${ app.id }?devMode=${ this.devMode }`}
+        frameBorder="0"
+        id={ app.id }
+        className="multiTasking-interpreter"
+        style={{ width: '100%', height: '100%', backgroundColor: 'white', display: 'none'}}/>;
+      interpreters.push(interpreter);
+    });
+
+    /* installed apps */
+    this.props.user.installedApps.forEach(app => {
+      const interpreter = <iframe
+        src={`${ this.host }view/${ app.id }?devMode=${ this.devMode }`}
+        frameBorder="0"
+        id={ app.id }
+        className="multiTasking-interpreter"
+        style={{ width: '100%', height: '100%', backgroundColor: 'white', display: 'none' }}/>;
+      interpreters.push(interpreter);
+    });
+
+    /* render all interpreters */
+    this.setState({ interpreters });
+
   }
 
   touchStart(event) {

@@ -254,7 +254,7 @@ class ProjectPage extends React.Component {
     }
 
     /* set app state */
-    this.props.changeAppState({ state: 'opened', type: 'my', id: this.id });
+    this.props.changeAppState({ state: 'closed', type: 'my', id: this.id });
 
     /* connect do devRoom to update interpreter */
     if (socket.listeners('updateAppCode').length > 0) { return; }
