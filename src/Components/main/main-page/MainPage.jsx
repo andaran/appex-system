@@ -21,9 +21,6 @@ class MainPage extends React.Component {
 
     /* settings */
     this.host = window.location.href.split('main')[0];
-    localStorage.getItem('devMode') === 'true'
-      ? this.devMode = true
-      : this.devMode = false;
 
     this.state = {
       currentPage: 0,
@@ -84,6 +81,11 @@ class MainPage extends React.Component {
         this.props.changeAppState({ state: 'closed' });
       }, 210);
     }
+
+    /* devMode */
+    localStorage.getItem('devMode') === 'true'
+      ? this.devMode = true
+      : this.devMode = false;
 
     /* set Interpreter */
     let interpreter = null;

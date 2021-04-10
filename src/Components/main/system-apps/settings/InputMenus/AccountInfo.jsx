@@ -16,6 +16,7 @@ export default class ChangeUserName extends React.Component {
     // bind
     this.deleteAccount = this.deleteAccount.bind(this);
     this.logOut = this.logOut.bind(this);
+    this.devMode = this.devMode.bind(this);
   }
 
   render() {
@@ -90,11 +91,22 @@ export default class ChangeUserName extends React.Component {
               </div>
             </div>
           </div>
+          <div className="app-block">
+            <div className="reg-window__input-item">
+              <div className="reg-window__button reg-window__button_green"
+                   id="devMode-btn"
+                   onClick={ this.devMode }>
+                Включить режим разработчика
+              </div>
+            </div>
+          </div>
           { errs[0] }
         </div>
       </div>
     );
   }
+
+  componentDidMount = () => this.updateDevModeBtn();
 
   deleteAccount = () =>  {
     const word = document.getElementById('test-word').value;
@@ -108,6 +120,22 @@ export default class ChangeUserName extends React.Component {
   }
 
   logOut = () => this.send('/api/log_out');
+
+  devMode = () => {
+    let devMode = localStorage.getItem('devMode');
+    devMode === 'true'
+      ? localStorage.setItem('devMode', 'false')
+      : localStorage.setItem('devMode', 'true');
+    this.updateDevModeBtn();
+  }
+
+  updateDevModeBtn = () => {
+    const btn = document.getElementById('devMode-btn');
+    let devMode = localStorage.getItem('devMode');
+    devMode === 'true'
+      ? btn.innerText = 'Выключить режим разработчика'
+      : btn.innerText = 'Включить режим разработчика';
+  }
 
   send(url) {
 
