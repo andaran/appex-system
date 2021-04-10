@@ -346,6 +346,7 @@ class MainPage extends React.Component {
     const wrap = document.getElementById('groups-wrap');
     const background = document.getElementById('system-background');
 
+    if (!wrap || !background) { return; }
     if (wrap.offsetWidth > background.offsetWidth && !this.device) {
       background.style.visibility = 'hidden';
     } else {

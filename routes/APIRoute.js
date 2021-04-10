@@ -300,7 +300,7 @@ router.post('/get_app', (req, res) => {
     if (foundApp === null) {
       res.json({ status: 'err' });
     } else {
-      res.json({ status: 'ok', app: foundApp });
+      res.json({ status: 'ok', app: foundApp, user: req.user });
     }
   }).catch(err => res.json({ status: 'err' }));
 });

@@ -57,31 +57,16 @@ export default class View extends React.Component {
 
     console.log('\n\n---=== VIEW_PROPS ===---\n\n', this.props);
 
-    /* download app */
+    /* download app and user */
     if (!this.state.app) {
       request('/api/get_app', { appId: this.id })
         .then(res => res.json()).then(body => {
           if (body.status === 'ok') {
-            console.log('ok');
-            console.log(body.app);
-            this.setState({ app: body.app });
+            this.setState({ app: body.app, user: body.user });
           } else {
             console.log('Ahtung in downloading app!');
           }
       }).catch(err => console.log('Ahtung in downloading app!'));
-    }
-
-    /* download user */
-    if (!this.state.user) {
-      request('/api/get_user', {})
-        .then(res => res.json()).then(body => {
-          if (body.status === 'ok') {
-            console.log('ok');
-            this.setState({ user: body.user });
-          } else {
-            console.log('Ahtung in downloading user!');
-          }
-      }).catch(err => console.log('Ahtung in downloading user!'));
     }
 
     if (!this.devMode) { return; }

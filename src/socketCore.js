@@ -3,7 +3,7 @@
 import io from 'socket.io-client';
 
 const port = 3001;
-const socket = io(`http://192.168.1.35:${ port }`);
+const socket = io(`http://192.168.1.37:${ port }`);
 
 export function connectToDevRoom(roomId) {
   socket.emit('connectToDevRoom', { roomId: 'dev=' + roomId });
