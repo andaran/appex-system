@@ -74,30 +74,26 @@ class MainPage extends React.Component {
         : points.push(<div className="point" key={ i }/>);
     }
 
-    /* app */
-    let appReadyFlag = false;
-    if (this.props.appState === 'clicked') {
-      if (this.props.appType === 'my') { appReadyFlag = true; }
-      else if (this.props.apps.find(app => app.id === this.props.appId)) {
-        appReadyFlag = true;
-      }
+    /* closing animation */
+    if (this.props.appState === 'closing') {
+      setTimeout(() => {
+        this.props.changeAppState({ state: 'closed' });
+      }, 210);
     }
-
-    /* open app if it's ready */
-    appReadyFlag && process.nextTick(() => this.props.changeAppState({ state: 'opened' }));
 
     /* set Interpreter */
     let interpreter = null;
-    let appObj;
-    if (this.props.appState === 'opened' && ['my', 'downloaded'].includes(this.props.appType)) {
+    if (['opened', 'closing'].includes(this.props.appState) &&
+        ['my', 'downloaded'].includes(this.props.appType)) {
+
       interpreter = (
         <iframe
           src={`${ this.host }view/${ this.props.appId }?devMode=true`}
           frameBorder="0"
           id="app-iframe"
-          style={{ width: '100%', height: '100%' }}/>
+          style={{ width: '100%', height: '100%', backgroundColor: 'white' }}/>
       );
-    } else if (this.props.appState === 'opened') {
+    } else if (['opened', 'closing'].includes(this.props.appState)) {
 
       /* switch system app */
       switch (this.props.appType) {
@@ -167,10 +163,7 @@ class MainPage extends React.Component {
           </div>
 
           <div className="main-app-page" id="main-app-page" data-state={ this.props.appState }>
-            <div className="app-settings" id="app-settings"></div>
-            <div className="app-body" id="app-body" data-state={ this.props.appState }>
-              { interpreter }
-            </div>
+            { interpreter }
             <SuperButton/>
           </div>
         </div>
@@ -337,7 +330,7 @@ class MainPage extends React.Component {
         this.movePage(-1);
         break;
       case 'ArrowDown':
-        this.props.changeAppState({ state: 'closed' });
+        this.props.changeAppState({ state: 'closing' });
         break;
     }
   }

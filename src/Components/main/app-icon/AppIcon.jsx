@@ -40,14 +40,9 @@ class AppIcon extends React.Component {
 
   iconClicked() {
 
-    let state;
-    this.props.type === 'downloaded'
-      ? state = 'clicked'
-      : state = 'opened';
-
     /* change app state */
     const appState = {
-      state,
+      state: 'opened',
       id: this.props.id || 'system-app',
       type: this.props.type,
     }

@@ -172,26 +172,12 @@
   overflow: hidden
   position: absolute
   z-index: 10
-  background: #2c3338
   box-shadow: 0 0 20px rgba(0, 0, 0, .5)
   transition: .2s ease-out
   top: 0
   transform: scale(1)
+  background: white
 
-.main-app-page[data-state="closed"]
+.main-app-page[data-state="closed"], .main-app-page[data-state="closing"]
   transform: scale(.8)
   top: 100vh
-
-.app-settings
-  display: none
-
-.app-body
-  height: 100vh
-  width: 100%
-  overflow: hidden
-  position: absolute
-  bottom: 100vh
-  transition: .1s ease-out
-
-.app-body[data-state="opened"]
-  bottom: 0

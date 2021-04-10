@@ -26,7 +26,9 @@ class SuperButton extends React.Component {
   render() {
 
     return (
-      <div className="super-button" id="super-button">
+      <div className="super-button"
+           id="super-button"
+           onClick={() => this.props.changeAppState({ state: 'closing' })}>
         <FontAwesomeIcon icon={ faTimes } className="super-button__knob" id="super-button__knob"/>
       </div>
     );
@@ -72,7 +74,7 @@ class SuperButton extends React.Component {
 
   close() {
     if (Date.now() - this.state.startTime >= 300) { return; }
-    this.props.changeAppState({ state: 'closed' });
+    this.props.changeAppState({ state: 'closing' });
   }
 
   componentWillUnmount() {

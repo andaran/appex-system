@@ -41,7 +41,7 @@ export default class View extends React.Component {
     console.log('\n\n   ---==== Запускаем! ====---   \n\n', this.state);
 
     return (
-      <div style={{ width: '100vw', height: '100vh' }}>
+      <div style={{ width: '100vw', height: '100vh', backgroundColor: 'white' }}>
         <FontAwesomeIcon icon={ faPlay } style={{ display: 'none'}}/>
         <Interpreter
           app = { this.state.app }
