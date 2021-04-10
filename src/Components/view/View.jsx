@@ -31,6 +31,8 @@ export default class View extends React.Component {
 
   render() {
 
+    console.log('\n\n Start: ', Date.now(), '\n\n');
+
     /* if app isn`t being */
     if(!this.state.app || !this.state.user) {
       return (
@@ -59,14 +61,25 @@ export default class View extends React.Component {
 
     /* download app and user */
     if (!this.state.app) {
-      request('/api/get_app', { appId: this.id })
-        .then(res => res.json()).then(body => {
+      let name = 'release-';
+      if (this.devMode) { name = 'update-'; }
+      const app = JSON.parse(localStorage.getItem(name + this.id));
+      const user = JSON.parse(localStorage.getItem('user'));
+
+      if (app && user) {
+        console.log('\n\n used local! \n\n');
+        this.setState({ app, user });
+      } else {
+        console.log('\n\n used server! \n\n');
+        request('/api/get_app', { appId: this.id })
+          .then(res => res.json()).then(body => {
           if (body.status === 'ok') {
             this.setState({ app: body.app, user: body.user });
           } else {
             console.log('Ahtung in downloading app!');
           }
-      }).catch(err => console.log('Ahtung in downloading app!'));
+        }).catch(err => console.log('Ahtung in downloading app!'));
+      }
     }
 
     if (!this.devMode) { return; }

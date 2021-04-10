@@ -261,14 +261,6 @@ class ProjectPage extends React.Component {
 
     /* connect to devRoom */
     connectToDevRoom(this.id);
-
-    /* update appCode */
-    socket.on('updateAppCode', data => {
-      if (data.roomId === 'dev=' + this.id) {
-        /*this.props.fetchProjects();*/
-        console.log('UPDATE'); // TODO: sync mode
-      }
-    });
   }
 
   componentWillUnmount() {
@@ -380,7 +372,12 @@ class ProjectPage extends React.Component {
       }
     }).catch(err => {
       this.setState({message: { type: false, text: 'Ошибка отправки!'}});
-    }).finally(() => updateAppCode(this.id));
+    }).finally(() => {
+      localStorage.setItem('update-' + id, JSON.stringify(this.app));
+      localStorage.setItem('user', JSON.stringify(this.props.user));
+      setTimeout(() => localStorage.setItem('update-' + id, null), 3000);
+      updateAppCode(this.id);
+    });
   }
 
 

@@ -174,6 +174,8 @@ export default class Interpreter extends React.Component {
         .getElementById( this.props.id )
         .innerHTML = code;
 
+      console.log('\n\n End: ', Date.now(), '\n\n');
+
 
 
       /*   ---==== play JS ====---   */
