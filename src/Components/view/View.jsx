@@ -61,7 +61,7 @@ export default class View extends React.Component {
 
     /* download app and user */
     if (!this.state.app) {
-      let name = 'release-';
+      let name = 'cache-';
       if (this.devMode) { name = 'update-'; }
       const app = JSON.parse(localStorage.getItem(name + this.id));
       const user = JSON.parse(localStorage.getItem('user'));

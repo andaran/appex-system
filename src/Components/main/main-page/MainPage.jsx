@@ -4,6 +4,7 @@ import { fetchProjects, changeProjects } from '../../../actions/projectsActions'
 import { switchModalState } from "../../../actions/projectsModalActions";
 import { changeAppState } from "../../../actions/appStateActions";
 import { connect } from "react-redux";
+import { request } from "../../../tools/apiRequest/apiRequest";
 
 import SystemNavbar from '../system-navbar/SystemNavbar';
 import AppIcon from '../app-icon/AppIcon';
@@ -20,6 +21,9 @@ class MainPage extends React.Component {
 
     /* settings */
     this.host = window.location.href.split('main')[0];
+    localStorage.getItem('devMode') === 'true'
+      ? this.devMode = true
+      : this.devMode = false;
 
     this.state = {
       currentPage: 0,
@@ -88,7 +92,7 @@ class MainPage extends React.Component {
 
       interpreter = (
         <iframe
-          src={`${ this.host }view/${ this.props.appId }?devMode=true`}
+          src={`${ this.host }view/${ this.props.appId }?devMode=${ this.devMode }`}
           frameBorder="0"
           id="app-iframe"
           style={{ width: '100%', height: '100%', backgroundColor: 'white' }}/>
@@ -235,6 +239,38 @@ class MainPage extends React.Component {
     window.addEventListener('resize', this.resize, device);
     window.addEventListener('keydown', this.keydown);
 
+
+
+    /*   ---==== Caching all apps ====---   */
+
+    /* user */
+    localStorage.setItem('user', JSON.stringify(this.props.user));
+
+    /* my apps */
+    this.props.projects.forEach(app => {
+      request('/api/get_app', { appId: app.id })
+        .then(res => res.json()).then(body => {
+          if (body.status === 'ok') {
+            console.log("cached project ", app.id);
+            localStorage.setItem('cache-' + app.id, JSON.stringify(body.app));
+          } else {
+            console.log('err in caching project ' + app.id);
+          }
+      }).catch(err => console.log('err in caching project ' + app.id));
+    });
+
+    /* installed apps */
+    this.props.user.installedApps.forEach(app => {
+      request('/api/get_app', { appId: app.id })
+        .then(res => res.json()).then(body => {
+        if (body.status === 'ok') {
+          console.log("cached app ", app.id);
+          localStorage.setItem('cache-' + app.id, JSON.stringify(body.app));
+        } else {
+          console.log('err in caching app ' + app.id);
+        }
+      }).catch(err => console.log('err in caching app ' + app.id));
+    });
   }
 
   touchStart(event) {
