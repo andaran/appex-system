@@ -10,12 +10,12 @@
     "id": "12345"
   },
   "code": {
-    "html": "",
+    "html": "<h1>2</h1>",
     "css": "",
     "js": "console.log('Hello, World!');"
   },
   "releaseCode": {
-    "html": "Скачаное приложение!",
+    "html": "<h1>2</h1>",
     "css":"",
     "js": "console.log('Release!');"
   }

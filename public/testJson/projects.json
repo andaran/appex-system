@@ -11,12 +11,12 @@
       "id": "12345"
     },
     "code": {
-      "html": "test!",
+      "html": "<h1>1</h1>",
       "css": "",
       "js": "console.log('Hello, World!');"
     },
     "releaseCode": {
-      "html": "release!",
+      "html": "<h1>1</h1>",
       "css":"",
       "js": "console.log('Release!');"
     }

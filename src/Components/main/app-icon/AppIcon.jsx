@@ -6,6 +6,7 @@ import { fetchApp } from "../../../actions/appsActions";
 import { changeAppState } from '../../../actions/appStateActions';
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
+import { list } from "../../../tools/LastApps/LastApps";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import * as Icons from "@fortawesome/free-solid-svg-icons";
 
@@ -48,11 +49,9 @@ class AppIcon extends React.Component {
     }
     this.props.changeAppState(appState);
 
-    if (this.props.type !== 'downloaded') { return; }
-
-    /* fetch app if it isn`t downloaded */
-    const app = this.props.apps.find(app => app.id === this.props.id);
-    !app && this.props.fetchApp(this.props.id);
+    if (this.props.type === 'app') {
+      list.append(this.props.id);
+    }
   }
 
   componentWillUnmount() {

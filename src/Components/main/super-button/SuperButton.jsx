@@ -3,7 +3,9 @@ import React from 'react';
 import { changeAppState } from "../../../actions/appStateActions";
 import { connect } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTimes } from "@fortawesome/free-solid-svg-icons";
+import { faTimes, faArrowsAltH } from "@fortawesome/free-solid-svg-icons";
+import LastApps from "../../../tools/LastApps/LastApps";
+import { list } from "../../../tools/LastApps/LastApps";
 
 /* Component */
 class SuperButton extends React.Component {
@@ -13,6 +15,10 @@ class SuperButton extends React.Component {
     this.state = {
       startTime: Date.now(),
       touch: false,
+
+      wrapStart: 0,
+      wrapGo: false,
+      wrapTo: false,
     }
 
 
@@ -21,15 +27,21 @@ class SuperButton extends React.Component {
     this.touchEnd = this.touchEnd.bind(this);
     this.touchMove = this.touchMove.bind(this);
     this.close = this.close.bind(this);
+
+    this.wrapTouchStart = this.wrapTouchStart.bind(this);
+    this.wrapTouchEnd = this.wrapTouchEnd.bind(this);
+    this.wrapTouchMove = this.wrapTouchMove.bind(this);
   }
 
   render() {
-
     return (
-      <div className="super-button"
-           id="super-button"
-           onClick={() => this.props.changeAppState({ state: 'closing' })}>
-        <FontAwesomeIcon icon={ faTimes } className="super-button__knob" id="super-button__knob"/>
+      <div>
+        <div className="super-button"
+             id="super-button"
+             onClick={() => this.props.changeAppState({ state: 'closing' })}>
+          <FontAwesomeIcon icon={ faTimes } className="super-button__knob" id="super-button__knob"/>
+        </div>
+        <div id="swipe-wrap" style={{ display: 'none' }}/>
       </div>
     );
   }
@@ -40,6 +52,12 @@ class SuperButton extends React.Component {
     button.addEventListener('touchmove', this.touchMove);
     button.addEventListener('touchend', this.touchEnd);
     button.addEventListener('click', this.close);
+
+    const wrap = document.getElementById('swipe-wrap');
+    wrap.addEventListener('touchstart', this.wrapTouchStart);
+    wrap.addEventListener('touchmove', this.wrapTouchMove);
+    wrap.addEventListener('touchend', this.wrapTouchEnd);
+    wrap.addEventListener('touchcancel', this.wrapTouchEnd);
   }
 
   touchStart(event) {
@@ -59,6 +77,7 @@ class SuperButton extends React.Component {
   touchEnd(event) {
     const button = document.getElementById('super-button');
     button.style.transform = 'scale(1)';
+
     document.body.style.userSelect = 'auto';
     this.setState({ touch: false });
   }
@@ -77,12 +96,65 @@ class SuperButton extends React.Component {
     this.props.changeAppState({ state: 'closing' });
   }
 
+  wrapTouchStart(event) {
+    this.setState({ wrapStart: event.touches[event.touches.length - 1].pageX });
+  }
+
+  wrapTouchMove(event) {
+    event.preventDefault();
+    let pageX = event.touches[event.touches.length - 1].pageX;
+    if (this.state.wrapStart - pageX > 50) {
+      if (!this.state.wrapGo) {
+        navigator.vibrate([20, 15, 20]);
+        this.setState({ wrapGo: true, wrapTo: 'right' });
+      }
+    } else if (this.state.wrapStart - pageX < -50) {
+      if (!this.state.wrapGo) {
+        navigator.vibrate([20, 15, 20]);
+        this.setState({ wrapGo: true, wrapTo: 'left' });
+      }
+    } else if (this.state.wrapGo) {
+      this.setState({ wrapGo: false, wrapTo: false });
+    }
+  }
+
+  wrapTouchEnd() {
+    if (this.state.wrapTo) {
+      let id;
+      this.state.wrapTo === 'left'
+        ? id = list.left()
+        : id = list.right();
+
+      if (id) {
+
+        /* close all apps */
+        const nodeList = document.querySelectorAll('.multiTasking-interpreter');
+        const interpreters = Array.from(nodeList);
+
+        interpreters.forEach(node => {
+          node.style.display = 'none';
+        });
+
+        /* change new app */
+        this.props.changeAppState({ id });
+      }
+    }
+
+    this.setState({ wrapGo: false, wrapTo: false });
+  }
+
   componentWillUnmount() {
     const button = document.getElementById('super-button');
     button.removeEventListener('touchstart', this.touchStart);
     button.removeEventListener('touchmove', this.touchMove);
     button.removeEventListener('touchend', this.touchEnd);
     button.removeEventListener('click', this.close);
+
+    const wrap = document.getElementById('swipe-wrap');
+    wrap.removeEventListener('touchstart', this.wrapTouchStart);
+    wrap.removeEventListener('touchmove', this.wrapTouchMove);
+    wrap.removeEventListener('touchend', this.wrapTouchEnd);
+    wrap.removeEventListener('touchcancel', this.wrapTouchEnd);
   }
 }
 

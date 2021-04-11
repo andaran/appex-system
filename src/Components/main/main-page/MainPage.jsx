@@ -44,12 +44,12 @@ class MainPage extends React.Component {
 
     /* my apps */
     let myApps = this.props.projects.map(app => {
-      return <AppIcon { ...app } key={ app.id } type="my"/>;
+      return <AppIcon { ...app } key={ app.id } type="app"/>;
     });
 
     /* installed apps */
     let installedApps = this.props.user.installedApps.map(app => {
-      return <AppIcon { ...app } key={ app.id } type="downloaded"/>;
+      return <AppIcon { ...app } key={ app.id } type="app"/>;
     });
 
     /* system apps */
@@ -104,7 +104,7 @@ class MainPage extends React.Component {
 
     /* set multiTasking Interpreter */
     if (['opened', 'closing'].includes(this.props.appState) &&
-        ['my', 'downloaded'].includes(this.props.appType) &&
+        this.props.appType === 'app' &&
         this.multiTasking) {
 
       document.getElementById(this.props.appId).style.display = 'block';
@@ -113,7 +113,7 @@ class MainPage extends React.Component {
     /* set oneTasking Interpreter */
     let interpreter = null;
     if (['opened', 'closing'].includes(this.props.appState) &&
-        ['my', 'downloaded'].includes(this.props.appType) &&
+        this.props.appType === 'app' &&
         !this.multiTasking) {
 
       interpreter = (
@@ -193,11 +193,10 @@ class MainPage extends React.Component {
           <div className="page-number">
             { points }
           </div>
-
           <div className="main-app-page" id="main-app-page" data-state={ this.props.appState }>
             { interpreter } {/* oneTasking */}
             { this.state.interpreters } {/* multiTasking */}
-            <SuperButton/>
+            <SuperButton multiTasking={ this.multiTasking }/>
           </div>
         </div>
       </div>
