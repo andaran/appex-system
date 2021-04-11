@@ -41,7 +41,7 @@ class SuperButton extends React.Component {
              onClick={() => this.props.changeAppState({ state: 'closing' })}>
           <FontAwesomeIcon icon={ faTimes } className="super-button__knob" id="super-button__knob"/>
         </div>
-        <div id="swipe-wrap" style={{ display: 'none' }}/>
+        <div id="swipe-wrap"/>
       </div>
     );
   }

@@ -79,7 +79,7 @@ class MainPage extends React.Component {
 
     /* closing animation */
     if (this.props.appState === 'closing') {
-      setTimeout(() => {
+      this.closeTimeout = setTimeout(() => {
         this.props.changeAppState({ state: 'closed' });
       }, 210);
     }
