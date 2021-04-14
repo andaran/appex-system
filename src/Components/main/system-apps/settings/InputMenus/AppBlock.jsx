@@ -15,6 +15,7 @@ export default class AppBlock extends React.Component {
 
     // bind
     this.send = this.send.bind(this);
+    this.delete = this.delete.bind(this);
   }
 
   render() {
@@ -38,6 +39,17 @@ export default class AppBlock extends React.Component {
         );
       }
     });
+
+    let deleteApp = null;
+    if (this.props.type === 'app') {
+      deleteApp = (
+        <div className="reg-window__input-item">
+          <div className="reg-window__button reg-window__button_red" id="delete-btn" onClick={ this.delete }>
+            Удалить
+          </div>
+        </div>
+      );
+    }
 
     return (
       <div className="app-block">
@@ -79,6 +91,7 @@ export default class AppBlock extends React.Component {
             Сохранить
           </div>
         </div>
+        { deleteApp }
       </div>
     );
   }
@@ -130,20 +143,45 @@ export default class AppBlock extends React.Component {
     }
 
     /* do request */
-    request(`/api/change_user`, { settings: newUserSettings })
+    this.userRequest({ settings: newUserSettings });
+  }
+
+  delete() {
+
+    /* clear errs */
+    this.setState({
+      errs: ['']
+    });
+
+    const id = this.props.id;
+    const app = this.props.user.installedApps.find(elem => elem.id === id);
+    const newApps = this.props.user.installedApps;
+
+    /* delete app */
+    const index = newApps.indexOf(app);
+    if (index > -1) {
+      newApps.splice(index, 1);
+    }
+
+    /* do request */
+    this.userRequest({ installedApps: newApps });
+  }
+
+  userRequest(params) {
+    request(`/api/change_user`, params)
       .then(res => res.json()).then(body => {
-        if (body.status === 'ok') {
-          this.props.fetchUser();
-        } else {
-          console.log(body);
-          this.setState({
-            errs: ['Ошибка!']
-          });
-        }
-      }).catch(err => {
+      if (body.status === 'ok') {
+        this.props.fetchUser();
+      } else {
+        console.log(body);
         this.setState({
-          errs: ['Ошибка запроса!']
+          errs: ['Ошибка!']
         });
+      }
+    }).catch(err => {
+      this.setState({
+        errs: ['Ошибка запроса!']
       });
+    });
   }
 }
