@@ -516,6 +516,10 @@ class ProjectPage extends React.Component {
       : changedProjects[appNumber].releaseCode = changedProjects[appNumber].code;
 
     this.props.changeProjects( changedProjects.slice() );
+
+    if(!mode) {
+      setTimeout(() => this.upload(), 4000);
+    }
   }
 }
 
