@@ -1,7 +1,7 @@
 import * as PROJECTS from '../Constants/projectsConstants';
 
 /* develop mode */
-const devMode = false;
+const devMode = true;
 
 export function fetchProjects(username, id) {
   const body = JSON.stringify({ username, id });

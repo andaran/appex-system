@@ -27,6 +27,9 @@ const loginRoute = require(path.join(__dirname, 'routes', 'loginRoute.js'));
 const User = require(path.join(__dirname, 'models', 'user.js'));
 const Room = require(path.join(__dirname, 'models', 'room.js'));
 
+/* requests limit */
+let reqLimit = [];
+
 
 
 /*   ---==== Connect to DB ====---   */
@@ -113,7 +116,7 @@ app.use('/api', APIRoute);
 
 
 
-/*   ---==== Use socket.io ====---   */
+/*   ---==== socket.io ====---   */
 /*
 app.use(((req, res, next) => {
   res.header("Access-Control-Allow-Origin", "*");
@@ -168,7 +171,36 @@ io.on('connection', (socket) => {
   /* update state */
   socket.on('updateState', data => {
 
-    console.log(data);
+    /* request limit */
+    const req = reqLimit.find(elem => elem.id = data.roomId);
+
+    /* send err if over 600 reqs in list */
+    if (req && req.timeout - Date.now() > 0 && req.count > 600) {
+      return socket.emit('error', { type: 'TooManyRequests', roomId: data.roomId });
+    }
+
+    /* update request timeout */
+    if (req && req.timeout - Date.now() <= 0) {
+      reqLimit = reqLimit.map(elem => {
+        if (elem.id === data.roomId) {
+          return { ...elem, count: 1, timeout: Date.now() + 60000 };
+        } else { return elem; }
+      });
+    }
+
+    /* add request to list */
+    if (!req) {
+      reqLimit.push({ timeout: Date.now() + 60000, count: 1, id: data.roomId });
+    }
+
+    /* requests count ++ */
+    if (req) {
+      reqLimit = reqLimit.map(elem => {
+        if (elem.id === data.roomId) {
+          return { ...elem, count: elem.count + 1 };
+        } else { return elem; }
+      });
+    }
 
     /* find this room */
     Room.findOne({ roomId: data.roomId, roomPass: data.roomPass }).then(room => {
@@ -197,7 +229,7 @@ io.on('connection', (socket) => {
 
   /* error */
   socket.on('error', data => {
-    socket.to(data.roomId).emit('updateState', data);
+    socket.to(data.roomId).emit('error', data);
   });
 
   /*   ---==== Development ====---   */
