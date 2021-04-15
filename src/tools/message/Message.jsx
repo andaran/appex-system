@@ -16,11 +16,6 @@ export default class Message extends React.Component {
     let icon = <FontAwesomeIcon icon={ faTimes }/>;
     if ( this.props.type ) { icon = <FontAwesomeIcon icon={ faCheck }/>; }
 
-    let audio = new Audio();
-    audio.preload = 'auto';
-    audio.src = '/sounds/message.wav';
-    audio.play();
-
     return (
       <div className="message">
         <div className="message-background"/>

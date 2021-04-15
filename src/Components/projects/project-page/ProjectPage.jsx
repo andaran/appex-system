@@ -135,9 +135,9 @@ class ProjectPage extends React.Component {
     let message = null;
     if (this.state.message) {
       message = <Message { ...this.state.message }/>;
-      setTimeout(() => {
+      this.timeout = setTimeout(() => {
         this.setState({ message: false });
-      }, 600);
+      }, 4000);
     }
 
     /* render settings window */
@@ -424,9 +424,9 @@ class ProjectPage extends React.Component {
     if (event.ctrlKey && event.code === 'KeyB') {
       event.preventDefault();
       try {
+        const value = JSON.stringify( this.app.code );
+        localStorage.setItem(this.app.id, value);
         process.nextTick(() => {
-          const value = JSON.stringify( this.app.code );
-          localStorage.setItem(this.app.id, value);
           this.setState({message: { type: true, text: 'Бекап сохранен!'}});
         });
       } catch {
