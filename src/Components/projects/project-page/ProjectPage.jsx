@@ -136,7 +136,9 @@ class ProjectPage extends React.Component {
     if (this.state.message) {
       message = <Message { ...this.state.message }/>;
       this.timeout = setTimeout(() => {
-        this.setState({ message: false });
+        if (Date.now() - this.state.message.time > 3999) {
+          this.setState({ message: false });
+        }
       }, 4000);
     }
 
@@ -366,12 +368,12 @@ class ProjectPage extends React.Component {
       body
     }).then(res => res.json()).then(body => {
       if (body.status === 'ok') {
-        this.setState({message: { type: true, text: 'Код отправлен!'}});
+        this.setState({message: { type: true, text: 'Код отправлен!', time: Date.now() }});
       } else {
-        this.setState({message: { type: false, text: 'Ошибка отправки!'}});
+        this.setState({message: { type: false, text: 'Ошибка отправки!', time: Date.now() }});
       }
     }).catch(err => {
-      this.setState({message: { type: false, text: 'Ошибка отправки!'}});
+      this.setState({message: { type: false, text: 'Ошибка отправки!', time: Date.now() }});
     }).finally(() => {
       localStorage.setItem('update-' + id, JSON.stringify(this.app));
       localStorage.setItem('user', JSON.stringify(this.props.user));
@@ -427,10 +429,10 @@ class ProjectPage extends React.Component {
         const value = JSON.stringify( this.app.code );
         localStorage.setItem(this.app.id, value);
         process.nextTick(() => {
-          this.setState({message: { type: true, text: 'Бекап сохранен!'}});
+          this.setState({message: { type: true, text: 'Бекап сохранен!', time: Date.now() }});
         });
       } catch {
-        this.setState({message: { type: true, text: 'Ошибка создания бекапа :('}});
+        this.setState({message: { type: true, text: 'Ошибка создания бекапа :(', time: Date.now() }});
       }
       return false;
     }
@@ -441,12 +443,12 @@ class ProjectPage extends React.Component {
       try {
         let code = localStorage.getItem( this.app.id );
         if (code === null) {
-          return this.setState({message: { type: false, text: 'Бекапа не найденно!'}});
+          return this.setState({message: { type: false, text: 'Бекапа не найденно!', time: Date.now() }});
         }
         this.download(code);
-        this.setState({message: { type: true, text: 'Бекап загружен!'}});
+        this.setState({message: { type: true, text: 'Бекап загружен!', time: Date.now() }});
       } catch {
-        this.setState({message: { type: true, text: 'Ошибка загрузки бекапа :('}});
+        this.setState({message: { type: true, text: 'Ошибка загрузки бекапа :(', time: Date.now() }});
       }
       return false;
     }
@@ -456,7 +458,7 @@ class ProjectPage extends React.Component {
       if (event.altKey && event.code === 'KeyR') {
         event.preventDefault();
         this.download('_', false);
-        this.setState({message: { type: true, text: 'Релиз кода создан!'}});
+        this.setState({message: { type: true, text: 'Релиз кода создан!', time: Date.now() }});
         return false;
       }
     });
