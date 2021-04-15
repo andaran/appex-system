@@ -3,6 +3,7 @@ import React from 'react';
 
 import Interpreter from "../../tools/interpreter/Interpreter";
 import Error from "../projects/error-404/Error404";
+import Message from "../../tools/message/Message";
 
 import { socket, connectToDevRoom } from '../../socketCore';
 
@@ -18,6 +19,8 @@ export default class View extends React.Component {
     this.state = {
       app: false,
       user: false,
+      err: false,
+      errMessage: null,
     }
 
     /* find app id and devMode */
@@ -34,9 +37,21 @@ export default class View extends React.Component {
     console.log('\n\n Start: ', Date.now(), '\n\n');
 
     /* if app isn`t being */
-    if(!this.state.app || !this.state.user) {
+    if((!this.state.app || !this.state.user) && !this.state.err) {
       return (
         <div style={{ width: '100vw', height: '100vh', backgroundColor: 'white' }}/>
+      );
+    }
+
+    /* any error */
+    if(this.state.err) {
+      return (
+        <div style={{ width: '100vw', height: '100vh' }}>
+          <Message type={false}
+                   text="Ошибка открытия приложения"
+                   underText={ this.state.errMessage }
+                   center={true}/>
+        </div>
       );
     }
 
@@ -76,9 +91,13 @@ export default class View extends React.Component {
           if (body.status === 'ok') {
             this.setState({ app: body.app, user: body.user });
           } else {
+            this.setState({ err: true, errMessage: body.message });
             console.log('Ahtung in downloading app!');
           }
-        }).catch(err => console.log('Ahtung in downloading app!'));
+        }).catch(err => {
+          console.log('Ahtung in downloading app!');
+          this.setState({ err: true, errMessage: 'Проверьте соединение с интернетом' });
+        });
       }
     }
 

@@ -138,11 +138,22 @@
   animation: message ease-in 4s forwards
   z-index: 10
 
+  &_center
+    animation: none
+    width: 300px
+    right: calc(50% - 150px)
+    top: 60px
+
   &__text
     font-weight: bold
     font-size: 16px
     background: rgba(0, 0, 0, .12)
     padding: 10px 15px
+
+  &__under-text
+    font-size: 14px
+    background: rgba(0, 0, 0, .12)
+    padding: 0 15px 10px 15px
 
   &__icon
     font-size: 40px
