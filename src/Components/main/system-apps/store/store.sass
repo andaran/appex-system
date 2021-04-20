@@ -1,0 +1,37 @@
+
+.apps-loader
+  width: 100%
+  text-align: center
+  margin: 60px 0
+
+  svg
+    color: white
+    font-size: 32px
+    opacity: 0.3
+    animation: rotate 1.5s linear infinite
+
+.store-search-block
+  z-index: 0
+  position: relative
+  width: 100%
+  transition: .5s
+
+  &_active
+    width: calc(100% + 32px)
+    background: #18191c
+    margin-left: -16px
+
+    .reg-window__input-item:first-child
+      margin-bottom: 30px
+
+.main-store-wrap
+  position: relative
+  overflow-y: scroll
+  z-index: 0
+
+@keyframes rotate
+  from
+    transform: rotate(0deg)
+
+  to
+    transform: rotate(360deg)

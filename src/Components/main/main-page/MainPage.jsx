@@ -13,6 +13,7 @@ import SuperButton from '../super-button/SuperButton';
 import { Link } from "react-router-dom";
 
 import SettingsApp from '../system-apps/settings/SettingsApp';
+import StoreApp from '../system-apps/store/StoreApp';
 
 /* Component */
 class MainPage extends React.Component {
@@ -144,7 +145,10 @@ class MainPage extends React.Component {
           interpreter = <SettingsApp/>;
           break;
         case 'store':
-          interpreter = <SettingsApp/>;
+          interpreter = <StoreApp/>;
+          break;
+        default:
+          console.error('Ошибка открытия приложения!');
           break;
       }
     }
