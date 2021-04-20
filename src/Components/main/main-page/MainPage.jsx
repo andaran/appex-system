@@ -54,8 +54,18 @@ class MainPage extends React.Component {
 
     /* system apps */
     let systemApps = [
-      <AppIcon color="#95a5a6" icon="faCog" title="Настройки" key="settings-icon" type="settings"/>,
-      <AppIcon color="#3498db" icon="faShoppingBag" title="Магазин" key="store-icon" type="store"/>,
+      <AppIcon color="#95a5a6"
+               icon="faCog"
+               title="Настройки"
+               key="settings-icon"
+               type="settings"
+               id="settings-system-app"/>,
+      <AppIcon color="#3498db"
+               icon="faShoppingBag"
+               title="Магазин"
+               key="store-icon"
+               type="store"
+               id="store-system-app"/>,
     ]
 
     if(myApps.length) {
