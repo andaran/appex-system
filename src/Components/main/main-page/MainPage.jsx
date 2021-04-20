@@ -55,6 +55,7 @@ class MainPage extends React.Component {
     /* system apps */
     let systemApps = [
       <AppIcon color="#95a5a6" icon="faCog" title="Настройки" key="settings-icon" type="settings"/>,
+      <AppIcon color="#3498db" icon="faShoppingBag" title="Магазин" key="store-icon" type="store"/>,
     ]
 
     if(myApps.length) {
@@ -130,6 +131,9 @@ class MainPage extends React.Component {
       /* switch system app */
       switch (this.props.appType) {
         case 'settings':
+          interpreter = <SettingsApp/>;
+          break;
+        case 'store':
           interpreter = <SettingsApp/>;
           break;
       }
@@ -292,24 +296,26 @@ class MainPage extends React.Component {
     const interpreters = [];
 
     /* my apps */
-    this.props.projects.forEach(app => {
+    this.props.projects.forEach((app, index) => {
       const interpreter = <iframe
         src={`${ this.host }view/${ app.id }?devMode=${ this.devMode }`}
         frameBorder="0"
         id={ app.id }
         className="multiTasking-interpreter"
-        style={{ width: '100%', height: '100%', backgroundColor: 'white', display: 'none'}}/>;
+        style={{ width: '100%', height: '100%', backgroundColor: 'white', display: 'none'}}
+        key={ 'project-' + index }/>;
       interpreters.push(interpreter);
     });
 
     /* installed apps */
-    this.props.user.installedApps.forEach(app => {
+    this.props.user.installedApps.forEach((app, index) => {
       const interpreter = <iframe
         src={`${ this.host }view/${ app.id }?devMode=${ this.devMode }`}
         frameBorder="0"
         id={ app.id }
         className="multiTasking-interpreter"
-        style={{ width: '100%', height: '100%', backgroundColor: 'white', display: 'none' }}/>;
+        style={{ width: '100%', height: '100%', backgroundColor: 'white', display: 'none' }}
+        key={ 'app-' + index }/>;
       interpreters.push(interpreter);
     });
 

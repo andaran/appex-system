@@ -171,7 +171,10 @@ io.on('connection', (socket) => {
   /* update state */
   socket.on('updateState', data => {
 
-    /* request limit */
+
+
+    /*   ---==== Request limit ====---   */
+
     const req = reqLimit.find(elem => elem.id = data.roomId);
 
     /* send err if over 600 reqs in list */
