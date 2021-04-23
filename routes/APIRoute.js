@@ -312,7 +312,7 @@ router.post('/get_app', (req, res) => {
 router.post('/get_last_apps', (req, res) => {
 
   /* find last 100 apps */
-  App.find()
+  App.find({ storeVisibility: true })
     .sort({'date': -1})
     .limit(100)
     .then(foundApps => {
@@ -340,8 +340,8 @@ router.post('/get_find_apps', (req, res) => {
 
   /* find apps */
   App.find({$or: [
-      { title: req.body.search },
-      { id: req.body.search }
+      { title: req.body.search, storeVisibility: true },
+      { id: req.body.search, storeVisibility: true }
     ]})
     .sort({'date': -1})
     .limit(100)
