@@ -110,8 +110,6 @@ function mapStateToProps(store) {
   return {
     user: store.userData.user,
     projects: store.projects.data,
-    apps: store.apps.data,
-
   }
 }
 

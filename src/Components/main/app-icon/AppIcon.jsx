@@ -1,11 +1,7 @@
 import React from 'react';
 
-import { fetchProjects, changeProjects } from '../../../actions/projectsActions';
-import { switchModalState } from "../../../actions/projectsModalActions";
-import { fetchApp } from "../../../actions/appsActions";
 import { changeAppState } from '../../../actions/appStateActions';
 import { connect } from "react-redux";
-import { Link } from "react-router-dom";
 import { list } from "../../../tools/LastApps/LastApps";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import * as Icons from "@fortawesome/free-solid-svg-icons";
@@ -65,19 +61,11 @@ class AppIcon extends React.Component {
 /*   ---==== Connect to redux ====---   */
 
 function mapStateToProps(store) {
-  return {
-
-    /* downloaded apps */
-    apps: store.apps.data,
-
-  }
+  return {}
 }
 
 function mapDispatchToProps(dispatch) {
   return {
-    fetchApp: (appId) => {
-      dispatch(fetchApp(appId))
-    },
     changeAppState: (changedState) => {
       dispatch(changeAppState(changedState))
     },

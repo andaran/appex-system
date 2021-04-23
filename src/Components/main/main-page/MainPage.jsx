@@ -1,16 +1,12 @@
 import React from 'react';
 
-import { fetchProjects, changeProjects } from '../../../actions/projectsActions';
-import { switchModalState } from "../../../actions/projectsModalActions";
 import { changeAppState } from "../../../actions/appStateActions";
 import { connect } from "react-redux";
 import { request } from "../../../tools/apiRequest/apiRequest";
-
-import SystemNavbar from '../system-navbar/SystemNavbar';
-import AppIcon from '../app-icon/AppIcon';
-import Interpreter from '../../../tools/interpreter/Interpreter';
-import SuperButton from '../super-button/SuperButton';
 import { Link } from "react-router-dom";
+
+import AppIcon from '../app-icon/AppIcon';
+import SuperButton from '../super-button/SuperButton';
 
 import SettingsApp from '../system-apps/settings/SettingsApp';
 import StoreApp from '../system-apps/store/StoreApp';
@@ -482,10 +478,6 @@ function mapStateToProps(store) {
     appState: store.appState.state,
     appId: store.appState.id,
     appType: store.appState.type,
-
-    /* downloaded apps */
-    apps: store.apps.data,
-
   }
 }
 
