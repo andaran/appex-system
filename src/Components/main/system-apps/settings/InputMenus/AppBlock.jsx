@@ -70,7 +70,7 @@ export default class AppBlock extends React.Component {
           <div className="reg-window__item-block">
             <input type="text"
                    placeholder="id комнаты"
-                   id={`room-id-${ this.props.id }`}
+                   id={`room-id-${ this.props.type + this.props.id }`}
                    className="reg-window__input"/>
           </div>
         </div>
@@ -81,7 +81,7 @@ export default class AppBlock extends React.Component {
           <div className="reg-window__item-block">
             <input type="text"
                    placeholder="пароль комнаты"
-                   id={`room-pass-${ this.props.id }`}
+                   id={`room-pass-${ this.props.type + this.props.id }`}
                    className="reg-window__input"/>
           </div>
         </div>
@@ -97,8 +97,8 @@ export default class AppBlock extends React.Component {
   }
 
   componentDidMount() {
-    const id = document.getElementById(`room-id-${ this.props.id }`);
-    const pass = document.getElementById(`room-pass-${ this.props.id }`);
+    const id = document.getElementById(`room-id-${ this.props.type + this.props.id }`);
+    const pass = document.getElementById(`room-pass-${ this.props.type + this.props.id }`);
 
     id.value = this.roomId || '';
     pass.value = this.roomPass || '';
@@ -111,8 +111,8 @@ export default class AppBlock extends React.Component {
       errs: ['']
     });
 
-    const roomId = document.getElementById(`room-id-${ this.props.id }`).value;
-    const roomPass = document.getElementById(`room-pass-${ this.props.id }`).value;
+    const roomId = document.getElementById(`room-id-${ this.props.type + this.props.id }`).value;
+    const roomPass = document.getElementById(`room-pass-${ this.props.type + this.props.id }`).value;
 
     if (!roomId || !roomPass) {
       return this.setState({
