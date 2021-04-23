@@ -18,13 +18,13 @@ class StoreApp extends React.Component {
       search: false,
       lastApps: false,
       findApps: false,
-      value: '',
     }
 
     // bind
     this.focusIn = this.focusIn.bind(this);
     this.focusOut = this.focusOut.bind(this);
     this.typing = this.typing.bind(this);
+    this.findApps = this.findApps.bind(this);
   }
 
   render() {
@@ -48,35 +48,6 @@ class StoreApp extends React.Component {
       lastApps = this.state.lastApps.map((app, index) => {
         return <AppDownload { ...app } key={index}/>;
       });
-    }
-
-    /* find apps */
-    if (!this.state.findApps && this.state.search) {
-      request('/api/get_find_apps', { search: this.state.search })
-        .then(res => res.json()).then(body => {
-          if (body.status === 'ok') {
-            this.setState({ findApps: body.apps });
-          } else {
-            console.log('Ahtung in downloading last apps!');
-          }
-        }).catch(err => {
-          console.log('Ahtung in downloading last apps!');
-        });
-
-      /*this.setState({ findApps: [
-          {
-            title: "Скачаное приложение", icon: "faUtensils", color: "#f1c40f", id: "hHud&snkxkhs&9467"
-          },
-          {
-            title: "Скачаное приложение 2", icon: "faUtensils", color: "#f1c40f", id: "hHui&snkxkhs&9468"
-          },
-          {
-            title: "Скачаное приложение 3", icon: "faUtensils", color: "#f1c40f", id: "hHui&snkxkhs&9469"
-          },
-          {
-            title: "Скачаное приложение 4", icon: "faUtensils", color: "#f1c40f", id: "hHui&snkxkhs&9470"
-          }
-        ]});*/
     }
 
     return (
@@ -158,11 +129,24 @@ class StoreApp extends React.Component {
   typing() {
     const input = document.getElementById('search');
     if (input.value.length !== 0) {
-      this.setState({ value: input.value, search: true });
+      this.findApps(input.value);
+      this.setState({ search: true });
     } else {
-      this.setState({ value: '', search: false });
+      this.setState({ search: false });
     }
+  }
 
+  findApps(search) {
+    request('/api/get_find_apps', { search })
+      .then(res => res.json()).then(body => {
+        if (body.status === 'ok') {
+          this.setState({ findApps: body.apps });
+        } else {
+          console.log('Ahtung in downloading last apps!');
+        }
+      }).catch(err => {
+        console.log('Ahtung in downloading last apps!');
+      });
   }
 
   componentWillUnmount() {
