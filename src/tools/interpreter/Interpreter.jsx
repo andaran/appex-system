@@ -29,7 +29,6 @@ export default class Interpreter extends React.Component {
     */
 
     /*   ---==== Parse presets ====---   */
-    console.log('\n\n -== Render ==- \n\n');
 
     /* render mode */
     let appSourceCode;
@@ -139,7 +138,6 @@ export default class Interpreter extends React.Component {
                 item.preset.args.forEach(arg => {
                   presetHtml = presetHtml.replaceAll(`{{ ${arg.name} }}`, arg.value);
                 });
-                // console.log('REPLACED:', presetHtml);
 
                 /* add this html to another code */
                 return item.code + presetHtml;
@@ -161,7 +159,6 @@ export default class Interpreter extends React.Component {
       codeArr.forEach((blockOfCode) => {
         finallyCode += blockOfCode;
       });
-      // console.log(finallyCode);
 
       /* create code variable with styles */
       let code = `<div id="app">\n<style>\n ${ appSourceCode.css } \n</style>\n`;
@@ -174,8 +171,6 @@ export default class Interpreter extends React.Component {
         .getElementById( this.props.id )
         .innerHTML = code;
 
-      console.log('\n\n End: ', Date.now(), '\n\n');
-
 
 
       /*   ---==== play JS ====---   */
@@ -186,7 +181,6 @@ export default class Interpreter extends React.Component {
       /* find room settings */
       const id = this.props.appId;
       const settings = this.props.user.settings.find(elem => elem.id === id);
-      console.log(settings, id, this.props);
 
       /* set socketCore class */
       const app = new App(this.props.app, settings);

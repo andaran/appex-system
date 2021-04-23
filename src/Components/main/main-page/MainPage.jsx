@@ -281,7 +281,6 @@ class MainPage extends React.Component {
       request('/api/get_app', { appId: app.id })
         .then(res => res.json()).then(body => {
           if (body.status === 'ok') {
-            console.log("cached project ", app.id);
             localStorage.setItem('cache-' + app.id, JSON.stringify(body.app));
           } else {
             console.log('err in caching project ' + app.id);
@@ -294,7 +293,6 @@ class MainPage extends React.Component {
       request('/api/get_app', { appId: app.id })
         .then(res => res.json()).then(body => {
         if (body.status === 'ok') {
-          console.log("cached app ", app.id);
           localStorage.setItem('cache-' + app.id, JSON.stringify(body.app));
         } else {
           console.log('err in caching app ' + app.id);

@@ -34,8 +34,6 @@ export default class View extends React.Component {
 
   render() {
 
-    console.log('\n\n Start: ', Date.now(), '\n\n');
-
     /* if app isn`t being */
     if((!this.state.app || !this.state.user) && !this.state.err) {
       return (
@@ -55,8 +53,6 @@ export default class View extends React.Component {
       );
     }
 
-    console.log('\n\n   ---==== Запускаем! ====---   \n\n', this.state);
-
     return (
       <div style={{ width: '100vw', height: '100vh', backgroundColor: 'white' }}>
         <FontAwesomeIcon icon={ faPlay } style={{ display: 'none'}}/>
@@ -72,8 +68,6 @@ export default class View extends React.Component {
 
   componentDidMount() {
 
-    console.log('\n\n---=== VIEW_PROPS ===---\n\n', this.props);
-
     /* download app and user */
     if (!this.state.app) {
       let name = 'cache-';
@@ -82,10 +76,8 @@ export default class View extends React.Component {
       const user = JSON.parse(localStorage.getItem('user'));
 
       if (app && user) {
-        console.log('\n\n used local! \n\n');
         this.setState({ app, user });
       } else {
-        console.log('\n\n used server! \n\n');
         request('/api/get_app', { appId: this.id })
           .then(res => res.json()).then(body => {
           if (body.status === 'ok') {
@@ -109,7 +101,6 @@ export default class View extends React.Component {
     /* update appCode */
     socket.on('updateAppCode', data => {
       if (data.roomId === 'dev=' + this.id) {
-        console.log('\nreload!\n');
         window.location.reload();
       }
     });
