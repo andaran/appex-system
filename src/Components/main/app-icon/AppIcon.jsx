@@ -24,7 +24,7 @@ class AppIcon extends React.Component {
       <div className="app-icon">
         <div
           style={{ backgroundColor: this.props.color || '#1abc9c' }}
-          id={`icon-${ this.props.id }`}>
+          id={ this.props.prefix + this.props.id }>
           <FontAwesomeIcon icon={ Icons[this.props.icon || 'faMobile'] } />
         </div>
         <footer>
@@ -35,7 +35,7 @@ class AppIcon extends React.Component {
   }
 
   componentDidMount() {
-    document.getElementById(`icon-${ this.props.id }`)
+    document.getElementById(this.props.prefix + this.props.id)
       .addEventListener('click', this.iconClicked);
   }
 
@@ -55,7 +55,7 @@ class AppIcon extends React.Component {
   }
 
   componentWillUnmount() {
-    document.getElementById(`icon-${ this.props.id }`)
+    document.getElementById(this.props.prefix + this.props.id)
       .removeEventListener('click', this.iconClicked);
   }
 }

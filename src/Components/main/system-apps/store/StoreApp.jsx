@@ -52,7 +52,7 @@ class StoreApp extends React.Component {
 
     /* find apps */
     if (!this.state.findApps && this.state.search) {
-      /*request('/api/get_last_apps', { search: this.state.search })
+      request('/api/get_find_apps', { search: this.state.search })
         .then(res => res.json()).then(body => {
           if (body.status === 'ok') {
             this.setState({ findApps: body.apps });
@@ -61,9 +61,9 @@ class StoreApp extends React.Component {
           }
         }).catch(err => {
           console.log('Ahtung in downloading last apps!');
-        });*/
+        });
 
-      this.setState({ findApps: [
+      /*this.setState({ findApps: [
           {
             title: "Скачаное приложение", icon: "faUtensils", color: "#f1c40f", id: "hHud&snkxkhs&9467"
           },
@@ -76,7 +76,7 @@ class StoreApp extends React.Component {
           {
             title: "Скачаное приложение 4", icon: "faUtensils", color: "#f1c40f", id: "hHui&snkxkhs&9470"
           }
-        ]});
+        ]});*/
     }
 
     return (
@@ -113,7 +113,7 @@ class StoreApp extends React.Component {
     input.addEventListener('input', this.typing);
 
     if (!this.state.lastApps) {
-      /*request('/api/get_last_apps', {})
+      request('/api/get_last_apps', {})
         .then(res => res.json()).then(body => {
           if (body.status === 'ok') {
             this.setState({ lastApps: body.apps });
@@ -122,9 +122,9 @@ class StoreApp extends React.Component {
           }
         }).catch(err => {
           console.log('Ahtung in downloading last apps!');
-        });*/
+        });
 
-      this.setState({ lastApps: [
+      /*this.setState({ lastApps: [
           {
             title: "Скачаное приложение", icon: "faUtensils", color: "#f1c40f", id: "hHud&snkxkhs&9467"
           },
@@ -137,7 +137,7 @@ class StoreApp extends React.Component {
           {
             title: "Скачаное приложение 4", icon: "faUtensils", color: "#f1c40f", id: "hHui&snkxkhs&9470"
           }
-      ]});
+      ]});*/
     }
   }
 

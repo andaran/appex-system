@@ -28,7 +28,6 @@ class AppDownload extends React.Component {
       </div>
     </div>;
 
-    console.log('APP', app);
     if (app) {
       button = <div className="reg-window__input-item">
         <div className="reg-window__button reg-window__button_red" onClick={ this.delete }>

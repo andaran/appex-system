@@ -45,12 +45,12 @@ class MainPage extends React.Component {
 
     /* my apps */
     let myApps = this.props.projects.map(app => {
-      return <AppIcon { ...app } key={ app.id } type="app"/>;
+      return <AppIcon { ...app } key={ 'project' + app.id } type="app" prefix="icon-project-"/>;
     });
 
     /* installed apps */
     let installedApps = this.props.user.installedApps.map(app => {
-      return <AppIcon { ...app } key={ app.id } type="app"/>;
+      return <AppIcon { ...app } key={ 'app' + app.id } type="app" prefix="icon-app-"/>;
     });
 
     /* system apps */
@@ -119,7 +119,10 @@ class MainPage extends React.Component {
         this.props.appType === 'app' &&
         this.multiTasking) {
 
-      document.getElementById(this.props.appId).style.display = 'block';
+      const project = document.getElementById('project'+this.props.appId);
+      const app = document.getElementById('app'+this.props.appId);
+      app ? app.style.display = 'block' : project.style.display = 'block';
+
     }
 
     /* set oneTasking Interpreter */
@@ -148,7 +151,6 @@ class MainPage extends React.Component {
           interpreter = <StoreApp/>;
           break;
         default:
-          console.error('Ошибка открытия приложения!');
           break;
       }
     }
@@ -314,7 +316,7 @@ class MainPage extends React.Component {
       const interpreter = <iframe
         src={`${ this.host }view/${ app.id }?devMode=${ this.devMode }`}
         frameBorder="0"
-        id={ app.id }
+        id={ 'project' + app.id }
         className="multiTasking-interpreter"
         style={{ width: '100%', height: '100%', backgroundColor: 'white', display: 'none'}}
         key={ 'project-' + index }/>;
@@ -326,7 +328,7 @@ class MainPage extends React.Component {
       const interpreter = <iframe
         src={`${ this.host }view/${ app.id }?devMode=${ this.devMode }`}
         frameBorder="0"
-        id={ app.id }
+        id={ 'app' + app.id }
         className="multiTasking-interpreter"
         style={{ width: '100%', height: '100%', backgroundColor: 'white', display: 'none' }}
         key={ 'app-' + index }/>;

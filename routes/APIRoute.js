@@ -305,4 +305,35 @@ router.post('/get_app', (req, res) => {
   }).catch(err => res.json({ status: 'err' }));
 });
 
+
+
+/*   ---==== Store ====---  */
+
+router.post('/get_last_apps', (req, res) => {
+
+  /* find last 100 apps */
+  App.find()
+    .sort({'date': -1})
+    .limit(100)
+    .then(foundApps => {
+
+    /* send found rooms */
+    if (foundApps === null) {
+      res.json({ status: 'err' });
+    } else {
+
+      foundApps = foundApps.map(app => {
+        return {
+          title: app.title,
+          icon: app.icon,
+          color: app.color,
+          id: app.id,
+        }
+      });
+
+      res.json({ status: 'ok', apps: foundApps });
+    }
+  }).catch(err => res.json({ status: 'err' }));
+});
+
 module.exports = router;
