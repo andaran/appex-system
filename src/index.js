@@ -18,6 +18,7 @@ import ProjectPage from './Components/projects/project-page/ProjectPage';
 import PrivateRoute from "./Components/additComponents/PrivateRoute";
 import MainPage from './Components/main/main-page/MainPage';
 import View from './Components/view/View';
+import Lending from './Components/lending/Lending';
 
 /* Libraries */
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -45,9 +46,7 @@ ReactDOM.render(
   <Provider store={store}>
     <Router>
       <Switch>
-        <Route exact path="/">
-          <Redirect to={ { pathname: "/sign_up" } }/>
-        </Route>
+        <Route exact path="/" component={ Lending }/>
         <Route exact path="/sign_up" component={ Register }/>
         <Route exact path="/sign_in" component={ Login }/>
         <Route exact path="/change_password" component={ ChangePass }/>

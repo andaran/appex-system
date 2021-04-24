@@ -100,7 +100,7 @@ class AppDownload extends React.Component {
         console.log(body);
       }
     }).catch(err => {
-      console.error('Ошибка запроса!');
+      console.error('Ошибка запроса!\n\n', err);
     });
   }
 }
