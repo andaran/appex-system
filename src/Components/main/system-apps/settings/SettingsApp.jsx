@@ -105,15 +105,7 @@ class SettingsApp extends React.Component {
     );
   }
 
-  componentDidMount() {
-
-  }
-
   close() { this.setState({ menu: false }); }
-
-  componentWillUnmount() {
-
-  }
 }
 
 

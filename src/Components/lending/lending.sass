@@ -10,14 +10,173 @@
     background: #4b6584
     transition: .5s ease-in
 
+    main
+      width: 500px
+
+      .lending-description
+        display: block
+        padding-top: 20px
+        color: white
+        text-align: center
+
   section:nth-child(2)
-    background: #ea8685
+    background: #FED6BC
 
   section:nth-child(3)
-    background: #63cdda
+    background: #B5F2EA
 
   section:nth-child(4)
-    background: #f7d794
+    background: #FFFADD
 
   section:nth-child(5)
-    background: #cd84f1
+    background: #DEF7FE
+
+.lending-header
+  display: flex
+  justify-content: center
+  align-items: center
+  position: relative
+
+  &_down
+    position: absolute
+    margin: auto
+    bottom: 20px
+    display: flex
+
+    &__animate
+      animation: swipe linear infinite 2s
+
+  &_space
+    width: 140px
+    height: 30px
+    background: white
+    text-align: center
+    padding-top: 1px
+    border-radius: 5px
+    box-shadow: 0 -3px rgba(0, 0, 0, .2) inset
+    margin: 0 8px
+
+  &_arrow
+    width: 30px
+    height: 30px
+    background: white
+    text-align: center
+    padding-top: 1px
+    border-radius: 5px
+    box-shadow: 0 -3px rgba(0, 0, 0, .2) inset
+    margin: 0 8px
+
+  &_swipe
+    transform: rotate(-135deg)
+    width: 20px
+    height: 20px
+    border-left: 2px solid white
+    border-bottom: 2px solid white
+    border-radius: 1px
+
+  &_nav
+    width: 100%
+    display: flex
+    justify-content: flex-end
+    padding: 4px 0
+    background: rgba(0, 0, 0, 0.2)
+    letter-spacing: 1px
+    position: absolute
+    top: 0
+    left: 0
+
+    a
+      display: block
+      color: black
+      height: 26px
+      text-align: center
+      border-radius: 2px
+      box-shadow: 0 -3px rgba(0, 0, 0, .2) inset
+      margin-right: 4px
+      padding: 1px 8px 0 8px
+      font-weight: 400
+      font-size: 14px
+      background: #ffffff
+
+      &:hover
+        text-decoration: none
+
+@keyframes swipe
+  0%
+    right: 20px
+  50%
+    right: 30px
+  100%
+    right: 20px
+
+.lending-section
+  display: flex
+  justify-content: center
+  position: relative
+  overflow: hidden
+
+.lending-text
+  position: absolute
+  left: 20px
+  top: 20px
+  width: 50%
+
+  &_title
+    font-size: 54px
+    color: #1f1f1f
+
+  &_main
+    font-size: 24px
+    margin-top: 12px
+
+.lending-register
+  position: absolute
+  right: 20px
+  bottom: 20px
+
+// Mobile
+
+.lending-mobile
+  display: grid
+  grid-template-columns: repeat(6, 100vw)
+  width: 600vw
+  transition: .4s ease-in
+
+  section, header
+    width: 100vw
+
+  section
+    margin-left: -0.5px
+
+    .lending-icon
+      position: absolute
+      font-size: 200px
+      opacity: .3
+      bottom: 100px
+
+  .lending-text
+    position: absolute
+    left: 10px
+    top: 10px
+    width: calc(100vw - 20px)
+
+    &_title
+      font-size: 30px
+      font-weight: bold
+      color: #313131
+
+    &_main
+      font-size: 18px
+      margin-top: 8px
+
+  main
+    width: 80%
+
+.lending-mobile-wrap
+  width: 100vw
+  height: 100vh
+  overflow: hidden
+  position: relative
+
+  .lending-header_down
+    top: 50px

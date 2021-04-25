@@ -170,18 +170,18 @@ export default class AppBlock extends React.Component {
   userRequest(params) {
     request(`/api/change_user`, params)
       .then(res => res.json()).then(body => {
-      if (body.status === 'ok') {
-        this.props.fetchUser();
-      } else {
-        console.log(body);
+        if (body.status === 'ok') {
+          this.props.fetchUser();
+        } else {
+          console.log(body);
+          this.setState({
+            errs: ['Ошибка!']
+          });
+        }
+      }).catch(err => {
         this.setState({
-          errs: ['Ошибка!']
+          errs: ['Ошибка запроса!']
         });
-      }
-    }).catch(err => {
-      this.setState({
-        errs: ['Ошибка запроса!']
       });
-    });
   }
 }
