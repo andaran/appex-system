@@ -41,7 +41,7 @@ export default class Lending extends React.Component {
             </span>
           </main>
           <div className='lending-header_down'>
-            <div className="lending-header_space"> space </div>
+            <div className="lending-header_space lending-header_space__animate"> space </div>
           </div>
         </header>
         <section className="lending-section">
@@ -99,7 +99,7 @@ export default class Lending extends React.Component {
         <section className="lending-section">
           <RegWindow/>
           <div className='lending-header_down'>
-            <div className="lending-header_space"> space </div>
+            <div className="lending-header_space lending-header_space__animate"> space </div>
           </div>
         </section>
       </article>

@@ -51,10 +51,13 @@
     height: 30px
     background: white
     text-align: center
-    padding-top: 1px
+    padding-top: .5px
     border-radius: 5px
     box-shadow: 0 -3px rgba(0, 0, 0, .2) inset
     margin: 0 8px
+
+    &__animate
+      animation: space 2s linear infinite
 
   &_arrow
     width: 30px
@@ -108,6 +111,20 @@
     right: 30px
   100%
     right: 20px
+
+@keyframes space
+  50%
+    box-shadow: 0 -3px rgba(0, 0, 0, .2) inset
+    height: 30px
+  55%
+    box-shadow: none
+    height: 27px
+  95%
+    box-shadow: none
+    height: 27px
+  100%
+    box-shadow: 0 -3px rgba(0, 0, 0, .2) inset
+    height: 30px
 
 .lending-section
   display: flex
