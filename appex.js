@@ -86,6 +86,7 @@ passport.deserializeUser((id, done) => {
       userSettings: foundUser.userSettings,
       installedApps: foundUser.installedApps,
       type: foundUser.type,
+      alerts: foundUser.alerts,
     });
   });
 });

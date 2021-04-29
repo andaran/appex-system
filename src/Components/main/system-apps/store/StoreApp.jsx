@@ -53,7 +53,7 @@ class StoreApp extends React.Component {
     return (
       <div className="main-settings-wrap main-store-wrap" id="main-store-wrap">
         <div className="main-settings-title">Магазин</div>
-        <div className="app-block store-search-block" id="search-block">
+        <div className="app-block store-search-block app-download-block" id="search-block">
           <div className="reg-window__input-item">
             <div className="reg-window__item-block">
               <FontAwesomeIcon icon={ faSearch } />

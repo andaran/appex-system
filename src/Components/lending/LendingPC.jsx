@@ -29,6 +29,7 @@ export default class Lending extends React.Component {
           <nav className="lending-header_nav">
             <Link to="/sign_in">вход</Link>
             <Link to="/sign_up">регистрация</Link>
+            <Link to="/main">главная</Link>
             <Link to="/doc">документация</Link>
           </nav>
           <main>

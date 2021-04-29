@@ -28,6 +28,7 @@ const userSchema = new mongoose.Schema({
   installedApps: { type: Array },
   settings: { type: Array },
   userSettings: { type: Object },
+  alerts: { type: Array },
 });
 
 const user = mongoose.model('user', userSchema, 'users');

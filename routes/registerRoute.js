@@ -9,6 +9,9 @@ const bcrypt = require('bcrypt');
 const mailer = require(path.join(__dirname, '../', 'mails', 'mailer.js'));
 const generateUserId = require(path.join(__dirname, '../', 'IdActions', 'generateUserID.js'));
 
+/* alerts */
+const start = require(path.join(__dirname, '../', 'alerts', 'start.js'));
+
 /* models */
 const User = require(path.join(__dirname, '../', 'models', 'user.js'));
 
@@ -62,6 +65,7 @@ router.post('/', (req, res) => {
             installedApps: [],
             settings: [],
             userSettings: {},
+            alerts: [ start ],  // education
           });
 
           /* save new user */

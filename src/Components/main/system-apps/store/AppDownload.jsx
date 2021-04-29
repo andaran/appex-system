@@ -37,7 +37,7 @@ class AppDownload extends React.Component {
     }
 
     return (
-      <div className="app-block">
+      <div className="app-block app-download-block">
         <div className="reg-window__input-item">
           <div className="reg-window__item-block">
             <div className="app-block__icon" style={{ backgroundColor: this.props.color }}>
