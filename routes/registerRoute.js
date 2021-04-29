@@ -10,7 +10,7 @@ const mailer = require(path.join(__dirname, '../', 'mails', 'mailer.js'));
 const generateUserId = require(path.join(__dirname, '../', 'IdActions', 'generateUserID.js'));
 
 /* alerts */
-const start = require(path.join(__dirname, '../', 'alerts', 'start.js'));
+const start = require(path.join(__dirname, '../', 'alerts', 'code', 'start.js'));
 
 /* models */
 const User = require(path.join(__dirname, '../', 'models', 'user.js'));

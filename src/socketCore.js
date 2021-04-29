@@ -38,17 +38,16 @@ export class App {
   /* start app */
   start() {
 
+    /* check params */
+    if (!this.state) { return console.log('[Err] Отсутствует state!'); }
+    if (!this.update) { return console.log('[Err] Отсутствует update!'); }
+    if (!this.roomSettings) { return console.log('[Err] Отсутствуют данные комнаты!'); }
+
     const socket = this.socket;
-    const id = this.app.id;
     const roomId = this.roomSettings.body.roomId;
     const roomPass = this.roomSettings.body.roomPass;
 
     console.log('[log] Старт приложения ...');
-
-    /* check params */
-    if (!this.state) { return console.log('[Err] Отсутствует state!'); }
-    if (!this.update) { return console.log('[Err] Отсутствует update!'); }
-    if (this.roomSettings === undefined) { return console.log('[Err] Отсутствуют данные комнаты!'); }
 
     /* change settings */
     const defaultSettings = {
