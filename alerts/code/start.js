@@ -6,7 +6,7 @@ const start = [
   {
     type: 'ALERT',
     title: 'Добро пожаловать в appex!',
-    text: 'Рад приветствоавть вас в своей системе. Пройдите обучение, чтобы лучше разбираться в ней.',
+    text: 'Рад приветствоавть вас в своей системе. Пройдите обучение, чтобы лучше разбираться в ней',
     code: false,
   },
   {
@@ -18,9 +18,15 @@ const start = [
   {
     type: 'POP_UP',
     text: 'Нажав сюда, вы создадите новую комнату',
-    target: '#room-card-plus-wrap',
+    target: '#room-card__plus',
     code: false,
-  }
+  },
+  {
+    type: 'ALERT',
+    title: 'Приятного пользования!',
+    text: 'Теперь вы умеете пользоваться этим меню',
+    code: false,
+  },
 ]
 
 module.exports = start;
