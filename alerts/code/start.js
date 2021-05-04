@@ -25,7 +25,7 @@ const start = [
     type: 'ALERT',
     title: 'Приятного программирования!',
     text: 'Теперь вы умеете пользоваться этим меню',
-    code: false,
+    code: 'alert("end!");',
   },
 ]
 

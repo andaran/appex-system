@@ -68,6 +68,17 @@ export default class AlertsView {
         </div>  
     `
     document.getElementById('root').append(elem);
+
+    /* play js */
+    if (conf.code) {
+      try {
+        const code = Function(conf.code);
+        code();
+      } catch (e) {
+        console.log('Ahtung in play code', e);
+      }
+    }
+
     return elem;
   }
 
@@ -116,6 +127,16 @@ export default class AlertsView {
     let top = cords.y - deltaHeight;
     if (top < popUp.offsetHeight + 10) { top = popUp.offsetHeight + 10 }
     popUp.style.top = top + 'px';
+
+    /* play js */
+    if (conf.code) {
+      try {
+        const code = Function(conf.code);
+        code();
+      } catch (e) {
+        console.log('Ahtung in play code', e);
+      }
+    }
 
     return elem;
   }
