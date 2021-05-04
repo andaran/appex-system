@@ -14,8 +14,11 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { connect } from 'react-redux';
 import { fetchProjects } from '../../../actions/projectsActions';
 import { fetchRooms } from '../../../actions/roomsActions';
+import { fetchUser } from "../../../actions/userActions";
 import { switchModalState } from '../../../actions/projectsModalActions';
 import Message from "../../../tools/message/Message";
+
+import AlertsView from "../../../tools/alerts/alertsView";
 
 /* Component */
 class ProjectsWrap extends React.Component {
@@ -146,6 +149,13 @@ class ProjectsWrap extends React.Component {
 
     document.getElementById(`project-card-plus-wrap`).addEventListener('click', this.newProject);
     document.getElementById(`room-card-plus-wrap`).addEventListener('click', this.newRoom);
+
+
+
+    /*   ---==== Alerts ====---   */
+
+    const alerts = new AlertsView(this.props.user.alerts, 'ProjectsWrap', this.props.fetchUser);
+    alerts.run();
   }
 
   componentWillUnmount() {
@@ -237,6 +247,9 @@ function mapDispatchToProps(dispatch) {
     },
     switchModalState: (state, mode) => {
       dispatch(switchModalState(state, mode))
+    },
+    fetchUser: () => {
+      dispatch(fetchUser())
     }
   }
 }

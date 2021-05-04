@@ -116,6 +116,8 @@
     padding: 0 26px
     margin: 14px
 
+
+
 /*   ---==== Interpreter ====---   */
 
 .interpreter
@@ -172,3 +174,92 @@
 
   100%
     opacity: 0
+
+
+
+/*   ---==== Alerts ====---   */
+
+/* alert */
+
+#system-alert-wrap, #system-pop-up-wrap
+  position: absolute
+  background: rgba(0, 0, 0, .2)
+  width: 100%
+  height: 100%
+  z-index: 1000
+  display: flex
+  justify-content: center
+  align-items: center
+  margin: 0
+  padding: 0
+  top: 0
+  right: 0
+
+#system-alert, #system-pop-up
+  position: absolute
+  padding: 0
+  width: 500px
+  background: white
+  border-radius: 5px
+  border: 1px solid lightgray
+
+  @media all and (max-width: 500px)
+    width: calc(100% - 10px)
+
+  &__main
+    padding: 14px
+
+  &__buttons
+    display: flex
+    justify-content: flex-end
+    align-items: center
+    background: rgba(0, 0, 0, .08)
+    padding: 3px
+
+    div
+      color: black
+      height: 26px
+      text-align: center
+      border-radius: 2px
+      box-shadow: 0 -3px rgba(0, 0, 0, .2) inset
+      margin: 3px
+      padding: 1px 8px 0 8px
+      font-weight: 400
+      font-size: 14px
+      background: #ffffff
+      user-select: none
+      cursor: pointer
+
+/* pop up */
+
+.top-index
+  position: relative
+  z-index: 1001
+  pointer-events: none
+
+#system-pop-up-wrap
+  background: rgba(0, 0, 0, .5)
+
+#system-pop-up
+  width: auto
+  max-width: 300px
+  border-radius: 2px
+  border: 1px solid white
+
+#system-pop-up-corner-wrap
+  position: absolute
+  width: 100%
+  height: 100%
+  top: 0
+  right: 0
+  display: flex
+  justify-content: center
+  align-items: center
+  z-index: -1
+
+#system-pop-up-corner
+  width: 20px
+  height: 20px
+  transform: rotate(45deg)
+  position: absolute
+  background: white

@@ -1,7 +1,7 @@
 const start = [
   {
     type: 'CONFIGURATION',
-    component: 'Projects',
+    component: 'ProjectsWrap',
     renew: false
   },
   {
