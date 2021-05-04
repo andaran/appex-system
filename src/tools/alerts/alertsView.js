@@ -188,7 +188,7 @@ export default class AlertsView {
           elem = this.sendPopUp(chain);
           break;
         default:
-          return resolve(false);
+          return resolve(true);
       }
 
       if (!elem) { resolve(true); }
