@@ -28,7 +28,6 @@ export default class AlertsView {
       if (elem.type !== 'CONFIGURATION') { alerts.push(elem); }
     });
 
-    document.documentElement.style.overflow = 'hidden';
     this.step(alerts);
   }
 

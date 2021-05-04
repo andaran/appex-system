@@ -19,7 +19,8 @@ const start = [
     type: 'POP_UP',
     text: 'Нажав сюда, вы создадите новую комнату',
     target: '#room-card__plus',
-    code: false,
+    code: `document.documentElement.scrollTop = 
+           document.documentElement.scrollHeight - document.documentElement.clientHeight`,
   },
   {
     type: 'ALERT',

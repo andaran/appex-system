@@ -182,7 +182,7 @@
 /* alert */
 
 #system-alert-wrap, #system-pop-up-wrap
-  position: absolute
+  position: fixed
   background: rgba(0, 0, 0, .5)
   width: 100%
   height: 100%
@@ -237,6 +237,19 @@
   z-index: 1001
   pointer-events: none
 
+  @media all and (max-width: 500px)
+    &::before
+      content: ''
+      position: absolute
+      margin: auto
+      width: 20px
+      height: 20px
+      border-left: 2px solid white
+      border-bottom: 2px solid white
+      top: -35px
+      left: 10px
+      transform: rotate(-45deg)
+
 #system-pop-up-wrap
   background: rgba(0, 0, 0, .5)
 
@@ -245,6 +258,11 @@
   max-width: 300px
   border-radius: 2px
   border: 1px solid white
+
+  @media all and (max-width: 500px)
+    min-width: calc(100% - 10px) !important
+    top: 5px !important
+    left: 5px !important
 
 #system-pop-up-corner-wrap
   position: absolute
@@ -263,3 +281,6 @@
   transform: rotate(45deg)
   position: absolute
   background: white
+
+  @media all and (max-width: 500px)
+    display: none
