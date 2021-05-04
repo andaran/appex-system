@@ -107,6 +107,25 @@ router.post('/delete_user', (req, res) => {
   });
 });
 
+router.post('/remove_alerts_chains', (req, res) => {
+
+  /* find user */
+  User.findOne({ username: req.user.username }).then(foundUser => {
+    if (foundUser === null) { return res.json({ status: 'err' }); }
+
+    /* remove alerts chains */
+    const alerts = foundUser.alerts;
+    alerts.splice(alerts.findIndex(elem => elem === req.body.chains), 1);
+
+    /* update user */
+    User.updateOne({ username: req.user.username }, { $set: { alerts } }).then(user => {
+      res.json({ status: 'ok' });
+      }, err => {
+      res.json({ status: 'err' });
+    }).catch(err => res.json({ status: 'err' }));
+  });
+});
+
 
 
 /*   ---==== Projects ====---   */

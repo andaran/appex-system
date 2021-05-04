@@ -41,14 +41,12 @@ export default class AlertsView {
     let config = false;
     let alertChains = false;
     for (const chain of chains) {
-      console.log('check', this.check(chain), chain);
       if (this.check(chain)) {
         config = this.check(chain);
         alertChains = chain;
         break;
       }
     }
-    console.log('config', config);
     return { config, alertChains };
   }
 
