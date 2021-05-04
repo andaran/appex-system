@@ -2,18 +2,23 @@ const start = [
   {
     type: 'CONFIGURATION',
     component: 'ProjectsWrap',
-    renew: false
   },
   {
     type: 'ALERT',
     title: 'Добро пожаловать в appex!',
-    text: 'Рад приветствоавть вас в своей системе. Пройдите обучение, чтобы лучше разбираться в системе.',
+    text: 'Рад приветствоавть вас в своей системе. Пройдите обучение, чтобы лучше разбираться в ней.',
     code: false,
   },
   {
     type: 'POP_UP',
-    text: 'test',
-    target: '#test-button',
+    text: 'С помощью этой кнопки можно создать новое приложение',
+    target: '#project-card__plus',
+    code: false,
+  },
+  {
+    type: 'POP_UP',
+    text: 'Нажав сюда, вы создадите новую комнату',
+    target: '#room-card-plus-wrap',
     code: false,
   }
 ]
