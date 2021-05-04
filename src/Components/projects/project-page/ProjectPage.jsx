@@ -47,7 +47,9 @@ import Window from '../create-app-window/CreateAppWindow';
 import Wrap from '../../../tools/modal-wrap/ModalWrap';
 import {connectToDevRoom, socket, updateAppCode} from '../../../socketCore';
 import { changeAppState } from "../../../actions/appStateActions";
+import { fetchUser } from "../../../actions/userActions";
 import { Link } from "react-router-dom";
+import AlertsView from "../../../tools/alerts/alertsView";
 
 /* Component */
 class ProjectPage extends React.Component {
@@ -263,6 +265,13 @@ class ProjectPage extends React.Component {
 
     /* connect to devRoom */
     connectToDevRoom(this.id);
+
+
+
+    /*   ---==== Alerts ====---   */
+
+    const alerts = new AlertsView(this.props.user.alerts, 'ProjectPage', this.props.fetchUser);
+    alerts.run();
   }
 
   componentWillUnmount() {
@@ -564,6 +573,9 @@ function mapDispatchToProps(dispatch) {
     },
     changeAppState: (changedState) => {
       dispatch(changeAppState(changedState))
+    },
+    fetchUser: () => {
+      dispatch(fetchUser())
     },
   }
 }

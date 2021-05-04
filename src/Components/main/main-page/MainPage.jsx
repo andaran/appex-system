@@ -1,9 +1,11 @@
 import React from 'react';
 
 import { changeAppState } from "../../../actions/appStateActions";
+import { fetchUser } from "../../../actions/userActions";
 import { connect } from "react-redux";
 import { request } from "../../../tools/apiRequest/apiRequest";
 import { Link } from "react-router-dom";
+import AlertsView from "../../../tools/alerts/alertsView";
 
 import AppIcon from '../app-icon/AppIcon';
 import SuperButton from '../super-button/SuperButton';
@@ -332,6 +334,12 @@ class MainPage extends React.Component {
     /* render all interpreters */
     this.setState({ interpreters });
 
+
+
+    /*   ---==== Alerts ====---   */
+
+    const alerts = new AlertsView(this.props.user.alerts, 'MainPage', this.props.fetchUser);
+    alerts.run();
   }
 
   touchStart(event) {
@@ -485,6 +493,9 @@ function mapDispatchToProps(dispatch) {
   return {
     changeAppState: (changedState) => {
       dispatch(changeAppState(changedState))
+    },
+    fetchUser: () => {
+      dispatch(fetchUser())
     },
   }
 }
