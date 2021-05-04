@@ -1,6 +1,5 @@
-/*
 
-/!* import sockets *!/
+/* import sockets */
 import io from 'socket.io-client';
 
 const port = 3001;
@@ -33,13 +32,13 @@ export class App {
 
   }
 
-  /!* get app object *!/
+  /* get app object */
   getApp() { return this.app; }
 
-  /!* start app *!/
+  /* start app */
   start() {
 
-    /!* check params *!/
+    /* check params */
     if (!this.state) { return console.log('[Err] Отсутствует state!'); }
     if (!this.update) { return console.log('[Err] Отсутствует update!'); }
     if (!this.roomSettings) { return console.log('[Err] Отсутствуют данные комнаты!'); }
@@ -50,13 +49,13 @@ export class App {
 
     console.log('[log] Старт приложения ...');
 
-    /!* change settings *!/
+    /* change settings */
     const defaultSettings = {
       awaitResponse: true,
     }
     this.settings = { ...defaultSettings, ...this.settings };
 
-    /!* connect to room *!/
+    /* connect to room */
     // socket.emit('disconnectFromRoom', { roomId });
     socket.emit('connectToRoom', { roomId, roomPass, currentState: this.state });
     this.runFlag = true;
@@ -79,7 +78,7 @@ export class App {
 
   init() {
 
-    /!* init app *!/
+    /* init app */
     socket.on('connectSuccess', state => {
       if (!this.runFlag) { return; }
       this.state = { ...this.state, ...state };
@@ -87,11 +86,11 @@ export class App {
       this.update( this.state );
     });
 
-    /!* update *!/
+    /* update */
     socket.on('updateState', state => {
       if (!this.runFlag) { return; }
 
-      /!* update if id is true *!/
+      /* update if id is true */
       if (state.roomId === this.roomSettings.body.roomId) {
         this.state = { ...this.state, ...state.params };
         this.update( this.state );
@@ -99,7 +98,7 @@ export class App {
       }
     });
 
-    /!* error *!/
+    /* error */
     socket.on('error', err => {
       if (!this.runFlag) { return; }
       switch (err.type) {
@@ -129,4 +128,3 @@ export class App {
     }
   }
 }
-*/
