@@ -12,7 +12,7 @@ export default class ChangePass extends React.Component {
     super (props);
 
     this.state = {
-      errs: ['', '', '', '', ''],
+      errs: ['', '', '', ''],
     }
 
     // bind
@@ -50,15 +50,6 @@ export default class ChangePass extends React.Component {
         { errs[0] }
         <div className="reg-window__input-item">
           <div className="reg-window__item-block">
-            <FontAwesomeIcon icon={ faUnlock } />
-          </div>
-          <div className="reg-window__item-block">
-            <input type="password" placeholder="старый пароль" id="reg-password" className="reg-window__input"/>
-          </div>
-        </div>
-        { errs[1] }
-        <div className="reg-window__input-item">
-          <div className="reg-window__item-block">
             <FontAwesomeIcon icon={ faEnvelope } />
           </div>
           <div className="reg-window__item-block">
@@ -68,7 +59,7 @@ export default class ChangePass extends React.Component {
             </div>
           </div>
         </div>
-        { errs[2] }
+        { errs[1] }
         <div className="reg-window__input-item">
           <div className="reg-window__item-block">
             <FontAwesomeIcon icon={ faKey } />
@@ -77,7 +68,7 @@ export default class ChangePass extends React.Component {
             <input type="text" placeholder="ключ" id="reg-key" className="reg-window__input"/>
           </div>
         </div>
-        { errs[3] }
+        { errs[2] }
         <div className="reg-window__input-item">
           <div className="reg-window__item-block">
             <FontAwesomeIcon icon={ faLock } />
@@ -86,14 +77,14 @@ export default class ChangePass extends React.Component {
             <input type="text" placeholder="новый пароль" id="reg-new-password" className="reg-window__input"/>
           </div>
         </div>
-        { errs[4] }
+        { errs[3] }
         <div className="reg-window__input-item">
           <div className="reg-window__button reg-window__button_green" id="reg-btn">
             Сменить пароль!
           </div>
         </div>
         <div className="reg-window__under-text">
-          Введите логин / пароль и email. На него вам придет код для создания нового пароля.
+          Введите логин и email. На него вам придет код для создания нового пароля.
         </div>
         <div className="reg-window__under-text reg-window__under-text_not-first">
           Перейти на
@@ -120,39 +111,33 @@ export default class ChangePass extends React.Component {
   }
 
   btnClicked() {
+
     /* Clear warnings */
     this.setState({
-      errs: ['', '', '', '', '']
+      errs: ['', '', '', '']
     });
 
     const username = document.getElementById('reg-username').value;
-    const password = document.getElementById('reg-password').value;
+    const password = document.getElementById('reg-new-password').value;
 
     /* username */
-    if (username.length === 0 && password.length === 0) {
+    if (username.length === 0) {
       this.setState({
-        errs: ['Введите имя пользователя или пароль!', '', '', '', '']
+        errs: ['Введите имя пользователя!', '', '', '']
       });
       return;
     }
     if (false) {
       this.setState({
-        errs: ['Такой пользователь уже есть в системе!', '', '', '']
+        errs: ['Такой пользователь уже есть в системе!', '', '']
       });
       return;
     }
 
     /* password */
-    if (password.length === 0 && username.length === 0) {
-      this.setState({
-        errs: ['', 'Введите пароль или имя пользователя!', '', '', '']
-      });
-      return;
-    }
-
     if (!/(?=.*[0-9])(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z])/.test(password) && username.length === 0) {
       this.setState({
-        errs: ['', 'Слишком легкий пароль!', '', '', '']
+        errs: ['', '', '', 'Слишком легкий пароль!']
       });
       return;
     }
@@ -160,7 +145,7 @@ export default class ChangePass extends React.Component {
     const email = document.getElementById('reg-email').value;
     if (!/\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,6}/.test(email)) {
       this.setState({
-        errs: ['', '', 'Неверно введен email адрес!', '', '']
+        errs: ['', 'Неверно введен email адрес!', '', '']
       });
       return;
     }
@@ -168,7 +153,7 @@ export default class ChangePass extends React.Component {
     const code = document.getElementById('reg-key').value;
     if (!/[0-9a-zA-Z!@#$%^&*]{8}/.test(code)) {
       this.setState({
-        errs: ['', '', '', 'Неверный формат кода! Он должен прийти вам на почту.', '']
+        errs: ['', '', 'Неверный формат кода! Он должен прийти вам на почту.', '']
       });
       return;
     } 
