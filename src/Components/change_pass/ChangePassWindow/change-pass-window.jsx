@@ -13,11 +13,18 @@ export default class ChangePass extends React.Component {
 
     this.state = {
       errs: ['', '', '', ''],
+      emailCode: false,
+      password: '',
+      email: '',
+      username: '',
+      code: '',
+      codeID: '',
     }
 
     // bind
     this.btnClicked = this.btnClicked.bind(this);
     this.hotkey = this.hotkey.bind(this);
+    this.sendCode = this.sendCode.bind(this);
   }
 
   render() {
@@ -32,6 +39,15 @@ export default class ChangePass extends React.Component {
         );
       }
     });
+
+    let codeButton = null;
+    if (!this.state.emailCode) {
+      codeButton = (
+        <div className="reg-window__input-button" id="send-code-button">
+          <FontAwesomeIcon icon={ faPaperPlane } />
+        </div>
+      );
+    }
 
     return (
       <div className="reg-window reg-window_center">
@@ -54,9 +70,7 @@ export default class ChangePass extends React.Component {
           </div>
           <div className="reg-window__item-block">
             <input type="text" placeholder="почта" id="reg-email" className="reg-window__input"/>
-            <div className="reg-window__input-button">
-              <FontAwesomeIcon icon={ faPaperPlane } /> 
-            </div>
+            { codeButton }
           </div>
         </div>
         { errs[1] }
@@ -97,11 +111,17 @@ export default class ChangePass extends React.Component {
   componentDidMount() {
     document.getElementById('reg-btn').addEventListener('click', this.btnClicked);
     document.addEventListener('keydown', this.hotkey);
+    if (!this.state.emailCode) {
+      document.getElementById('send-code-button').addEventListener('click', this.sendCode);
+    }
   }
 
   componentWillUnmount() {
     document.getElementById('reg-btn').removeEventListener('click', this.btnClicked);
     document.removeEventListener('keydown', this.hotkey);
+    if (!this.state.emailCode) {
+      document.getElementById('send-code-button').removeEventListener('click', this.sendCode);
+    }
   }
 
   hotkey(event) {
@@ -110,7 +130,7 @@ export default class ChangePass extends React.Component {
     }
   }
 
-  btnClicked() {
+  async btnClicked() {
 
     /* Clear warnings */
     this.setState({
@@ -118,30 +138,122 @@ export default class ChangePass extends React.Component {
     });
 
     const username = document.getElementById('reg-username').value;
+    if (username.length < 3) {
+      this.setState({
+        errs: ['Слишком короткое имя пользователя!', '', '', '']
+      });
+      return;
+    } else {
+
+      /* checking username available */
+      const body = JSON.stringify({ username });
+      await fetch('/sign_up/is_param_available', {
+        method: "POST",
+        headers: {
+          'Accept': 'application/json, text/plain, */*',
+          'Content-Type': 'application/json',
+        },
+        body
+      }).then(res => res.text()).then(text => {
+        if (text !== 'used') {
+          this.setState({
+            errs: ['Такого пользователя нет в системе!', '', '', '']
+          });
+          return;
+        } else { this.setState({ username }); }
+      }).catch(err => console.log('Ahtung in checking username!', new Error(err)));
+    }
+
     const password = document.getElementById('reg-new-password').value;
-
-    /* username */
-    if (username.length === 0) {
-      this.setState({
-        errs: ['Введите имя пользователя!', '', '', '']
-      });
-      return;
-    }
-    if (false) {
-      this.setState({
-        errs: ['Такой пользователь уже есть в системе!', '', '']
-      });
-      return;
-    }
-
-    /* password */
-    if (!/(?=.*[0-9])(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z])/.test(password) && username.length === 0) {
+    if (!/[0-9a-z]{6,}/.test(password)) {
       this.setState({
         errs: ['', '', '', 'Слишком легкий пароль!']
       });
       return;
+    } else { this.setState({ password }); }
+
+    const email = document.getElementById('reg-email').value;
+    if (!/\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,6}/.test(email)) {
+      this.setState({
+        errs: ['', 'Неверно введен email адрес!', '', '']
+      });
+      return;
+    } else {
+
+      /* checking email available */
+      const body = JSON.stringify({ email });
+      await fetch('/sign_up/is_param_available', {
+        method: "POST",
+        headers: {
+          'Accept': 'application/json, text/plain, */*',
+          'Content-Type': 'application/json',
+        },
+        body
+      }).then(res => res.text()).then(text => {
+        if (text !== 'used') {
+          this.setState({
+            errs: ['', 'Такого адреса нет в системе!', '', ''], emailCode: false
+          });
+          return;
+        } else { this.setState({ email }); }
+      }).catch(err => console.log('Ahtung in checking email!', new Error(err)));
     }
 
+    const code = document.getElementById('reg-key').value;
+    if (!/[0-9a-zA-Z]{8}/.test(code)) {
+      this.setState({
+        errs: ['', '', 'Неверный формат кода! Он должен прийти вам на почту.', '']
+      });
+      return;
+    } else { this.setState({ code }); }
+
+    /* if email code isn`t posted */
+    if (this.state.email === '' || this.state.codeID === '' || !this.state.emailCode) {
+      this.setState({
+        errs: ['', '', 'Вы не отправили код!', '']
+      });
+      return;
+    }
+
+    /* if all data is here */
+    if (this.state.username === '' || this.state.password === '') { return; }
+
+    /* if all is ok */
+    const body = JSON.stringify({
+      username: this.state.username,
+      newPassword: this.state.password,
+      email: this.state.email,
+      code: this.state.code,
+      codeID: this.state.codeID,
+    });
+
+    fetch('/change_password/', {
+      method: "POST",
+      headers: {
+        'Accept': 'application/json, text/plain, */*',
+        'Content-Type': 'application/json',
+      },
+      body
+    }).then(response => response.text()).then(text => {
+      switch (text) {
+        case 'ok':
+          console.log('ok!');
+          document.location.href = '/sign_in';
+          break;
+        case 'invalidCode':
+          this.setState({ errs: ['', '', 'Неправильный код!', ''] });
+          break;
+        case 'used':
+          this.setState({ errs: ['Такие username или email уже существуют!', '', '', ''], emailCode: false });
+          break;
+        default:
+          this.setState({ errs: ['Неизвестная ошибка :(', '', '', ''] });
+          break;
+      }
+    });
+  }
+
+  sendCode() {
     const email = document.getElementById('reg-email').value;
     if (!/\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,6}/.test(email)) {
       this.setState({
@@ -150,12 +262,23 @@ export default class ChangePass extends React.Component {
       return;
     }
 
-    const code = document.getElementById('reg-key').value;
-    if (!/[0-9a-zA-Z!@#$%^&*]{8}/.test(code)) {
-      this.setState({
-        errs: ['', '', 'Неверный формат кода! Он должен прийти вам на почту.', '']
-      });
-      return;
-    } 
+    /* generate code and send email */
+    const body = JSON.stringify({ email });
+    fetch('/change_password/secure_code', {
+      method: "POST",
+      headers: {
+        'Accept': 'application/json, text/plain, */*',
+        'Content-Type': 'application/json',
+      },
+      body
+    }).then(res => res.json()).then(body => {
+      if (body.status !== 'ok') {
+        this.setState({
+          errs: ['', '', 'Ошибка отправки кода. Попробуйте еще раз.', ''],
+          emailCode: false,
+        });
+        return; }
+      this.setState({ emailCode: true, email, codeID: body.codeID });
+    });
   }
 } 

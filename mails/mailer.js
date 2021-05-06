@@ -11,7 +11,7 @@ const options = {
   viewEngine: {
     extname: '.hbs',
     layoutsDir: path.join(__dirname, 'layouts'),
-    defaultLayout : 'code.hbs',
+    defaultLayout : 'default.hbs',
   },
   viewPath: path.join(__dirname, 'layouts'),
   extName: '.hbs'

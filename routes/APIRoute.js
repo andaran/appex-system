@@ -120,7 +120,7 @@ router.post('/remove_alerts_chains', (req, res) => {
     /* update user */
     User.updateOne({ username: req.user.username }, { $set: { alerts } }).then(user => {
       res.json({ status: 'ok' });
-      }, err => {
+    }, err => {
       res.json({ status: 'err' });
     }).catch(err => res.json({ status: 'err' }));
   });

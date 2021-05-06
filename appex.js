@@ -22,6 +22,7 @@ const port = +process.env.port || 3001;
 const APIRoute = require(path.join(__dirname, 'routes', 'APIRoute.js'));
 const registerRoute = require(path.join(__dirname, 'routes', 'registerRoute.js'));
 const loginRoute = require(path.join(__dirname, 'routes', 'loginRoute.js'));
+const changePassRoute = require(path.join(__dirname, 'routes', 'changePassRoute.js'));
 
 /* models */
 const User = require(path.join(__dirname, 'models', 'user.js'));
@@ -107,6 +108,9 @@ app.use('/sign_up', registerRoute);
 
 /* sign in */
 app.use('/sign_in', loginRoute);
+
+/* change password */
+app.use('/change_password', changePassRoute);
 
 /* secure urls */
 app.all('/api', mustBeAuth);
