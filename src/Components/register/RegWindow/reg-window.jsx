@@ -161,7 +161,7 @@ export default class RegWindow extends React.Component {
     }
 
     const password = document.getElementById('reg-password').value;
-    if (!/(?=.*[0-9])(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z!@#$%^&*]{6,}/.test(password)) {
+    if (!/[0-9a-z]{6,}/.test(password)) {
       this.setState({
         errs: ['', 'Слишком легкий пароль!', '', '']
       });
