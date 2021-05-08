@@ -34,7 +34,6 @@ export class App extends EventEmitter {
     this.roomId = false;
     this.roomPass = false;
     this.settings = {};
-    this.runFlag = false;
 
     this.socket = socket;
 
@@ -68,7 +67,6 @@ export class App extends EventEmitter {
 
     /* connect to room */
     socket.emit('connectToRoom', { roomId, roomPass, currentState: this.state });
-    this.runFlag = true;
   }
 
   send(params) {
@@ -90,7 +88,6 @@ export class App extends EventEmitter {
 
     /* init app */
     socket.on('connectSuccess', state => {
-      if (!this.runFlag) { return; }
       this.state = { ...this.state, ...state };
       this.update ? this.update(this.state) : this.emit('update', this.state);
       console.log('[log] Приложение подключено!');
@@ -98,7 +95,6 @@ export class App extends EventEmitter {
 
     /* update */
     socket.on('updateState', state => {
-      if (!this.runFlag) { return; }
 
       /* update if id is true */
       if (state.roomId === this.roomSettings.body.roomId) {
@@ -111,17 +107,7 @@ export class App extends EventEmitter {
     /* error */
     socket.on('err', err => {
       this.error ? this.error(err) : this.emit('err', err);
-      switch (err.type) {
-        case 'RoomNotFound':
-          console.log('[Err] Неверный id или пароль комнаты!');
-          break;
-        case 'UnknownError':
-          console.log('[Err] Ошибка подключения!');
-          break;
-        default:
-          console.log(`[Err] ${ err.type }`);
-          break;
-      }
+      console.log(`[Err] ${ err.type }`);
     });
   }
 }
