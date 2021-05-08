@@ -1,20 +1,23 @@
 
 /* начальное состояние */
-let state = {
-    isOnline: false,
+App.state = {
+    status: false,
 }
 
 /* настройки */
-const settings = {
+App.settings = {
     awaitResponse: true,
 }
 
 /* обновление состояния */
-const update = (newState) => {
-    state = newState;
-}
+App.on('update', state => {
+    // Ваш код здесь
+});
 
-App.settings = settings;
-App.state = state;
-App.update = update;
+/* ошибка */
+App.on('error', error => {
+    // Ваш код здесь
+});
+
+/* запускаем приложение */
 App.start();
