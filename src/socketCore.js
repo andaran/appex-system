@@ -30,6 +30,7 @@ export class App extends EventEmitter {
 
     this.state = false;
     this.update = false;
+    this.error = false;
     this.roomId = false;
     this.roomPass = false;
     this.settings = {};
@@ -109,7 +110,6 @@ export class App extends EventEmitter {
 
     /* error */
     socket.on('error', err => {
-      if (!this.runFlag) { return; }
       this.error ? this.error(err) : this.emit('error', err);
       switch (err.type) {
         case 'RoomNotFound':

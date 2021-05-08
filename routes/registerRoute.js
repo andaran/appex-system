@@ -8,6 +8,7 @@ const { uid } = require('rand-token');
 const bcrypt = require('bcrypt');
 const mailer = require(path.join(__dirname, '../', 'mails', 'mailer.js'));
 const generateUserId = require(path.join(__dirname, '../', 'IdActions', 'generateUserID.js'));
+const createStartApp = require(path.join(__dirname, '../', 'startApp', 'sender.js'));
 
 /* alerts */
 const start = require(path.join(__dirname, '../', 'alerts', 'code', 'start.js'));
@@ -70,6 +71,10 @@ router.post('/', (req, res) => {
 
           /* save new user */
           user.save().then(newUser => {
+
+            /* create start app */
+            createStartApp(userId);
+
             res.send('ok');
           }, err => {
             res.send('err');

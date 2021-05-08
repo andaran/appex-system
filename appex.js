@@ -240,9 +240,9 @@ io.on('connection', (socket) => {
     socket.to(data.roomId).emit('error', data);
   });
 
+
+
   /*   ---==== Development ====---   */
-
-
 
   /* connect to devRoom */
   socket.on('connectToDevRoom', data => {
