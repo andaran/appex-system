@@ -119,6 +119,18 @@ class ProjectPage extends React.Component {
       );
     }
 
+    /* if the screen is too small */
+    const width = document.documentElement.offsetWidth;
+    const height = document.documentElement.offsetHeight;
+    if (width < 1080 || height < 910) {
+      return (
+        <Message type={false}
+                 text="Ваш экран слишком маленький для отображения редактора кода"
+                 underText="Попробуйте открыть на более большом мониторе или уменьмить масштаб"
+                 center={true}/>
+      );
+    }
+
     /* find app */
     if (this.props.projects.length !== 0) {
       this.app = this.props.projects.find(elem => elem.id === this.id);
