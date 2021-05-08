@@ -1,7 +1,7 @@
 const main = [
   {
     type: 'CONFIGURATION',
-    component: 'ProjectsWrap',
+    component: 'MainPage',
   },
   {
     type: 'ALERT',
@@ -13,10 +13,8 @@ const main = [
     type: 'ALERT',
     title: 'Ожидайте ...',
     text: 'Сейчас вас перенаправит на страницу проектов',
-    code: `
-    window.location.href = window.location.href.replace('/main', '') + '/projects';
-    `,
-  },
+    code: "window.location.href = window.location.href.replace('/main', '') + '/projects';",
+  }
 ]
 
 module.exports = main;

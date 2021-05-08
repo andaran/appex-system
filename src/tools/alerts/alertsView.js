@@ -113,6 +113,7 @@ export default class AlertsView {
     const popUp = elem.querySelector("#system-pop-up");
     const corner = elem.querySelector("#system-pop-up-corner");
     const width = document.documentElement.offsetWidth;
+    const height = document.documentElement.offsetHeight;
 
     if (cords.right > (width / 2)) {
       corner.style.right = '-10px';
@@ -124,7 +125,14 @@ export default class AlertsView {
 
     const deltaHeight = (popUp.offsetHeight - cords.height) / 2;
     let top = cords.y - deltaHeight;
-    if (top < popUp.offsetHeight + 10) { top = popUp.offsetHeight + 10 }
+    if (top < 10) {
+      top = 10
+      corner.style.top = 10 + 'px';
+    }
+    if (top > height - popUp.offsetHeight - 10) {
+      top = height - popUp.offsetHeight - 10
+      corner.style.bottom = 10 + 'px';
+    }
     popUp.style.top = top + 'px';
 
     /* play js */
