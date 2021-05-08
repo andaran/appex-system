@@ -1,7 +1,7 @@
 
 /* начальное состояние */
 App.state = {
-  status: false,
+  status: true,
 }
 
 /* настройки */

@@ -2,6 +2,7 @@ const main = [
   {
     type: 'CONFIGURATION',
     component: 'MainPage',
+    name: 'main',
   },
   {
     type: 'ALERT',

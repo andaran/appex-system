@@ -2,6 +2,7 @@ const project = [
   {
     type: 'CONFIGURATION',
     component: 'ProjectPage',
+    name: 'project',
   },
   {
     type: 'ALERT',

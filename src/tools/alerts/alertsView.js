@@ -21,6 +21,7 @@ export default class AlertsView {
     const chains = this.find(this.mess);
     if (!chains.config) { return false; }
     this.chains = chains.alertChains;
+    this.config = chains.config;
 
     const alerts = [];
 
@@ -149,7 +150,7 @@ export default class AlertsView {
   }
 
   end() {
-    request('/api/remove_alerts_chains', { chains: this.chains })
+    request('/api/remove_alerts_chains', { name: this.config.name })
       .then(res => res.json()).then(body => {
         if (body.status === 'ok') {
           this.fetchUser();

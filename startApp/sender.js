@@ -10,6 +10,16 @@ const App = require(path.join(__dirname, '../', 'models', 'app.js'));
 const Room = require(path.join(__dirname, '../', 'models', 'room.js'));
 const User = require(path.join(__dirname, '../', 'models', 'user.js'));
 
+/* alerts */
+const start = require(path.join(__dirname, '../', 'alerts', 'code', 'start.js'));
+const main = require(path.join(__dirname, '../', 'alerts', 'code', 'main.js'));
+const project = require(path.join(__dirname, '../', 'alerts', 'code', 'project.js'));
+
+/* alerts obj */
+const alerts = {
+  start, main, project,
+}
+
 
 
 /*   ---==== Start app sender ====---   */
@@ -55,7 +65,7 @@ const createStartApp = (userId) => {
     generateRoomId().then(roomId => {
 
       /* create app object */
-      const state = JSON.stringify({ lastChange: Date.now() });
+      const state = JSON.stringify({ lastChange: Date.now(), status: true });
       const roomPass = '123';
       let roomObj = {
         author: userId,
@@ -80,7 +90,12 @@ const createStartApp = (userId) => {
           }
           User.updateOne(
             { id: userId },
-            { $addToSet: { settings: settings } }
+            { $addToSet:
+                {
+                  settings: settings,
+                  alerts: [main, start, project]
+                }
+            }
           ).catch(err => console.log('Error in creating start user settings!', err));
 
         }).catch(err => console.log('Error in creating start room!', err));

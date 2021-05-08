@@ -2,13 +2,14 @@ const start = [
   {
     type: 'CONFIGURATION',
     component: 'ProjectsWrap',
+    name: 'start',
   },
   {
     type: 'ALERT',
     title: 'Проекты',
     text: 'Перед вами страница проектов. Жмите далее, чтобы проходить обучение.',
     code: `
-    const body = JSON.stringify([  {    type: 'CONFIGURATION',    component: 'MainPage',  },  {    type: 'ALERT',    title: 'Добро пожаловать в appex!',    text: 'Рад приветствоавть вас в своей системе. Сейчас вы находитесь на главной странице. Нажмите далее, чтобы перейти на страницу проектов и пройти обучение.',    code: false,  },  {    type: 'ALERT',    title: 'Ожидайте ...',    text: 'Сейчас вас перенаправит на страницу проектов',    code: "window.location.href = window.location.href.replace('/main', '') + '/projects';",  }]);
+    const body = JSON.stringify({ name: 'main' });
     fetch('/api/remove_alerts_chains', {
       method: "POST",
       headers: {

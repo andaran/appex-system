@@ -115,7 +115,11 @@ router.post('/remove_alerts_chains', (req, res) => {
 
     /* remove alerts chains */
     const alerts = foundUser.alerts;
-    alerts.splice(alerts.findIndex(elem => elem === req.body.chains), 1);
+    const index = alerts.findIndex(chains => {
+      const fined = chains.find(chain => chain.name === req.body.name);
+      if (fined) { return true; }
+    });
+    alerts.splice(index, 1);
 
     /* update user */
     User.updateOne({ username: req.user.username }, { $set: { alerts } }).then(user => {
