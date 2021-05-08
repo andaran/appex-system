@@ -109,8 +109,8 @@ export class App extends EventEmitter {
     });
 
     /* error */
-    socket.on('error', err => {
-      this.error ? this.error(err) : this.emit('error', err);
+    socket.on('err', err => {
+      this.error ? this.error(err) : this.emit('err', err);
       switch (err.type) {
         case 'RoomNotFound':
           console.log('[Err] Неверный id или пароль комнаты!');

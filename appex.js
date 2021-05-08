@@ -168,9 +168,9 @@ io.on('connection', (socket) => {
             .then(info => {}, err => {});
         }
       } else {
-        socket.emit('error', { type: 'RoomNotFound', roomId: data.roomId });
+        socket.emit('err', { type: 'RoomNotFound', roomId: data.roomId });
       }
-    }, err => socket.emit('error', { type: 'UnknownError', roomId: data.roomId }));
+    }, err => socket.emit('err', { type: 'UnknownServerError', roomId: data.roomId }));
   });
 
   /* update state */
@@ -184,7 +184,7 @@ io.on('connection', (socket) => {
 
     /* send err if over 600 reqs in list */
     if (req && req.timeout - Date.now() > 0 && req.count > 600) {
-      return socket.emit('error', { type: 'TooManyRequests', roomId: data.roomId });
+      return socket.emit('err', { type: 'TooManyRequests', roomId: data.roomId });
     }
 
     /* update request timeout */
@@ -225,7 +225,9 @@ io.on('connection', (socket) => {
           data.params.lastChange = Date.now();
           socket.to(data.roomId).emit('updateState', data);
           socket.emit('updateState', data);
-        } catch(e) {}
+        } catch(e) {
+          socket.to(data.roomId).emit('err', { type: 'UnknownServerError', roomId: data.roomId });
+        }
       }
     });
   });
@@ -236,8 +238,8 @@ io.on('connection', (socket) => {
   });
 
   /* error */
-  socket.on('error', data => {
-    socket.to(data.roomId).emit('error', data);
+  socket.on('err', data => {
+    socket.to(data.roomId).emit('err', data);
   });
 
 
@@ -249,12 +251,10 @@ io.on('connection', (socket) => {
 
     /* join to room */
     socket.join(data.roomId);
-    console.log('JOIN', data);
   });
 
   /* send update event */
   socket.on('updateAppCode', data => {
     socket.to(data.roomId).emit('updateAppCode', data);
-    console.log('UPDATE_APP_CODE', data);
   });
 });
