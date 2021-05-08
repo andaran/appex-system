@@ -1,6 +1,7 @@
 
 /* import sockets */
 import io from 'socket.io-client';
+import EventEmitter from 'events';
 
 const port = 3001;
 const socket = io(`http://192.168.1.35:${ port }`);
@@ -15,10 +16,16 @@ export function updateAppCode(roomId) {
 
 export { socket };
 
-export class App {
+export class App extends EventEmitter {
+
+  /* private fields */
+  #app;
+
   constructor(app, roomSettings) {
 
-    this.app = app;
+    super();
+
+    this.#app = app;
     this.roomSettings = roomSettings;
 
     this.state = false;
@@ -30,17 +37,20 @@ export class App {
 
     this.socket = socket;
 
+    // bind
+    this.init = this.init.bind(this);
+    this.send = this.send.bind(this);
+    this.start = this.start.bind(this);
   }
 
   /* get app object */
-  getApp() { return this.app; }
+  get app() { return this.#app; }
 
   /* start app */
   start() {
 
     /* check params */
     if (!this.state) { return console.log('[Err] Отсутствует state!'); }
-    if (!this.update) { return console.log('[Err] Отсутствует update!'); }
     if (!this.roomSettings) { return console.log('[Err] Отсутствуют данные комнаты!'); }
 
     const socket = this.socket;
@@ -56,7 +66,6 @@ export class App {
     this.settings = { ...defaultSettings, ...this.settings };
 
     /* connect to room */
-    // socket.emit('disconnectFromRoom', { roomId });
     socket.emit('connectToRoom', { roomId, roomPass, currentState: this.state });
     this.runFlag = true;
   }
@@ -71,8 +80,8 @@ export class App {
 
     if (!this.settings.awaitResponse) {
       this.state = { ...this.state, ...params };
+      this.update ? this.update(this.state) : this.emit('update', this.state);
       console.log('[log] Обновление состояния ...');
-      this.update( this.state );
     }
   }
 
@@ -82,8 +91,8 @@ export class App {
     socket.on('connectSuccess', state => {
       if (!this.runFlag) { return; }
       this.state = { ...this.state, ...state };
+      this.update ? this.update(this.state) : this.emit('update', this.state);
       console.log('[log] Приложение подключено!');
-      this.update( this.state );
     });
 
     /* update */
@@ -93,7 +102,7 @@ export class App {
       /* update if id is true */
       if (state.roomId === this.roomSettings.body.roomId) {
         this.state = { ...this.state, ...state.params };
-        this.update( this.state );
+        this.update ? this.update(this.state) : this.emit('update', this.state);
         console.log('[log] Обновление состояния ...');
       }
     });
@@ -101,6 +110,7 @@ export class App {
     /* error */
     socket.on('error', err => {
       if (!this.runFlag) { return; }
+      this.error ? this.error(err) : this.emit('error', err);
       switch (err.type) {
         case 'RoomNotFound':
           console.log('[Err] Неверный id или пароль комнаты!');
@@ -113,18 +123,5 @@ export class App {
           break;
       }
     });
-  }
-
-  exit() {
-    try {
-      this.runFlag = false;
-      if (this.roomSettings !== undefined) {
-        const roomId = this.roomSettings.body.roomId;
-        this.socket.emit('disconnectFromRoom', { roomId });
-      }
-      console.log('[Log] Выход из приложения.');
-    } catch(err) {
-      console.log('[Err] Ошибка выхода из приложения!\n\n', err);
-    }
   }
 }
