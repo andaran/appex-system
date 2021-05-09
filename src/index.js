@@ -19,6 +19,7 @@ import PrivateRoute from "./Components/additComponents/PrivateRoute";
 import MainPage from './Components/main/main-page/MainPage';
 import View from './Components/view/View';
 import Lending from './Components/lending/Lending';
+import DocsPage from './Components/docs/docs-page/DocsPage';
 
 /* Libraries */
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -51,6 +52,7 @@ ReactDOM.render(
         <Route exact path="/sign_in" component={ Login }/>
         <Route exact path="/change_password" component={ ChangePass }/>
         <Route exact path="/view/:id" component={ View }/>
+        <Route exact path="/doc" component={ DocsPage }/>
         <Route exact path="/projects">
           <PrivateRoute> <Projects/> </PrivateRoute>
         </Route>
