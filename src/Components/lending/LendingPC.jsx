@@ -99,9 +99,6 @@ export default class Lending extends React.Component {
         </section>
         <section className="lending-section">
           <RegWindow/>
-          <div className='lending-header_down'>
-            <div className="lending-header_space lending-header_space__animate"> space </div>
-          </div>
         </section>
       </article>
     );
