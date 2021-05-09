@@ -192,8 +192,7 @@ class MainPage extends React.Component {
               <div className="app-group-widget">
                 <div className="app-group-widget__title">Сторонние приложения:</div>
                 <div className="app-group-widget__main">
-                  А здесь обитают приложения, которые вы скачали. Нужно загрузить ещё парочку? Тогда вам
-                  <Link to="/projects"> сюда</Link>.
+                  А здесь обитают приложения, которые вы скачали. Нужно загрузить ещё? Откройте магазин во вкладке системных приложений.
                 </div>
               </div>
               <div className="app-group__icons"> { installedApps } </div>
