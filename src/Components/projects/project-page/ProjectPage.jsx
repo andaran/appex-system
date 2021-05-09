@@ -325,6 +325,8 @@ class ProjectPage extends React.Component {
 
     document.addEventListener('mousemove', this.moveEmulator);
     document.body.style.userSelect = 'none';
+    document.querySelector('.app-demo__emulator')
+      .classList.add('app-demo__emulator_moving');
     document.getElementById('app-demo').style.transition = '0s';
   }
 
@@ -333,6 +335,8 @@ class ProjectPage extends React.Component {
 
     document.addEventListener('mousemove', this.resizeEmulator);
     document.body.style.userSelect = 'none';
+    document.querySelector('.app-demo__emulator')
+      .classList.add('app-demo__emulator_moving');
     document.getElementById('app-demo').style.transition = '0s';
   }
 
@@ -342,6 +346,8 @@ class ProjectPage extends React.Component {
       document.removeEventListener('mousemove', this.moveEmulator);
       document.removeEventListener('mousemove', this.resizeEmulator);
       document.body.style.userSelect = 'auto';
+      document.querySelector('.app-demo__emulator')
+        .classList.remove('app-demo__emulator_moving');
       document.getElementById('app-demo').style.transition = '0.2s';
     }
   }
