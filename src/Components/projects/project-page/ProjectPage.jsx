@@ -205,10 +205,14 @@ class ProjectPage extends React.Component {
                  onClick={ this.changeEmulatorFullscreenMode }>
               <FontAwesomeIcon icon={ faExpandArrowsAlt } className="app-demo__nav-item-icon"/>
             </div>
-            <Link to={`../view/${ this.id }?devMode=true`}
-                  className={`app-demo__nav-item`}>
+            <div className={`app-demo__nav-item`}
+                 onClick={() => {
+                   window.open(`../view/${ this.id }?devMode=true`,
+                     "Emulator",
+                     "width=375,height=812");
+                 }}>
               <FontAwesomeIcon icon={ faExternalLinkAlt } className="app-demo__nav-item-icon"/>
-            </Link>
+            </div>
             <div className={`app-demo__nav-item`}
                  onClick={() => {
                    document.getElementById('iframe')
