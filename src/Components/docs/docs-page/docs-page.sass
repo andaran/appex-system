@@ -2,5 +2,15 @@
 .doc-page
   display: grid
   grid-template-columns: 240px auto
-  height: 100vh
+  height: 100%
   overflow: hidden
+  padding: 10px
+
+  @media all and (max-width: 910px)
+    grid-template-columns: auto
+    grid-template-rows: auto auto
+    padding: 10px 10px 0 10px
+
+.doc-page-wrap
+  display: grid
+  grid-template-rows: auto calc(100vh - 50px)

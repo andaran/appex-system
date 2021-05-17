@@ -18,7 +18,7 @@ export default class Navbar extends React.Component {
             <Link className="navbar__link" to="/projects"> Проекты </Link>
           </div>
           <div className="navbar__item">
-            <Link className="navbar__link" to="/docs"> Документация </Link>
+            <Link className="navbar__link" to="/doc"> Документация </Link>
           </div>
           <div className="navbar__item">
             <Link className="navbar__link" to="/main"> Главная </Link>

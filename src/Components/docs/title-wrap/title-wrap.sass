@@ -5,5 +5,9 @@
   grid-template-columns: 1fr
   grid-auto-rows: 30px
   grid-gap: 20px
-  padding: 20px
-  overflow-y: scroll
+  padding: 10px
+
+  @media all and (max-width: 910px)
+    grid-template-columns: 1fr 1fr
+    grid-gap: 10px
+    padding: 0 0 10px 0
