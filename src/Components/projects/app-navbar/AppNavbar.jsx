@@ -122,7 +122,7 @@ class AppNavbar extends React.Component {
             <Link to="/projects"> Проекты </Link>
           </div>
           <div className="app-navbar__item app-navbar__item-link">
-            <Link to="/docs"> Документация </Link>
+            <Link to="/doc"> Документация </Link>
           </div>
           <div className="app-navbar__item app-navbar__item-link">
             <Link to="/main"> Главная </Link>

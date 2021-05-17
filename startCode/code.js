@@ -15,7 +15,7 @@ App.on('update', state => {
 });
 
 /* ошибка */
-App.on('error', error => {
+App.on('err', err => {
     // Ваш код здесь
 });
 
