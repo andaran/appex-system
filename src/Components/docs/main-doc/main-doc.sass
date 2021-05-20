@@ -2,17 +2,17 @@
 .doc
   //background: black
   //overflow-y: scroll
-  padding: 10px
+  margin: 10px
   //margin-top: 20px
   border-radius: 5px
   box-sizing: border-box
-  background: black
+  //background: black
   overflow: scroll
+
+  &::-webkit-scrollbar
+    height: 0
 
   @media all and (max-width: 910px)
     padding: 0
-    margin: 0
+    margin: 0 0 10px 0
     background: transparent
-
-    &::-webkit-scrollbar
-      height: 0

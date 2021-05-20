@@ -234,5 +234,35 @@ App.start();`,
 
   componentDidMount() {
 
+    const buttonItems = document.querySelectorAll('.title-item');
+
+    for (let buttonItem of buttonItems) {
+      buttonItem.addEventListener('click', (event) => this.move());
+    }
+
+    this.move();
+  }
+
+  componentWillUnmount() {
+
+  }
+
+  move() {
+    process.nextTick(() => {
+
+      /* scroll to top */
+      const wrap = document.querySelector('.doc');
+      wrap.scroll(0, 0);
+
+      /* set scroll size */
+      const id = window.location.hash.substring(1);
+      const block = document.getElementById(id);
+      const cords = block.getBoundingClientRect();
+      const wrapTop = wrap.getBoundingClientRect().top;
+      const scroll = cords.top - wrapTop;
+
+      /* scroll to block */
+      wrap.scroll(0, scroll);
+    });
   }
 }
