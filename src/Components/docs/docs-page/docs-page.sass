@@ -11,6 +11,15 @@
     grid-template-rows: auto auto
     padding: 10px 10px 0 10px
 
+  &_app-mode
+    grid-template-columns: auto
+
+    @media all and (max-width: 910px)
+      grid-template-rows: auto
+
 .doc-page-wrap
   display: grid
   grid-template-rows: auto calc(100vh - 50px)
+
+  &_app-mode
+    grid-template-rows: 100vh

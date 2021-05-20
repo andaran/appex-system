@@ -12,6 +12,7 @@ import SuperButton from '../super-button/SuperButton';
 
 import SettingsApp from '../system-apps/settings/SettingsApp';
 import StoreApp from '../system-apps/store/StoreApp';
+import DocApp from '../system-apps/doc/DocApp';
 
 /* Component */
 class MainPage extends React.Component {
@@ -65,6 +66,12 @@ class MainPage extends React.Component {
                key="store-icon"
                type="store"
                id="store-system-app"/>,
+      <AppIcon color="#2ecc71"
+               icon="faBook"
+               title="Докум-ция"
+               key="doc-icon"
+               type="doc"
+               id="doc-system-app"/>,
     ]
 
     if(myApps.length) {
@@ -147,6 +154,9 @@ class MainPage extends React.Component {
           break;
         case 'store':
           interpreter = <StoreApp/>;
+          break;
+        case 'doc':
+          interpreter = <DocApp/>;
           break;
         default:
           break;

@@ -9,13 +9,22 @@ import Navbar from "../../projects/navbar/Navbar";
 export default class DocsPage extends React.Component {
 
   render() {
-    return <div className="doc-page-wrap">
-      <Navbar path="./images/appex.svg" />
-      <div className="doc-page">
-        <TitleWrap/>
-        <MainDoc/>
+
+    if (this.props.mode === 'app') {
+      return <div className="doc-page-wrap doc-page-wrap_app-mode">
+        <div className="doc-page doc-page_app-mode">
+          <MainDoc/>
+        </div>
       </div>
-    </div>
+    } else {
+      return <div className="doc-page-wrap">
+          <Navbar path="./images/appex.svg" />
+          <div className="doc-page">
+            <TitleWrap/>
+            <MainDoc/>
+          </div>
+        </div>
+    }
   }
 
   componentDidMount() {
