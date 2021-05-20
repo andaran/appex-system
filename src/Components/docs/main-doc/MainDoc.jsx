@@ -251,11 +251,13 @@ App.start();`,
     process.nextTick(() => {
 
       /* scroll to top */
+      const id = window.location.hash.substring(1);
+      if (!id) { return; }
+
       const wrap = document.querySelector('.doc');
       wrap.scroll(0, 0);
 
       /* set scroll size */
-      const id = window.location.hash.substring(1);
       const block = document.getElementById(id);
       const cords = block.getBoundingClientRect();
       const wrapTop = wrap.getBoundingClientRect().top;
