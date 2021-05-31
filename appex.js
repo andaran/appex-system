@@ -242,6 +242,11 @@ io.on('connection', (socket) => {
     socket.to(data.roomId).emit('err', data);
   });
 
+  /* ping test */
+  socket.on('ping', data => {
+    socket.emit('ping', data);
+  });
+
 
 
   /*   ---==== Development ====---   */

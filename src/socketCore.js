@@ -91,6 +91,10 @@ export class App extends EventEmitter {
       this.state = { ...this.state, ...state };
       this.update ? this.update(this.state) : this.emit('update', this.state);
       console.log('[log] Приложение подключено!');
+
+      /* ping test */
+      this.testPingTime = Date.now();
+      this.socket.emit('ping', {});
     });
 
     /* update */
@@ -108,6 +112,12 @@ export class App extends EventEmitter {
     socket.on('err', err => {
       this.error ? this.error(err) : this.emit('err', err);
       console.log(`[Err] ${ err.type }`);
+    });
+
+    /* ping test */
+    socket.on('ping', () => {
+      const pingTime = Date.now() - this.testPingTime;
+      console.log(`[log] Пинг: ${ pingTime }мс.`);
     });
   }
 }
