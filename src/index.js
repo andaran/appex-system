@@ -20,6 +20,7 @@ import MainPage from './Components/main/main-page/MainPage';
 import View from './Components/view/View';
 import Lending from './Components/lending/Lending';
 import DocsPage from './Components/docs/docs-page/DocsPage';
+import Error404 from './Components/additComponents/Error404';
 
 /* Libraries */
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -62,6 +63,7 @@ ReactDOM.render(
         <Route exact path="/main">
           <PrivateRoute> <MainPage/> </PrivateRoute>
         </Route>
+        <Route component={ Error404 }/>
       </Switch>
     </Router>
   </Provider>,
