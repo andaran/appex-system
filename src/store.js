@@ -13,7 +13,7 @@ import { appStateReducer } from './Reducers/appStateReducer';
 
 /*   --=== End reducers ===--   */
 
-const middleware = applyMiddleware(createLogger(), createPromise());
+const middleware = applyMiddleware(/* createLogger(), */ createPromise());
 
 const reducers = combineReducers({
 
