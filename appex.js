@@ -14,8 +14,8 @@ const cors = require('cors');
 require('dotenv').config();
 
 /* settings */
-const sessionSecretKey1 = process.env.sessionSecretKey1 || '0u@Fq|nTyaHG';
-const sessionSecretKey2 = process.env.sessionSecretKey2 || 'U99}G9zTsKDg';
+const sessionSecretKey1 = process.env.sessionSecretKey1;
+const sessionSecretKey2 = process.env.sessionSecretKey2;
 const port = +process.env.port || 3001;
 
 /* routes */
@@ -35,7 +35,7 @@ let reqLimit = [];
 
 /*   ---==== Connect to DB ====---   */
 
-mongoose.connect('mongodb://127.0.0.1/appex', {
+mongoose.connect(process.env.database, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 }, err => err ? console.error(err) : console.log('[+] База подключена!'));
