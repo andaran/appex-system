@@ -8,6 +8,12 @@
 # testing
 /coverage
 
+# environment
+.env
+
+# phpStorm
+.idea
+
 # production
 /build
 
