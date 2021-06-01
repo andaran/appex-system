@@ -1,0 +1,22 @@
+{
+  "title": "Скачаное приложение",
+  "icon": "faUtensils",
+  "color": "#f1c40f",
+  "id": "hGLd&snkxkhs&9467",
+  "storeVisibility": true,
+  "createDate": "123456",
+  "author": {
+    "username": "Andrey",
+    "id": "12345"
+  },
+  "code": {
+    "html": "<h1>2</h1>",
+    "css": "",
+    "js": "console.log('Hello, World!');"
+  },
+  "releaseCode": {
+    "html": "<h1>2</h1>",
+    "css":"",
+    "js": "console.log('Release!');"
+  }
+}

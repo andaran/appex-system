@@ -1,0 +1,53 @@
+{
+  "status": "ok",
+  "user": {
+    "username": "Andrey",
+    "email": "andrnovip@gmail.com",
+    "id": "H2dv3hoel8Ij",
+    "registrationDate": "1234567",
+    "installedApps": [
+      {
+        "title": "Скачаное приложение",
+        "icon": "faUtensils",
+        "color": "#f1c40f",
+        "id": "hGLd&snkxkhs&9467"
+      }
+    ],
+    "type": "user",
+    "settings": [{
+      "id": "hGud&snkxkhs&6467",
+      "body": {
+        "roomId": "12345",
+        "roomPass": "password"
+      }
+    }],
+    "userSettings": {},
+    "alerts": [
+      [
+        {
+          "type": "CONFIGURATION",
+          "component": "ProjectsWrap",
+          "renew": false
+        },
+        {
+          "type": "ALERT",
+          "title": "Добро пожаловать в appex!",
+          "text": "Рад приветствоавть вас в своей системе. Пройдите обучение, чтобы лучше разбираться в системе.",
+          "code": false
+        },
+        {
+          "type": "POP_UP",
+          "text": "test",
+          "target": "#project-card__plus",
+          "code": false
+        },
+        {
+          "type": "POP_UP",
+          "text": "test",
+          "target": "#room-card-plus-wrap",
+          "code": false
+        }
+      ]
+    ]
+  }
+}
