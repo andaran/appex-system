@@ -128,11 +128,7 @@ app.use(((req, res, next) => {
   next();
 }));*/
 
-const io = socketIo(server, { log: false,
-    cors: {
-      origin: "http://localhost:3000",
-      credentials: true
-    }});
+const io = socketIo(server, { log: false, origins: '*:*' });
 io.on('connection', (socket) => {
 
 
