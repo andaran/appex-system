@@ -42,15 +42,13 @@
       "src": "./icons/ms-icon-310x310.png",
       "sizes": "310x310",
       "type": "image\/png",
-      "density": "6.46",
-      "purpose": "any maskable"
+      "density": "6.46"
     },
     {
       "src": "./icons/ms-icon-500x500.png",
       "sizes": "500x500",
       "type": "image\/png",
-      "density": "10.4",
-      "purpose": "any maskable"
+      "density": "10.4"
     },
     {
       "src": "./icons/ms-icon-1000x1000.png",
