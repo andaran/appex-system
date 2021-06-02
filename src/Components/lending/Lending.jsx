@@ -20,12 +20,12 @@ export default class Lending extends React.Component {
     if (devices.test(navigator.userAgent)) {
 
       /* redirect to main page */
-      request(`/api/get_user`, {})
+      /*request(`/api/get_user`, {})
         .then(res => res.json()).then(body => {
           if (body.status === 'ok') {
             window.location.pathname = 'main';
           }
-        }).catch(err => {});
+        }).catch(err => {});*/
 
       return <LendingMobile/>;
     }
