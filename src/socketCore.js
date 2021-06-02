@@ -4,9 +4,7 @@ import io from 'socket.io-client';
 import EventEmitter from 'events';
 
 const port = 3001;
-// const socket = io(`http://192.168.1.35:${ port }`);
 const socket = io();
-// const socket = io('http://185.233.80.72');  // http://185.233.80.72:3001/
 
 export function connectToDevRoom(roomId) {
   socket.emit('connectToDevRoom', { roomId: 'dev=' + roomId });

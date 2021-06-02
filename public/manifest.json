@@ -42,22 +42,25 @@
       "src": "./icons/ms-icon-310x310.png",
       "sizes": "310x310",
       "type": "image\/png",
-      "density": "6.46"
+      "density": "6.46",
+      "purpose": "any maskable"
     },
     {
       "src": "./icons/ms-icon-500x500.png",
       "sizes": "500x500",
       "type": "image\/png",
-      "density": "10.4"
+      "density": "10.4",
+      "purpose": "any maskable"
     },
     {
       "src": "./icons/ms-icon-1000x1000.png",
       "sizes": "1000x1000",
       "type": "image\/png",
-      "density": "20.8"
+      "density": "20.8",
+      "purpose": "any maskable"
     }
   ],
-  "start_url": "/main",
+  "start_url": ".",
   "display": "standalone",
   "theme_color": "#000000",
   "background_color": "#000000"
