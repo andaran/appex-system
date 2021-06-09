@@ -298,11 +298,10 @@ io.on('connection', (socket) => {
             /* update room */
             Room.updateOne({ roomId: data.roomId }, { $set: { state: newState }}).then(info => {}, err => {});
 
-            data = {
-              roomId: data.roomId,
-              roomPass: data.roomPass,
-              params: { ...oldState[data.property], lastChange: Date.now(), }
-            };
+            const params = { ...data.params, lastChange: Date.now(), };
+            params[data.property] = oldState[data.property];
+            data.params = params;
+
             socket.to(data.roomId).emit('updateState', data);
             socket.emit('updateState', data);
           } catch(e) {
@@ -339,11 +338,10 @@ io.on('connection', (socket) => {
             /* update room */
             Room.updateOne({ roomId: data.roomId }, { $set: { state: newState }}).then(info => {}, err => {});
 
-            data = {
-              roomId: data.roomId,
-              roomPass: data.roomPass,
-              params: { ...oldState[data.property], lastChange: Date.now(), }
-            };
+            const params = { ...data.params, lastChange: Date.now(), };
+            params[data.property] = oldState[data.property];
+            data.params = params;
+
             socket.to(data.roomId).emit('updateState', data);
             socket.emit('updateState', data);
           } catch(e) {
