@@ -84,6 +84,24 @@ export class App extends EventEmitter {
     }
   }
 
+  invertProperty(property, room = false) {
+
+    const roomId = room ? room.roomId : this.roomSettings.body.roomId;
+    const roomPass = room ? room.roomPass : this.roomSettings.body.roomPass;
+
+    this.socket.emit('invertProperty', { roomId, roomPass, property });
+    console.log('[log] Отправка параметров ...');
+  }
+
+  changeNumericProperty(property, value, room = false) {
+
+    const roomId = room ? room.roomId : this.roomSettings.body.roomId;
+    const roomPass = room ? room.roomPass : this.roomSettings.body.roomPass;
+
+    this.socket.emit('changeNumericProperty', { roomId, roomPass, property, value });
+    console.log('[log] Отправка параметров ...');
+  }
+
   init() {
 
     /* init app */

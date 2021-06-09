@@ -299,12 +299,12 @@ io.on('connection', (socket) => {
             Room.updateOne({ roomId: data.roomId }, { $set: { state: newState }}).then(info => {}, err => {});
 
             data = {
-              roomId: data.data.roomId,
+              roomId: data.roomId,
               roomPass: data.roomPass,
-              params: { ...oldState[data.property] }
+              params: { ...oldState[data.property], lastChange: Date.now(), }
             };
-            socket.emit('updateState', data);
             socket.to(data.roomId).emit('updateState', data);
+            socket.emit('updateState', data);
           } catch(e) {
             socket.emit('err', { type: 'UnknownServerError', roomId: data.roomId });
           }
@@ -340,12 +340,12 @@ io.on('connection', (socket) => {
             Room.updateOne({ roomId: data.roomId }, { $set: { state: newState }}).then(info => {}, err => {});
 
             data = {
-              roomId: data.data.roomId,
+              roomId: data.roomId,
               roomPass: data.roomPass,
-              params: { ...oldState[data.property] }
+              params: { ...oldState[data.property], lastChange: Date.now(), }
             };
-            socket.emit('updateState', data);
             socket.to(data.roomId).emit('updateState', data);
+            socket.emit('updateState', data);
           } catch(e) {
             socket.emit('err', { type: 'UnknownServerError', roomId: data.roomId });
           }
