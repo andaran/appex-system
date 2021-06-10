@@ -272,20 +272,17 @@ io.on('connection', (socket) => {
 
 
   /*   ---==== Additional api ====---   */
-  //
-  let n = 0;//
-  console.log(++n);//
 
   /* invert property */
   socket.on('invertProperty', data => {
-    console.log(++n);//
+
     /* request limit  */
     checkRequestLimit(data).then(() => {
-      console.log(++n);//
+
       /* find this room */
       Room.findOne({ roomId: data.roomId, roomPass: data.roomPass }).then(room => {
         if (room !== null) {
-          console.log(++n);//
+
           /* update room */
           try {
             const oldState = JSON.parse(room.state);
@@ -295,20 +292,18 @@ io.on('connection', (socket) => {
             } else {
               return socket.emit('err', { type: 'InvalidParam', roomId: data.roomId });
             }
-            console.log(++n);//
+
             const newState = JSON.stringify({ ...oldState, lastChange: Date.now() });
-            console.log(++n);//
+
             /* update room */
             Room.updateOne({ roomId: data.roomId }, { $set: { state: newState }}).then(info => {}, err => {});
-            console.log(++n);//
+
             const params = { ...data.params, lastChange: Date.now(), };
             params[data.property] = oldState[data.property];
             data.params = params;
-            console.log(++n);//
+
             socket.to(data.roomId).emit('updateState', data);
             socket.emit('updateState', data);
-            console.log(++n);//
-            n = 0;
           } catch(e) {
             socket.emit('err', { type: 'UnknownServerError', roomId: data.roomId });
           }
