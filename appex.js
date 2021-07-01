@@ -47,9 +47,6 @@ mongoose.connect(process.env.database, {
 const app = express();
 app.use(bodyParser.json());
 
-/* set cors */
-// app.use(cors({ origin: '*' }));  // TODO: хз че с этим делать
-
 /* set static dir */
 app.use(express.static(path.join(__dirname, 'build')));
 
@@ -119,11 +116,11 @@ app.all('/api/*', mustBeAuth);
 /* api */
 app.use('/api', APIRoute);
 
-/*   =========================   */
+/*   ==================================   */
 
 
 
-/*   ---==== socket.io ====---   */
+/*   ---==== CORE API functions ====---   */
 
 /* checking request limit */
 const checkRequestLimit = (data) => {
@@ -187,7 +184,7 @@ const updateState = (data) => {
           reject({ type: 'UnknownServerError', roomId: data.roomId });
         }
       }
-    }, () => reject({ type: 'UnknownServerError', roomId: data.roomId }))
+    }, () => reject({ type: 'RoomNotFound', roomId: data.roomId }))
         .catch(() => reject({ type: 'UnknownServerError', roomId: data.roomId }));
   });
 }
@@ -224,7 +221,7 @@ const invertProperty = (data) => {
           reject({ type: 'UnknownServerError', roomId: data.roomId });
         }
       }
-    }, () => reject({ type: 'UnknownServerError', roomId: data.roomId }))
+    }, () => reject({ type: 'RoomNotFound', roomId: data.roomId }))
         .catch(() => reject({ type: 'UnknownServerError', roomId: data.roomId }));
   });
 }
@@ -262,10 +259,16 @@ const changeNumericProperty = (data) => {
           reject({ type: 'UnknownServerError', roomId: data.roomId });
         }
       }
-    }, () => reject({ type: 'UnknownServerError', roomId: data.roomId }))
+    }, () => reject({ type: 'RoomNotFound', roomId: data.roomId }))
         .catch(() => reject({ type: 'UnknownServerError', roomId: data.roomId }));
   });
 }
+
+/*   ==================================   */
+
+
+
+/*   ---==== socket.io CORE API ====---   */
 
 /* socket server */
 const io = socketIo(server, { log: false, origins: '*:*' });
@@ -413,4 +416,71 @@ io.on('connection', (socket) => {
     }, (type) => socket.emit('err', { type, roomId: data.roomId }))
         .catch(() => socket.emit('err', { type: 'UnknownServerError', roomId: data.roomId }));
   });
+});
+
+
+
+/*   ---==== HTTP CORE API ====---   */
+
+app.post('/core_api/update_state', (req, res) => {
+
+  /* request limit  */
+  checkRequestLimit(req.body).then(() => {
+
+    /* update state */
+    updateState(req.body).then((newData) => {
+
+      /* send new state */
+      res.json(newData);
+      io.in(newData.roomId).emit('updateState', newData);
+
+    /* any errors */
+    }, () => res.sendStatus(401))
+        .catch(() => res.sendStatus(500));
+
+  /* any errors */
+  }, () => res.sendStatus(429))
+      .catch(() => res.sendStatus(500));
+});
+
+app.post('/core_api/invert_property', (req, res) => {
+
+  /* request limit  */
+  checkRequestLimit(req.body).then(() => {
+
+    /* invert property */
+    invertProperty(req.body).then((newData) => {
+
+      /* send new state */
+      res.json(newData);
+      io.in(newData.roomId).emit('updateState', newData);
+
+    /* any errors */
+    }, () => res.sendStatus(401))
+        .catch(() => res.sendStatus(500));
+
+  /* any errors */
+  }, () => res.sendStatus(429))
+      .catch(() => res.sendStatus(500));
+});
+
+app.post('/core_api/change_numeric_property', (req, res) => {
+
+  /* request limit  */
+  checkRequestLimit(req.body).then(() => {
+
+    /* change numeric property */
+    changeNumericProperty(req.body).then((newData) => {
+
+      /* send new state */
+      res.json(newData);
+      io.in(newData.roomId).emit('updateState', newData);
+
+    /* any errors */
+    }, () => res.sendStatus(401))
+        .catch(() => res.sendStatus(500));
+
+  /* any errors */
+  }, () => res.sendStatus(429))
+      .catch(() => res.sendStatus(500));
 });
