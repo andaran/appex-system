@@ -309,7 +309,7 @@ void setup() {
   Serial.printf("[SETUP] IP adress: %s\n", ip.c_str());
 
   // подключаемся к серверу
-  socketIO.beginSSL("www.appex-system.ru", 443);
+  socketIO.beginSSL("www.appex-system.ru", 443, "/socket.io/?EIO=4");
 
   // если пришел запрос
   socketIO.onEvent(socketIOEvent);
