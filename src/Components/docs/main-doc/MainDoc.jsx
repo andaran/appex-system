@@ -289,6 +289,11 @@ App.changeNumericProperty('volume', -10, {
           <Code>
             { codes[19] }
           </Code>
+          <h5>https://appex-system.ru/core_api/get_property_value</h5>
+          Возвращает значение свойства в JSON в "value".
+          <Code>
+            { codes[18] }
+          </Code>
         </DocItem>
         <DocItem title="С++ код" id="C-plus-plus-code">
           Напишем код для esp8266. Плата будет реагировать на нажатие кнопки.

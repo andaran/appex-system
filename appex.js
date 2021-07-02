@@ -183,6 +183,8 @@ const updateState = (data) => {
         } catch(e) {
           reject({ type: 'UnknownServerError', roomId: data.roomId });
         }
+      } else {
+        reject({ type: 'RoomNotFound', roomId: data.roomId });
       }
     }, () => reject({ type: 'RoomNotFound', roomId: data.roomId }))
         .catch(() => reject({ type: 'UnknownServerError', roomId: data.roomId }));
@@ -204,7 +206,7 @@ const invertProperty = (data) => {
           if (typeof oldState[data.property] === 'boolean') {
             oldState[data.property] = !oldState[data.property];
           } else {
-            return socket.emit('err', { type: 'InvalidParam', roomId: data.roomId });
+            return reject({ type: 'InvalidParam', roomId: data.roomId });
           }
 
           const newState = JSON.stringify({ ...oldState, lastChange: Date.now() });
@@ -220,6 +222,8 @@ const invertProperty = (data) => {
         } catch(e) {
           reject({ type: 'UnknownServerError', roomId: data.roomId });
         }
+      } else {
+        reject({ type: 'RoomNotFound', roomId: data.roomId });
       }
     }, () => reject({ type: 'RoomNotFound', roomId: data.roomId }))
         .catch(() => reject({ type: 'UnknownServerError', roomId: data.roomId }));
@@ -242,7 +246,7 @@ const changeNumericProperty = (data) => {
               typeof data.value === 'number') {
             oldState[data.property] = oldState[data.property] + data.value;
           } else {
-            return socket.emit('err', { type: 'InvalidParam', roomId: data.roomId });
+            return reject({ type: 'InvalidParam', roomId: data.roomId });
           }
 
           const newState = JSON.stringify({ ...oldState, lastChange: Date.now() });
@@ -258,6 +262,32 @@ const changeNumericProperty = (data) => {
         } catch(e) {
           reject({ type: 'UnknownServerError', roomId: data.roomId });
         }
+      } else {
+        reject({ type: 'RoomNotFound', roomId: data.roomId });
+      }
+    }, () => reject({ type: 'RoomNotFound', roomId: data.roomId }))
+        .catch(() => reject({ type: 'UnknownServerError', roomId: data.roomId }));
+  });
+}
+
+/* get property */
+const getProperty = (data) => {
+  return new Promise((resolve, reject) => {
+
+    /* find this room */
+    Room.findOne({ roomId: data.roomId, roomPass: data.roomPass }).then(room => {
+
+      if (room !== null) {
+
+        /* get property */
+        const state = JSON.parse(room.state);
+        if (state[data.property] !== undefined) {
+          resolve({ value: state[data.property], roomId: data.roomId });
+        } else {
+          reject({ type: 'InvalidParam', roomId: data.roomId });
+        }
+      } else {
+        reject({ type: 'RoomNotFound', roomId: data.roomId });
       }
     }, () => reject({ type: 'RoomNotFound', roomId: data.roomId }))
         .catch(() => reject({ type: 'UnknownServerError', roomId: data.roomId }));
@@ -475,6 +505,26 @@ app.post('/core_api/change_numeric_property', (req, res) => {
       /* send new state */
       res.json(newData);
       io.in(newData.roomId).emit('updateState', newData);
+
+    /* any errors */
+    }, () => res.sendStatus(401))
+        .catch(() => res.sendStatus(500));
+
+  /* any errors */
+  }, () => res.sendStatus(429))
+      .catch(() => res.sendStatus(500));
+});
+
+app.post('/core_api/get_property_value', (req, res) => {
+
+  /* request limit  */
+  checkRequestLimit(req.body).then(() => {
+
+    /* get property */
+    getProperty(req.body).then((data) => {
+
+      /* send property value */
+      res.json(data);
 
     /* any errors */
     }, () => res.sendStatus(401))
