@@ -111,7 +111,38 @@ App.on('update', state => {
     wrap.style.backgroundColor = '#c8d6e5';
   }
 });`, `/* запускаем приложение */
-App.start();`,
+App.start();`,`
+App.invertProperty('status', {
+  roomId: '123',
+  roomPass: '123'
+});
+`, `
+App.changeNumericProperty('volume', -10, { 
+  roomId: '123', 
+  roomPass: '123' 
+});
+`,`
+{
+    "roomId": "123",
+    "roomPass": "123",
+    "params": {
+        "status": true
+    }
+}
+`,`
+{ 
+    "roomId": "123", 
+    "roomPass": "123",
+    "property": "status"
+}
+`,`
+{ 
+    "roomId": "123", 
+    "roomPass": "123",
+    "property": "volume",
+    "value": -10
+}
+`
     ]
 
     const R = '}';
@@ -226,6 +257,38 @@ App.start();`,
           <Image name="connect.png"/>
           Такая красота получилась. Осталось написать код для esp8266, например, прикрутить туда реле и управлять светом.
           <Image name="app.png"/>
+        </DocItem>
+        <DocItem title="Additional api" id="additional-api">
+          Дополнительное api нужно для изменения состояния, когда Вам не известны значения свойств обьекта state
+          в какой-либо комнате.
+          <h5>invertProperty</h5>
+          Данный метод инвертирует булевое свойство.
+          <Code>
+            { codes[15] }
+          </Code>
+          Если не передать обьект с логином и паролем комнаты, то запрос будет совершен в текущую комнату.
+          <h5>changeNumericProperty</h5>
+          Данный метод прибавляет переданное значение к числовому свойству. В примере ниже громкость уменьшается на 10.
+          <Code>
+            { codes[16] }
+          </Code>
+          Если не передать обьект с логином и паролем комнаты, то запрос будет совершен в текущую комнату.
+        </DocItem>
+        <DocItem title="Http core api" id="http-core-api">
+          Http api может использоваться для голосовых ассистентов или иных случаев, когда не требуется постоянная
+          связь с сервером. <mark>Запрос выполняется методом POST, параметры передаются в JSON.</mark>
+          <h5>https://appex-system.ru/core_api/update_state</h5>
+          <Code>
+            { codes[17] }
+          </Code>
+          <h5>https://appex-system.ru/core_api/invert_property</h5>
+          <Code>
+            { codes[18] }
+          </Code>
+          <h5>https://appex-system.ru/core_api/change_numeric_property</h5>
+          <Code>
+            { codes[19] }
+          </Code>
         </DocItem>
         <DocItem title="С++ код" id="C-plus-plus-code">
           Напишем код для esp8266. Плата будет реагировать на нажатие кнопки.
