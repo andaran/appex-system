@@ -1,3 +1,6 @@
 # https://www.robotstxt.org/robotstxt.html
 User-agent: *
-Disallow:
+Disallow: /images/appex.svg
+Disallow: /images/background.jpg
+Disallow: /images/bg-horizontal.jpg
+Disallow: /images/bg-vertical.jpg
