@@ -89,8 +89,9 @@ passport.deserializeUser((id, done) => {
   });
 });
 
-const mustBeAuth = (req, res, next) => {  // Is user authenticated
-  req.isAuthenticated() ? next() : res.json({ status: 'err', text: 'no_auth' });;
+/* is user authenticated */
+const mustBeAuth = (req, res, next) => {
+  req.isAuthenticated() ? next() : res.json({ status: 'err', text: 'no_auth' });
 }
 
 app.use(passport.initialize({}));
@@ -123,6 +124,12 @@ app.use('/api', APIRoute);
 /*   ---==== CORE API functions ====---   */
 
 /* checking request limit */
+/**
+ * Проверяет, сколько раз пользователь делал запрос за эту минуту.
+ *
+ * @param {object} data - что пришло с клиента
+ * @returns {Promise} - реджектит ошибку в случае привышения лимита
+ */
 const checkRequestLimit = (data) => {
   return new Promise((resolve, reject) => {
 
@@ -163,6 +170,21 @@ const checkRequestLimit = (data) => {
 }
 
 /* update state */
+/**
+ * Обновляет обьект состояния.
+ *
+ * @param {object} data - что пришло с клиента
+ * @returns {Promise} - реджектит обьект с ошибкой или резолвит обновленное состояние
+ *
+ * @example
+ * updateState({
+ *    roomId: "123",
+ *    roomPass: "123",
+ *    params: {
+ *      status: true
+ *    }
+ * });
+ */
 const updateState = (data) => {
   return new Promise((resolve, reject) => {
 
@@ -192,6 +214,19 @@ const updateState = (data) => {
 }
 
 /* invert property */
+/**
+ * Инвертирует значение указанного св-ва обьекта состояния.
+ *
+ * @param {object} data - что пришло с клиента
+ * @returns {Promise} - реджектит обьект с ошибкой или резолвит обновленное состояние
+ *
+ * @example
+ * invertProperty({
+ *    roomId: "nVb6pO6YrdFN",
+ *    roomPass: "123",
+ *    property: "status"
+ * });
+ */
 const invertProperty = (data) => {
   return new Promise((resolve, reject) => {
 
@@ -231,6 +266,20 @@ const invertProperty = (data) => {
 }
 
 /* change numeric property */
+/**
+ * Прибавляет переданное число к указанному св-ву обьекта состояния.
+ *
+ * @param {object} data - что пришло с клиента
+ * @returns {Promise} - реджектит обьект с ошибкой или резолвит обновленное состояние
+ *
+ * @example
+ * changeNumericProperty({
+ *    roomId: "123",
+ *    roomPass: "123",
+ *    property: "status",
+ *    value: -15
+ * });
+ */
 const changeNumericProperty = (data) => {
   return new Promise((resolve, reject) => {
 
@@ -271,6 +320,20 @@ const changeNumericProperty = (data) => {
 }
 
 /* get property */
+/**
+ * Возвращает значение св-ва обьекта состояния
+ *
+ *
+ * @param {object} data - что пришло с клиента
+ * @returns {Promise} - реджектит обьект с ошибкой или резолвит обьект со значением св-ва и id комнаты
+ *
+ * @example
+ * getProperty({
+ *    roomId: "123",
+ *    roomPass: "123",
+ *    property: "status",
+ * });
+ */
 const getProperty = (data) => {
   return new Promise((resolve, reject) => {
 

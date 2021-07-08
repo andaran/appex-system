@@ -1,0 +1,497 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset='utf-8'>
+  <title>appex-system 1.2.1 | Documentation</title>
+  <meta name='viewport' content='width=device-width,initial-scale=1'>
+  <link href='assets/bass.css' rel='stylesheet'>
+  <link href='assets/style.css' rel='stylesheet'>
+  <link href='assets/github.css' rel='stylesheet'>
+  <link href='assets/split.css' rel='stylesheet'>
+</head>
+<body class='documentation m0'>
+    <div class='flex'>
+      <div id='split-left' class='overflow-auto fs0 height-viewport-100'>
+        <div class='py1 px2'>
+          <h3 class='mb0 no-anchor'>appex-system</h3>
+          <div class='mb1'><code>1.2.1</code></div>
+          <input
+            placeholder='Filter'
+            id='filter-input'
+            class='col12 block input'
+            spellcheck='false'
+            autocapitalize='off'
+            autocorrect='off'
+            type='text' />
+          <div id='toc'>
+            <ul class='list-reset h5 py1-ul'>
+              
+                
+                <li><a
+                  href='#checkrequestlimit'
+                  class="">
+                  checkRequestLimit
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#updatestate'
+                  class="">
+                  updateState
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#invertproperty'
+                  class="">
+                  invertProperty
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#changenumericproperty'
+                  class="">
+                  changeNumericProperty
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#getproperty'
+                  class="">
+                  getProperty
+                  
+                </a>
+                
+                </li>
+              
+            </ul>
+          </div>
+          <div class='mt1 h6 quiet'>
+            <a href='https://documentation.js.org/reading-documentation.html'>Need help reading this?</a>
+          </div>
+        </div>
+      </div>
+      <div id='split-right' class='relative overflow-auto height-viewport-100'>
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='checkrequestlimit'>
+      checkRequestLimit
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Проверяет, сколько раз пользователь делал запрос за эту минуту.</p>
+
+    <div class='pre p1 fill-light mt0'>checkRequestLimit</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>data</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>)</code>
+	    что пришло с клиента
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></code>:
+        реджектит ошибку в случае привышения лимита
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='updatestate'>
+      updateState
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Обновляет обьект состояния.</p>
+
+    <div class='pre p1 fill-light mt0'>updateState</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>data</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>)</code>
+	    что пришло с клиента
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></code>:
+        реджектит обьект с ошибкой или резолвит обновленное состояние
+
+      
+    
+  
+
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Example</div>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'>updateState({
+   <span class="hljs-attr">roomId</span>: <span class="hljs-string">&quot;123&quot;</span>,
+   <span class="hljs-attr">roomPass</span>: <span class="hljs-string">&quot;123&quot;</span>,
+   <span class="hljs-attr">params</span>: {
+     <span class="hljs-attr">status</span>: <span class="hljs-literal">true</span>
+   }
+});</pre>
+    
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='invertproperty'>
+      invertProperty
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Инвертирует значение указанного св-ва обьекта состояния.</p>
+
+    <div class='pre p1 fill-light mt0'>invertProperty</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>data</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>)</code>
+	    что пришло с клиента
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></code>:
+        реджектит обьект с ошибкой или резолвит обновленное состояние
+
+      
+    
+  
+
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Example</div>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'>invertProperty({
+   <span class="hljs-attr">roomId</span>: <span class="hljs-string">&quot;nVb6pO6YrdFN&quot;</span>,
+   <span class="hljs-attr">roomPass</span>: <span class="hljs-string">&quot;123&quot;</span>,
+   <span class="hljs-attr">property</span>: <span class="hljs-string">&quot;status&quot;</span>
+});</pre>
+    
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='changenumericproperty'>
+      changeNumericProperty
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Прибавляет переданное число к указанному св-ву обьекта состояния.</p>
+
+    <div class='pre p1 fill-light mt0'>changeNumericProperty</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>data</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>)</code>
+	    что пришло с клиента
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></code>:
+        реджектит обьект с ошибкой или резолвит обновленное состояние
+
+      
+    
+  
+
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Example</div>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'>changeNumericProperty({
+   <span class="hljs-attr">roomId</span>: <span class="hljs-string">&quot;123&quot;</span>,
+   <span class="hljs-attr">roomPass</span>: <span class="hljs-string">&quot;123&quot;</span>,
+   <span class="hljs-attr">property</span>: <span class="hljs-string">&quot;status&quot;</span>,
+   <span class="hljs-attr">value</span>: -<span class="hljs-number">15</span>
+});</pre>
+    
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='getproperty'>
+      getProperty
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Возвращает значение св-ва обьекта состояния</p>
+
+    <div class='pre p1 fill-light mt0'>getProperty</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>data</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>)</code>
+	    что пришло с клиента
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></code>:
+        реджектит обьект с ошибкой или резолвит обьект со значением св-ва и id комнаты
+
+      
+    
+  
+
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Example</div>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'>getProperty({
+   <span class="hljs-attr">roomId</span>: <span class="hljs-string">&quot;123&quot;</span>,
+   <span class="hljs-attr">roomPass</span>: <span class="hljs-string">&quot;123&quot;</span>,
+   <span class="hljs-attr">property</span>: <span class="hljs-string">&quot;status&quot;</span>,
+});</pre>
+    
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+      </div>
+    </div>
+  <script src='assets/anchor.js'></script>
+  <script src='assets/split.js'></script>
+  <script src='assets/site.js'></script>
+</body>
+</html>

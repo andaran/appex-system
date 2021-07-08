@@ -1,6 +1,6 @@
 {
   "name": "appex-system",
-  "version": "0.1.0",
+  "version": "1.2.1",
   "private": true,
   "dependencies": {
     "@emmetio/codemirror-plugin": "^1.2.4",
@@ -48,7 +48,8 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "doc": "documentation build ./src/** appex.js -f html -o docs"
   },
   "eslintConfig": {
     "extends": [
