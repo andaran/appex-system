@@ -8,7 +8,6 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const passport = require('passport');
 const session = require('cookie-session');
-const cors = require('cors');
 
 /* include .env settings */
 require('dotenv').config();
@@ -222,7 +221,7 @@ const updateState = (data) => {
  *
  * @example
  * invertProperty({
- *    roomId: "nVb6pO6YrdFN",
+ *    roomId: "123",
  *    roomPass: "123",
  *    property: "status"
  * });
@@ -448,7 +447,7 @@ io.on('connection', (socket) => {
 
 
 
-  /*   ---==== Development ====---   */
+  /*   ---==== Development api ====---   */
 
   /* connect to devRoom */
   socket.on('connectToDevRoom', data => {
@@ -513,7 +512,7 @@ io.on('connection', (socket) => {
 
 
 
-/*   ---==== HTTP CORE API ====---   */
+/*   ---==== Http core api ====---   */
 
 app.post('/core_api/update_state', (req, res) => {
 
