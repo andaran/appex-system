@@ -1,5 +1,9 @@
 # Appex system
 
+<img alt="GitHub release (latest by date)" src="https://img.shields.io/github/v/release/andaran/appex-system">
+<img alt="GitHub last commit" src="https://img.shields.io/github/last-commit/andaran/appex-system">
+<img alt="GitHub" src="https://img.shields.io/github/license/andaran/appex-system">
+
 ## Описание:
 
 Система умного дома с открытым исходным кодом для самодельных проектов. 
@@ -10,7 +14,7 @@
 Взаимодействие устройств происходит по протоколу wss. Приложение и все устройства, относящиеся к этому
 приложению помещаются в одну комнату. В этой комнате находится объект состояния, в котором указаны все 
 необходимые данные о работе устройства. Про работу с ним можно почитать в документации. 
-( https://www.appex-system.ru/doc#class-app, https://www.appex-system.ru/doc#C-plus-plus-code )
+https://www.appex-system.ru/doc#class-app, https://www.appex-system.ru/doc#C-plus-plus-code
 
 <strong> Плюсы и особенности: </strong>
 
@@ -33,7 +37,7 @@
 
 <strong>!!! Перед локальной установкой следует установить nodejs, npm, mongodb.</strong>
 
-1. Клонируем репозиторий (git clone https://github.com/andaran/appex-system)
+1. Клонируем репозиторий `git clone https://github.com/andaran/appex-system`
 2. Скачиваем необходимые пакеты. `npm i`
 3. Создаем конфиг окружения. Прописываем туда пароли для сессий, базу данных и порт. `nano .env`
 ```
