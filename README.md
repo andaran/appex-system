@@ -14,7 +14,7 @@
 Взаимодействие устройств происходит по протоколу wss. Приложение и все устройства, относящиеся к этому
 приложению помещаются в одну комнату. В этой комнате находится объект состояния, в котором указаны все 
 необходимые данные о работе устройства. Про работу с ним можно почитать в документации. 
-( https://www.appex-system.ru/doc#class-app, https://www.appex-system.ru/doc#C-plus-plus-code )
+https://www.appex-system.ru/doc#class-app, https://www.appex-system.ru/doc#C-plus-plus-code
 
 <strong> Плюсы и особенности: </strong>
 
