@@ -37,7 +37,7 @@
 
 <strong>!!! Перед локальной установкой следует установить nodejs, npm, mongodb.</strong>
 
-1. Клонируем репозиторий (git clone https://github.com/andaran/appex-system)
+1. Клонируем репозиторий `git clone https://github.com/andaran/appex-system`
 2. Скачиваем необходимые пакеты. `npm i`
 3. Создаем конфиг окружения. Прописываем туда пароли для сессий, базу данных и порт. `nano .env`
 ```
