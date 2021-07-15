@@ -1,8 +1,6 @@
 # Appex system
 
-<img alt="GitHub release (latest by date)" src="https://img.shields.io/github/v/release/andaran/appex-system">
-<img alt="GitHub last commit" src="https://img.shields.io/github/last-commit/andaran/appex-system">
-<img alt="GitHub" src="https://img.shields.io/github/license/andaran/appex-system">
+<img alt="GitHub release (latest by date)" src="https://img.shields.io/github/v/release/andaran/appex-system"><img alt="GitHub last commit" src="https://img.shields.io/github/last-commit/andaran/appex-system"><img alt="GitHub" src="https://img.shields.io/github/license/andaran/appex-system">
 
 ## Описание:
 
