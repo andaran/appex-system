@@ -25,6 +25,7 @@ export default class RegWindow extends React.Component {
     this.btnClicked = this.btnClicked.bind(this);
     this.hotkey = this.hotkey.bind(this);
     this.sendCode = this.sendCode.bind(this);
+    this.codeRequest = this.codeRequest.bind(this);
   }
 
   render() {
@@ -170,29 +171,9 @@ export default class RegWindow extends React.Component {
 
     const email = document.getElementById('reg-email').value;
     if (!/\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,6}/.test(email)) {
-      this.setState({
+      return this.setState({
         errs: ['', '', 'Неверно введен email адрес!', '']
       });
-      return;
-    } else {
-
-      /* checking email available */
-      const body = JSON.stringify({ email });
-      await fetch('/sign_up/is_param_available', {
-        method: "POST",
-        headers: {
-          'Accept': 'application/json, text/plain, */*',
-          'Content-Type': 'application/json',
-        },
-        body
-      }).then(res => res.text()).then(text => {
-        if (text === 'used') {
-          this.setState({
-            errs: ['', '', 'Такой email адрес уже есть в системе!', ''], emailCode: false
-          });
-          return;
-        } else { this.setState({ email }); }
-      }).catch(err => console.log('Ahtung in checking email!', new Error(err)));
     }
 
     const code = document.getElementById('reg-key').value;
@@ -251,13 +232,37 @@ export default class RegWindow extends React.Component {
   sendCode() {
     const email = document.getElementById('reg-email').value;
     if (!/\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,6}/.test(email)) {
-      this.setState({
+      return this.setState({
         errs: ['', '', 'Неверно введен email адрес!', '']
       });
-      return;
+    } else {
+
+      /* checking email available */
+      const body = JSON.stringify({ email });
+      fetch('/sign_up/is_param_available', {
+        method: "POST",
+        headers: {
+          'Accept': 'application/json, text/plain, */*',
+          'Content-Type': 'application/json',
+        },
+        body
+      }).then(res => res.text()).then(text => {
+        if (text === 'used') {
+          return this.setState({
+            errs: ['', '', 'Такой email адрес уже есть в системе!', ''], emailCode: false
+          });
+        } else {
+          this.setState({ email });
+          this.codeRequest();
+        }
+      }).catch(err => console.log('Ahtung in checking email!', new Error(err)));
     }
+  }
+
+  codeRequest() {
 
     /* generate code and send email */
+    const email = this.state.email;
     const body = JSON.stringify({ email });
     fetch('/sign_up/secure_code', {
       method: "POST",
@@ -268,12 +273,12 @@ export default class RegWindow extends React.Component {
       body
     }).then(res => res.json()).then(body => {
       if (body.status !== 'ok') {
-        this.setState({
+        return this.setState({
           errs: ['', '', '', 'Ошибка отправки кода. Попробуйте еще раз.'],
           emailCode: false,
         });
-        return; }
+      }
       this.setState({ emailCode: true, email, codeID: body.codeID });
     });
   }
-} 
+}
