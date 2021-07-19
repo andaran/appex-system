@@ -5,8 +5,16 @@ const nodemailer = require('nodemailer');
 const hbs = require('nodemailer-express-handlebars');
 const path = require('path');
 
-/* options for .hbs engine */
+/* include .env settings */
+require('dotenv').config();
 
+/* settings */
+const user = process.env.mailUser;
+const pass = process.env.mailPass;
+const host = process.env.mailHost;
+const port = +process.env.mailPort;
+
+/* options for .hbs engine */
 const options = {
   viewEngine: {
     extname: '.hbs',
@@ -23,12 +31,8 @@ const mailer = (to, subject, template, context) => {
 
     /* transporter settings */
     let transporter = nodemailer.createTransport({
-      host: "smtp.yandex.ru",
-      port: 465,
-      auth: {
-        user: 'appex.system@yandex.ru',
-        pass: 'Ojyn*2IHjsnH',
-      },
+      host, port,
+      auth: { user, pass },
     });
 
     /* apply handlebars settings */
@@ -36,7 +40,7 @@ const mailer = (to, subject, template, context) => {
 
     /* send the mail */
     transporter.sendMail({
-      from: '"Appex system" <appex.system@yandex.ru>',
+      from: '"Appex system" <appex-system@yandex.ru>',
       to, subject, template, context,
     })
       .then(info => resolve(info))

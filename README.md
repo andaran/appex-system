@@ -39,14 +39,22 @@ https://www.appex-system.ru/doc#class-app, https://www.appex-system.ru/doc#C-plu
 
 1. Клонируем репозиторий `git clone https://github.com/andaran/appex-system`
 2. Скачиваем необходимые пакеты. `npm i`
-3. Создаем конфиг окружения. Прописываем туда пароли для сессий, базу данных и порт. `nano .env`
+3. Создаем конфиг окружения. Прописываем туда пароли для сессий, базу данных, порт, настройки для smtp почты. `nano .env`
 ```
 # .env
-   
-sessionSecretKey1=0u@Fq|nTyaHG
-sessionSecretKey2=U99}G9zTsKDg
+
+# application
+sessionSecretKey1=**********
+sessionSecretKey2=**********
 database=mongodb://127.0.0.1/appex
 port=3001
+
+# smtp mailer
+mailUser=appex.system@yandex.ru
+mailPass=**********
+mailPort=465
+mailHost=smtp.yandex.ru
+
 ```
 4. Собираем приложение. `npm run build`
 5. Запускаем! `node appex`
