@@ -47,7 +47,7 @@ export default class ChangeUserName extends React.Component {
     const userSettings = this.props.user.userSettings;
     userSettings.theme = number;
 
-    return request(`/api/change_user_private`, { userSettings })
+    return request(`/api/change_user`, { userSettings })
      .then(res => res.json()).then(body => {
        if (body.status === 'ok') {
          this.props.fetchUser();
