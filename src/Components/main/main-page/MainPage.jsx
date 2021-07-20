@@ -6,6 +6,8 @@ import { connect } from "react-redux";
 import { request } from "../../../tools/apiRequest/apiRequest";
 import { Link } from "react-router-dom";
 import AlertsView from "../../../tools/alerts/alertsView";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCompress, faExpand, faPlus } from "@fortawesome/free-solid-svg-icons";
 
 import AppIcon from '../app-icon/AppIcon';
 import SuperButton from '../super-button/SuperButton';
@@ -13,6 +15,7 @@ import SuperButton from '../super-button/SuperButton';
 import SettingsApp from '../system-apps/settings/SettingsApp';
 import StoreApp from '../system-apps/store/StoreApp';
 import DocApp from '../system-apps/doc/DocApp';
+import {set} from "mongoose";
 
 /* Component */
 class MainPage extends React.Component {
@@ -29,13 +32,10 @@ class MainPage extends React.Component {
       lastMove: 0,
       moveTo: 'center',
       interpreters: null,
+      fullScreen: false,
     }
 
     // bind
-    this.touchStart = this.touchStart.bind(this);
-    this.touchEnd = this.touchEnd.bind(this);
-    this.touchMove = this.touchMove.bind(this);
-    this.movePage = this.movePage.bind(this);
     this.keydown = this.keydown.bind(this);
     this.resize = this.resize.bind(this);
   }
@@ -43,14 +43,16 @@ class MainPage extends React.Component {
   render() {
 
     /* my apps */
-    let myApps = this.props.projects.map(app => {
+    const myApps = this.props.projects.map(app => {
       return <AppIcon { ...app } key={ 'project' + app.id } type="app" prefix="icon-project-"/>;
     });
 
     /* installed apps */
-    let installedApps = this.props.user.installedApps.map(app => {
+    const installedApps = this.props.user.installedApps.map(app => {
       return <AppIcon { ...app } key={ 'app' + app.id } type="app" prefix="icon-app-"/>;
     });
+
+    let apps = [...myApps, ...installedApps];
 
     /* system apps */
     let systemApps = [
@@ -74,25 +76,56 @@ class MainPage extends React.Component {
                id="doc-system-app"/>,
     ]
 
-    if(myApps.length) {
-      myApps = <div className="apps-wrap">
-      { myApps }
-      </div>;
+    const groups = {};
+    const sortedGroups = [];
+    const groupsMarkup = [];
+
+    const settings = [ ...this.props.user.settings ];
+
+    /* sort apps about groups */
+    settings.map(setting => {
+      const groupName = setting.body.category;
+      if (typeof groupName !== 'string' || groupName === '') { return; }
+
+      /* create group property */
+      if (!sortedGroups.includes(groupName)) {
+        groups[groupName] = {
+          apps: [],
+          body: '',
+        };
+        sortedGroups.push(groupName);
+      }
+
+      /* find app */
+      const sortedApp = apps.find(app => app.props.id === setting.id);
+
+      /* put app to the group */
+      groups[groupName].apps.push(sortedApp);
+
+      /* delete sorted app from arr */
+      apps = apps.filter(item => item !== sortedApp);
+    });
+
+    /* create markup for groups */
+    for (let name in groups) {
+      groupsMarkup.push( this.createGroup(groups[name].apps, name) );
     }
 
-    if(installedApps.length) {
-      installedApps = <div className="apps-wrap">
-      { installedApps }
-      </div>;
+    /* create markup for apps without group */
+    if (apps.length) {
+      groupsMarkup.push( this.createGroup(apps,
+          'Приложения без группы',
+          'Вы можете назначить группы этим приложениям в настройках.') );
     }
 
-    /* page number */
-    let points = [];
-    for (let i = 0; i < 3; i++) {
-      i === this.state.currentPage
-        ? points.push(<div className="active point" key={ i }/>)
-        : points.push(<div className="point" key={ i }/>);
-    }
+    /* push system apps */
+    groupsMarkup.push( this.createGroup(systemApps,
+        'Системные приложения',
+        'Тут располагаются системные приложения. Они нужны для настройки системы и для будущих функций.') );
+
+    /* full screen */
+    let fullScreenIcon = <FontAwesomeIcon icon={ faExpand } />;
+    if (this.state.fullScreen) { fullScreenIcon = <FontAwesomeIcon icon={ faCompress } />; }
 
     /* closing animation */
     if (this.props.appState === 'closing') {
@@ -173,52 +206,24 @@ class MainPage extends React.Component {
               <div className="box-title__under-text"> system </div>
             </div>
             <div className="box-main">
-              <span> Листать </span>
-              <span> ⯇ </span>
-              <span> ⯈ </span>
-            </div>
-            <div className="box-main">
               <span> Свернуть </span>
               <span> ▼ </span>
             </div>
+            <Link className="box-main" to="/projects">
+              <span> Создать </span>
+              <span> alt </span>
+              <span> <FontAwesomeIcon icon={ faPlus } /> </span>
+            </Link>
           </div>
         </div>
         <div className="main-system-page" id="main-system-page">
-          <div className="system-background-wrap">
-            <img src="./images/bg-horizontal.jpg" id="system-background" className="system-background"/>
-          </div>
           <div className="groups-wrap" id="groups-wrap">
-            <div className="app-group">
-              <div className="app-group-widget">
-                <div className="app-group-widget__title">Мои приложения:</div>
-                <div className="app-group-widget__main">
-                  Здесь находятся приложения, которые вы создали. Хотите начать новый проект? Тогда вам
-                  <Link to="/projects"> сюда</Link>.
-                </div>
-              </div>
-              <div className="app-group__icons"> { myApps } </div>
+
+            { groupsMarkup }
+
+            <div className="fullview" id="fullScreen">
+              { fullScreenIcon }
             </div>
-            <div className="app-group">
-              <div className="app-group-widget">
-                <div className="app-group-widget__title">Сторонние приложения:</div>
-                <div className="app-group-widget__main">
-                  А здесь обитают приложения, которые вы скачали. Нужно загрузить ещё? Откройте магазин во вкладке системных приложений.
-                </div>
-              </div>
-              <div className="app-group__icons"> { installedApps } </div>
-            </div>
-            <div className="app-group">
-              <div className="app-group-widget">
-                <div className="app-group-widget__title">Системные приложения:</div>
-                <div className="app-group-widget__main">
-                  Тут располагаются системные приложения. Они нужны для настройки системы и для будущих функций.
-                </div>
-              </div>
-              <div className="app-group__icons"> { systemApps } </div>
-            </div>
-          </div>
-          <div className="page-number">
-            { points }
           </div>
           <div className="main-app-page" id="main-app-page" data-state={ this.props.appState }>
             { interpreter } {/* oneTasking */}
@@ -256,25 +261,44 @@ class MainPage extends React.Component {
     }
 
     /* scroll the menu */
-    const wrap = document.getElementById('groups-wrap');
     const systemWindow = document.getElementById('main-system-page');
     const systemBackground = document.getElementById('system-pc');
 
-    wrap.addEventListener('touchstart', this.touchStart);
-    wrap.addEventListener('touchend', this.touchEnd);
-    wrap.addEventListener('touchmove', this.touchMove);
-
-    if (systemWindow.offsetWidth / systemWindow.offsetHeight > 1.6 && device) {
-      systemWindow.style.width = systemWindow.offsetHeight + 'px';
+    if (device) {
+      systemWindow.style.width = 500 + 'px';
+      systemWindow.style.marginRight = 100 + 'px';
       systemWindow.classList.add('main-system-page__pc-mode');
 
-      const width = document.getElementById('system-wrap').offsetWidth - systemWindow.offsetWidth;
+      document.getElementById('fullScreen').style.display = 'none';
+
+      const width = document.getElementById('system-wrap').offsetWidth - systemWindow.offsetWidth - 100;
       systemBackground.classList.add('system-pc__active');
       systemBackground.style.width = width + 'px';
     }
 
     window.addEventListener('resize', this.resize, device);
     window.addEventListener('keydown', this.keydown);
+
+    document.querySelector('#fullScreen').onclick = () => {
+      try {
+        if (document.fullscreenElement) {
+          document.exitFullscreen();
+          this.setState({ fullScreen: false });
+        } else {
+          document.documentElement.requestFullscreen();
+          this.setState({ fullScreen: true });
+        }
+      } catch {
+        console.log('full screen error');
+      }
+    }
+
+
+
+    /*   ---==== Alerts ====---   */
+
+    const alerts = new AlertsView(this.props.user.alerts, 'MainPage', this.props.fetchUser);
+    alerts.run();
 
 
 
@@ -343,108 +367,16 @@ class MainPage extends React.Component {
     /* render all interpreters */
     this.setState({ interpreters });
 
-
-
-    /*   ---==== Alerts ====---   */
-
-    const alerts = new AlertsView(this.props.user.alerts, 'MainPage', this.props.fetchUser);
-    alerts.run();
-  }
-
-  touchStart(event) {
-
-    /* set finger cords */
-    this.setState({ touchStart: event.touches[event.touches.length - 1].pageX });
-  }
-
-  touchEnd(event) {
-
-    /* constants */
-    const wrap = document.getElementById('groups-wrap');
-    const width = wrap.offsetWidth;
-    const deltaTime = Date.now() - this.state.lastMove;
-    let deltaPage = 0;
-    let move = this.state.touchMove - this.state.touchStart;
-
-    /* natural flipping */
-    if (move > (width / 2) && this.state.currentPage > 0) {
-      deltaPage = -1;
-    } else if ((move * -1) > (width / 2) && this.state.currentPage < 2) {
-      deltaPage = 1;
-    }
-
-    /* swipe flipping */
-    if (this.state.moveTo === 'right' && deltaTime < 50 && this.state.currentPage < 2) {
-      deltaPage = 1;
-    } else if (this.state.moveTo === 'left' && deltaTime < 50 && this.state.currentPage > 0) {
-      deltaPage = -1;
-    }
-
-    /* move page, background and save params */
-    this.movePage(deltaPage);
-
-  }
-
-  touchMove(event) {
-
-    /* constants */
-    const cord = event.touches[event.touches.length - 1].pageX;
-    const wrap = document.getElementById('groups-wrap');
-    const width = wrap.offsetWidth;
-
-    /* move page under finger */
-    let moveTo;
-    let left = cord - this.state.touchStart;
-
-    if (left > 0 && this.state.currentPage < 1) { left /= 4 }
-    else if (left < 0 && this.state.currentPage > 1) { left /= 4 }
-
-    left += -1 * this.state.currentPage * width;
-
-    wrap.style.left = left + 'px';
-    wrap.style.transition = '0s';
-
-    /* calc swipe direction */
-    if (cord > this.state.touchMove) {
-      moveTo = 'left';
-    } else if (cord < this.state.touchMove) {
-      moveTo = 'right';
-    } else {
-      moveTo = 'center';
-    }
-
-    /* save params */
-    this.setState({ touchMove: cord, lastMove: Date.now(), moveTo });
-  }
-
-  movePage(deltaPage) {
-
-    const wrap = document.getElementById('groups-wrap');
-    const background = document.getElementById('system-background');
-    const width = wrap.offsetWidth;
-    const currentPage = this.state.currentPage + deltaPage;
-
-    if (currentPage > 2 || currentPage < 0) { return; }
-
-    this.setState({ touchStart: 0, currentPage });
-    wrap.style.transition = '.2s ease-out';
-    wrap.style.left = (-1 * currentPage * width) + 'px';
-    background.style.marginLeft = (-20 * currentPage) + 'px';
-
   }
 
   keydown(event) {
     switch (event.key) {
-      case 'ArrowRight':
-        if (this.props.appState !== 'closed') { return; }
-        this.movePage(1);
-        break;
-      case 'ArrowLeft':
-        if (this.props.appState !== 'closed') { return; }
-        this.movePage(-1);
-        break;
       case 'ArrowDown':
         this.props.changeAppState({ state: 'closing' });
+        break;
+      case '=':
+        if (!event.altKey) { return; }
+        window.location.href = '/projects';
         break;
     }
   }
@@ -461,14 +393,24 @@ class MainPage extends React.Component {
     }
   }
 
+  createGroup(apps, name, body = 'Пользовательская группа.') {
+    return (
+        <div className="app-group" key={ name }>
+          <div className="app-group-widget">
+            <div className="app-group-widget__title"> { name } </div>
+            <div className="app-group-widget__main">
+              { body }
+            </div>
+          </div>
+          <div className="app-group__icons"> { apps } </div>
+        </div>
+    );
+  }
+
   componentWillUnmount() {
 
     /* remove event listeners */
     const wrap = document.getElementById('groups-wrap');
-
-    wrap.removeEventListener('touchstart', this.touchStart);
-    wrap.removeEventListener('touchend', this.touchEnd);
-    wrap.removeEventListener('touchmove', this.touchMove);
 
     window.removeEventListener('keydown', this.keydown);
     window.removeEventListener('resize', this.resize);

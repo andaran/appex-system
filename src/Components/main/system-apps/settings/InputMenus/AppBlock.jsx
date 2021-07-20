@@ -1,6 +1,6 @@
 import React from 'react';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faKey, faIdBadge } from "@fortawesome/free-solid-svg-icons";
+import { faKey, faIdBadge, faLayerGroup } from "@fortawesome/free-solid-svg-icons";
 import * as Icons from "@fortawesome/free-solid-svg-icons";
 import {request} from "../../../../../tools/apiRequest/apiRequest";
 
@@ -27,6 +27,7 @@ export default class AppBlock extends React.Component {
     if (settings !== undefined) {
       this.roomId = settings.body.roomId;
       this.roomPass = settings.body.roomPass;
+      this.category = settings.body.category;
     }
 
     let errs = [null];
@@ -85,6 +86,17 @@ export default class AppBlock extends React.Component {
                    className="reg-window__input"/>
           </div>
         </div>
+        <div className="reg-window__input-item">
+          <div className="reg-window__item-block">
+            <FontAwesomeIcon icon={ faLayerGroup } />
+          </div>
+          <div className="reg-window__item-block">
+            <input type="text"
+                   placeholder="группа"
+                   id={`group-${ this.props.type + this.props.id }`}
+                   className="reg-window__input"/>
+          </div>
+        </div>
         { errs[0] }
         <div className="reg-window__input-item">
           <div className="reg-window__button reg-window__button_green" id="reg-btn" onClick={ this.send }>
@@ -99,9 +111,11 @@ export default class AppBlock extends React.Component {
   componentDidMount() {
     const id = document.getElementById(`room-id-${ this.props.type + this.props.id }`);
     const pass = document.getElementById(`room-pass-${ this.props.type + this.props.id }`);
+    const category = document.getElementById(`group-${ this.props.type + this.props.id }`);
 
     id.value = this.roomId || '';
     pass.value = this.roomPass || '';
+    category.value = this.category || '';
   }
 
   send() {
@@ -113,6 +127,7 @@ export default class AppBlock extends React.Component {
 
     const roomId = document.getElementById(`room-id-${ this.props.type + this.props.id }`).value;
     const roomPass = document.getElementById(`room-pass-${ this.props.type + this.props.id }`).value;
+    const category = document.getElementById(`group-${ this.props.type + this.props.id }`).value;
 
     if (!roomId || !roomPass) {
       return this.setState({
@@ -131,14 +146,14 @@ export default class AppBlock extends React.Component {
           return {
             id, body: {
               ...setting.body,
-              roomId, roomPass,
+              roomId, roomPass, category
             }
           }
         } else { return setting; }
       });
     } else {
       newUserSettings.push({
-        id, body: { roomId, roomPass, }
+        id, body: { roomId, roomPass, category }
       });
     }
 
