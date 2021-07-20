@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {faUser, faLock, faAt, faUserSlash, faMobile, faArrowLeft, faInfoCircle} from "@fortawesome/free-solid-svg-icons";
+import {faUser, faLock, faAt, faUserCog, faMobile, faArrowLeft, faInfoCircle} from "@fortawesome/free-solid-svg-icons";
 
 import { fetchUser } from "../../../../actions/userActions";
 import { connect } from "react-redux";
@@ -12,6 +12,7 @@ import ChangeMail from './InputMenus/ChangeMail';
 import ChangePassword from './InputMenus/ChangePassword';
 import AccountInfo from './InputMenus/AccountInfo';
 import AppsSettings from './InputMenus/AppsSettings';
+import UserSettings from './InputMenus/UserSettings';
 
 /* Component */
 class SettingsApp extends React.Component {
@@ -56,6 +57,11 @@ class SettingsApp extends React.Component {
       </div>,
       <div className="input-menu">
         { closeButton }
+        <div className="main-settings-title">Настройки пользователя</div>
+        <UserSettings { ...this.props } fetchUser={ this.props.fetchUser }/>
+      </div>,
+      <div className="input-menu">
+        { closeButton }
         <div className="main-settings-title">Об аккаунте</div>
         <AccountInfo { ...this.props } fetchUser={ this.props.fetchUser }/>
       </div>,
@@ -92,10 +98,15 @@ class SettingsApp extends React.Component {
             <span> Настройки приложений </span>
             <div/>
           </li>
+          <li className="apps-params" onClick={ () => this.setState({ menu: 4 }) }>
+            <FontAwesomeIcon icon={ faUserCog } style={{ color: '#63cdda' }}/>
+            <span> Настройки пользователя </span>
+            <div/>
+          </li>
         </ul>
         <hr className="settings-line"/>
         <ul className="settings-list">
-          <li className="apps-params" onClick={ () => this.setState({ menu: 4 }) }>
+          <li className="apps-params" onClick={ () => this.setState({ menu: 5 }) }>
             <FontAwesomeIcon icon={ faInfoCircle } style={{ color: '#2ecc71' }}/>
             <span> Об аккаунте </span>
             <div/>

@@ -65,7 +65,9 @@ router.post('/', (req, res) => {
             type: 'user',
             installedApps: [],
             settings: [],
-            userSettings: {},
+            userSettings: {
+              theme: 1,
+            },
             alerts: [ start ],  // education
           });
 

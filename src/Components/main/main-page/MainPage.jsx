@@ -295,6 +295,29 @@ class MainPage extends React.Component {
 
 
 
+    /*   ---==== Theme ====---   */
+
+    const theme = this.props.user.userSettings.theme;
+    switch (theme) {
+      case 1:
+        this.setTheme('#FDF6F0', '#F5C6AA');
+        break;
+      case 2:
+        this.setTheme('#F4EEFF', '#A6B1E1');
+        break;
+      case 3:
+        this.setTheme('#D7FBE8', '#62D2A2');
+        break;
+      case 4:
+        this.setTheme('#fce9e3', '#FFBBCC');
+        break;
+      default:
+        this.setTheme('#FDF6F0', '#F5C6AA');
+        break;
+    }
+
+
+
     /*   ---==== Alerts ====---   */
 
     const alerts = new AlertsView(this.props.user.alerts, 'MainPage', this.props.fetchUser);
@@ -405,6 +428,14 @@ class MainPage extends React.Component {
           <div className="app-group__icons"> { apps } </div>
         </div>
     );
+  }
+
+  setTheme(color1, color2) {
+    document.querySelector('.main-system-page')
+        .style.backgroundColor = color1;
+
+    document.querySelector('.fullview')
+        .style.backgroundColor = color2;
   }
 
   componentWillUnmount() {

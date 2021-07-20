@@ -50,7 +50,7 @@ router.post('/change_user', (req, res) => {
 router.post('/change_user_private', (req, res) => {
 
   /* private params */
-  const scheme = ['username', 'email'];
+  const scheme = ['username', 'email', 'userSettings', 'installedApps', 'settings'];
   const updateObj = clearParams(req.body, scheme);
 
   /* check params available and update user */

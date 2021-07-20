@@ -104,3 +104,51 @@
   .reg-window__err-item
     margin: 6px 0
 
+.user-settings-block
+  font-size: 16px
+  color: #d2d2d2
+
+  .theme
+    display: flex
+    align-items: center
+    justify-content: space-around
+    margin-top: 14px
+
+    .active
+      transform: scale(.92)
+
+    section
+      width: 60px
+      height: 80px
+      border-radius: 3px
+      position: relative
+      box-shadow: 0 0 5px rgba(0, 0, 0, .3)
+
+      &::before
+        content: ''
+        position: absolute
+        bottom: 0
+        left: 0
+        right: 0
+        height: 30px
+        border-radius: 0 0 3px 3px
+
+    section:nth-child(1)
+      background: #FDF6F0
+      &::before
+        background: #F5C6AA
+
+    section:nth-child(2)
+      background: #F4EEFF
+      &::before
+        background: #A6B1E1
+
+    section:nth-child(3)
+      background: #D7FBE8
+      &::before
+        background: #62D2A2
+
+    section:nth-child(4)
+      background: #fce9e3
+      &::before
+        background: #FFBBCC
