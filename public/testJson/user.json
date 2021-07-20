@@ -11,43 +11,62 @@
         "icon": "faUtensils",
         "color": "#f1c40f",
         "id": "hGLd&snkxkhs&9467"
+      },
+      {
+        "title": "Скачаное приложение 2",
+        "icon": "faUtensils",
+        "color": "#f1c40f",
+        "id": "hGLd&snkxkhs&94672"
+      },
+      {
+        "title": "Скачаное приложение 3",
+        "icon": "faUtensils",
+        "color": "#f1c40f",
+        "id": "hGLd&snkxkhs&94673"
+      },
+      {
+        "title": "Скачаное приложение 4",
+        "icon": "faUtensils",
+        "color": "#f1c40f",
+        "id": "hGLd&snkxkhs&94674"
       }
     ],
     "type": "user",
-    "settings": [{
-      "id": "hGud&snkxkhs&6467",
-      "body": {
-        "roomId": "12345",
-        "roomPass": "password"
-      }
-    }],
-    "userSettings": {},
-    "alerts": [
-      [
-        {
-          "type": "CONFIGURATION",
-          "component": "ProjectsWrap",
-          "renew": false
-        },
-        {
-          "type": "ALERT",
-          "title": "Добро пожаловать в appex!",
-          "text": "Рад приветствоавть вас в своей системе. Пройдите обучение, чтобы лучше разбираться в системе.",
-          "code": false
-        },
-        {
-          "type": "POP_UP",
-          "text": "test",
-          "target": "#project-card__plus",
-          "code": false
-        },
-        {
-          "type": "POP_UP",
-          "text": "test",
-          "target": "#room-card-plus-wrap",
-          "code": false
+    "settings": [
+      {
+        "id": "hGud&snkxkhs&6467",
+        "body": {
+          "roomId": "12345",
+          "roomPass": "password",
+          "category": "Моя комната"
         }
-      ]
-    ]
+      },
+      {
+        "id": "hGLd&snkxkhs&94672",
+        "body": {
+          "roomId": "12345",
+          "roomPass": "password",
+          "category": "Комната бабушки"
+        }
+      },
+      {
+        "id": "hGLd&snkxkhs&94673",
+        "body": {
+          "roomId": "12345",
+          "roomPass": "password",
+          "category": "Кухня"
+        }
+      },
+      {
+        "id": "hGLd&snkxkhs&94674",
+        "body": {
+          "roomId": "12345",
+          "roomPass": "password",
+          "category": "Кухня"
+        }
+      }
+    ],
+    "userSettings": {},
+    "alerts": []
   }
 }

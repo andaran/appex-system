@@ -6,7 +6,7 @@
 .app-group-widget
   width: calc(100% - (100% - 240px) / (5 / 2))
   position: relative
-  padding: 8px 2px 4px 2px
+  padding: 10px 2px 0 2px
   margin: 20px calc((100% - 240px) / (5))
 
   @media all and (min-width: 520px)
@@ -18,15 +18,19 @@
   &__title
     font-size: 24px
     font-weight: 300
-    color: white
+    color: black
 
   &__main
     font-size: 14px
-    color: #d2d2d2
+    color: #2d2d2d
     margin-top: 10px
 
     a
       color: #71b3e0
+
+.main-system-page__pc-mode .app-group-widget
+  width: calc(100% - (100% - 240px) / (5 / 2)) !important
+  margin: 20px calc((100% - 240px) / (5)) !important
 
 .apps-wrap
   padding-bottom: 16px
@@ -34,19 +38,22 @@
 
 .main-system-page
   height: 100vh
-  box-shadow: inset 0 0 0 1000px rgba(0, 0, 0, 0.3)
+  width: 100vw
   overflow: hidden
   float: right
   position: relative
+  background: #FDF6F0
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.6)
 
-  &__pc-mode
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.6)
+.main-system-page__pc-mode .app-group__icons
+  margin-left: calc((100% - 240px) / (5 * 2)) !important
 
 .groups-wrap
-  display: grid
-  grid-template-columns: 100% 100% 100%
-  height: calc(100vh - 45px)
-  padding: 0
+  height: 100vh
+  width: 100%
+  overflow-y: auto
+  overflow-x: hidden
+  padding: 0 0 80px 0
   margin: 0
   grid-gap: 0
   z-index: 1
@@ -55,9 +62,7 @@
 
 .app-group
   width: 100%
-  height: 100%
-  overflow-x: hidden
-  overflow-y: scroll
+  overflow: hidden
   padding: 0
   margin: 0
 
@@ -71,40 +76,9 @@
     @media all and (min-width: 1080px)
       margin-left: calc((100% - 360px) / (7 * 2))
 
-
-
-.page-number
-  height: 10px
-  width: 100%
-  position: absolute
-  bottom: 20px
-  display: flex
-  justify-content: center
-  align-items: center
-
-  div
-    width: 4px
-    height: 4px
-    margin: 11px
-    border-radius: 50%
-    background: #8b8b8b
-
-  .active
-    width: 6px
-    height: 6px
-    margin: 10px
-    background: white
-
-.system-background-wrap
+.system-wrap
+  width: 100vw
   height: 100vh
-  width: 100%
-  top: 0
-  overflow: hidden
-  position: absolute
-
-.system-background
-  height: 100%
-  transition: .2s ease-out
 
 .system-pc
   display: none
@@ -142,6 +116,7 @@
 
 .box-main
   margin-top: 4px
+  display: block
 
   span:first-child
     font-size: 16px
@@ -162,6 +137,9 @@
     width: 50px
     text-align: center
 
+  &:hover
+    color: white
+
 
 
 /*   ---==== main app page ====---   */
@@ -181,3 +159,17 @@
 .main-app-page[data-state="closed"], .main-app-page[data-state="closing"]
   transform: scale(.2)
   top: 100vh
+
+.fullview
+  position: fixed
+  bottom: 15px
+  right: 15px
+  width: 54px
+  height: 54px
+  color: #262c31
+  font-size: 19px
+  background: #F5C6AA
+  display: flex
+  justify-content: center
+  align-items: center
+  border-radius: 50%
