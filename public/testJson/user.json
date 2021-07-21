@@ -67,7 +67,25 @@
       }
     ],
     "userSettings": {
-      "theme": 1
+      "theme": 1,
+      "widgets": [
+        {
+          "roomId": "123",
+          "roomPass":  "123",
+          "category": "Кухня",
+          "property": "test",
+          "icon":  "faPaperPlane",
+          "title":  "%"
+        },
+        {
+          "roomId": "123",
+          "roomPass":  "123",
+          "category": "Кухня",
+          "property": "test",
+          "icon":  "faPaperPlane",
+          "title":  ""
+        }
+      ]
     },
     "alerts": []
   }

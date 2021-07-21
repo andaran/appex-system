@@ -1,7 +1,10 @@
 import * as PROJECTS from '../Constants/projectsConstants';
 
 /* develop mode */
-const devMode = false
+let devMode = false;
+if (window.location.port === '3000') {
+  devMode = true;
+}
 
 export function fetchProjects(username, id) {
   const body = JSON.stringify({ username, id });

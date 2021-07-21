@@ -1,0 +1,41 @@
+
+.widgets
+  padding: 0
+  margin: 0 calc((100% - 240px) / (5))
+
+  @media all and (min-width: 520px)
+    margin: 0 calc((100% - 300px) / (6))
+
+  @media all and (min-width: 1080px)
+    margin: 0 calc((100% - 360px) / (7))
+
+.main-system-page__pc-mode .widgets
+  margin: 0 calc((100% - 240px) / (5)) !important
+
+.widget-wrap
+  //width: 300px
+  display: inline-grid
+  height: 80px
+  border-top: 1px solid #2d2d2d
+  border-bottom: 1px solid #2d2d2d
+  grid-template-columns: auto auto auto
+  margin: 0 5px 20px 0
+
+  section
+    display: flex
+    align-items: center
+    color: #2d2d2d
+    padding: 0 10px
+
+  section:nth-child(1)
+    font-size: 40px
+
+  section:nth-child(2)
+    font-size: 32px
+    font-weight: bold
+
+  section:nth-child(3)
+    align-items: flex-start
+    font-size: 16px
+    font-weight: bold
+    padding: 16px 10px 0 0

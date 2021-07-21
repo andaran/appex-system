@@ -385,7 +385,7 @@ io.on('connection', (socket) => {
         socket.emit('connectSuccess', state);
 
         /* delete room trash */
-        if (data.currentState !== undefined) {
+        if (data.currentState) {
 
           let keys = Object.keys(data.currentState);
           let newState = {};

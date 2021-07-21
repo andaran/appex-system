@@ -8,14 +8,16 @@ import { Link } from "react-router-dom";
 import AlertsView from "../../../tools/alerts/alertsView";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCompress, faExpand, faPlus } from "@fortawesome/free-solid-svg-icons";
+import io from 'socket.io-client';
 
 import AppIcon from '../app-icon/AppIcon';
 import SuperButton from '../super-button/SuperButton';
-
 import SettingsApp from '../system-apps/settings/SettingsApp';
 import StoreApp from '../system-apps/store/StoreApp';
 import DocApp from '../system-apps/doc/DocApp';
-import {set} from "mongoose";
+import Widget from "../widget/Widget";
+
+const socket = io();
 
 /* Component */
 class MainPage extends React.Component {
@@ -33,11 +35,14 @@ class MainPage extends React.Component {
       moveTo: 'center',
       interpreters: null,
       fullScreen: false,
+      widgets: false,
     }
+
 
     // bind
     this.keydown = this.keydown.bind(this);
     this.resize = this.resize.bind(this);
+    this.updateWidgets = this.updateWidgets.bind(this);
   }
 
   render() {
@@ -325,6 +330,54 @@ class MainPage extends React.Component {
 
 
 
+    /*   ---==== Widgets ====---   */
+
+    let widgets = this.props.user.userSettings.widgets;
+
+    if (widgets === undefined) { widgets = []; }
+
+    if (widgets.length > 0) {
+
+      const states = [];
+
+      widgets.forEach(widget => {
+
+        /* connect to the socket room */
+        socket.emit('connectToRoom', {
+          roomId: widget.roomId,
+          roomPass: widget.roomPass,
+          currentState: false
+        });
+
+        /* fetch widgets statuses */
+        const state = request('/core_api/get_property_value', {
+          roomId: widget.roomId,
+          roomPass: widget.roomPass,
+          property: widget.property,
+        }).then(res => res.json())
+          .then(data => {
+            return { res: data, prop: widget.property }
+          });
+
+        states.push(state)
+      });
+
+      /* update widgets state */
+      socket.on('updateState', this.updateWidgets);
+
+      /* set widgets state */
+      Promise.all(states).then(data => {
+        const statuses = {};
+        data.forEach(widgetStatus => {
+          statuses[widgetStatus.res.roomId] = {};
+          statuses[widgetStatus.res.roomId][widgetStatus.prop] = widgetStatus.res.value;
+        });
+        this.setState({ widgets: statuses });
+      });
+    }
+
+
+
     /*   ---==== Caching all apps ====---   */
 
     /* user */
@@ -417,6 +470,25 @@ class MainPage extends React.Component {
   }
 
   createGroup(apps, name, body = 'Пользовательская группа.') {
+
+    let widgets = this.props.user.userSettings.widgets
+      .filter(widget => widget.category === name);
+
+    /* render widgets */
+    if (widgets.length && this.state.widgets) {
+      try {
+        widgets = widgets.map((widget, i) => {
+          return <Widget
+            title={ widget.title }
+            value={ this.state.widgets[ widget.roomId ][ widget.property ] }
+            icon={ widget.icon }
+            key={ i }/>
+        });
+      } catch {
+        widgets = null;
+      }
+    } else { widgets = null; }
+
     return (
         <div className="app-group" key={ name }>
           <div className="app-group-widget">
@@ -424,6 +496,9 @@ class MainPage extends React.Component {
             <div className="app-group-widget__main">
               { body }
             </div>
+          </div>
+          <div className="widgets">
+            { widgets }
           </div>
           <div className="app-group__icons"> { apps } </div>
         </div>
@@ -438,6 +513,14 @@ class MainPage extends React.Component {
         .style.backgroundColor = color2;
   }
 
+  updateWidgets(data) {
+
+    /* update widgets state */
+    const newState = this.state.widgets;
+    newState[data.roomId] = { ...newState[data.roomId], ...data.params };
+    this.setState({ widgets: newState });
+  }
+
   componentWillUnmount() {
 
     /* remove event listeners */
@@ -445,6 +528,10 @@ class MainPage extends React.Component {
 
     window.removeEventListener('keydown', this.keydown);
     window.removeEventListener('resize', this.resize);
+
+    this.props.user.userSettings.widgets.forEach(widget => {
+      socket.emit('disconnectFromRoom', widget.roomId);
+    });
   }
 }
 

@@ -1,6 +1,9 @@
 
 /* develop mode */
-const devMode = false;
+let devMode = false;
+if (window.location.port === '3000') {
+  devMode = true;
+}
 
 export function fetchRooms() {
   let request;
