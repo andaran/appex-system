@@ -471,6 +471,10 @@ class MainPage extends React.Component {
 
   createGroup(apps, name, body = 'Пользовательская группа.') {
 
+    if (this.props.user.userSettings.widgets === undefined) {
+      this.props.user.userSettings.widgets = [];
+    }
+
     let widgets = this.props.user.userSettings.widgets
       .filter(widget => widget.category === name);
 
