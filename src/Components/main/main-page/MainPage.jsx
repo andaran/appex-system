@@ -156,7 +156,10 @@ class MainPage extends React.Component {
       interpreters.forEach(node => {
         node.style.display = 'none';
       });
+    }
 
+    /* update system theme */
+    if (this.props.appState === 'closing') {
       process.nextTick(() => this.updateTheme());
     }
 
