@@ -515,6 +515,12 @@ class MainPage extends React.Component {
 
     document.querySelector('.fullview')
         .style.backgroundColor = color2;
+
+    document.getElementById('theme-color')
+      .setAttribute('content', color1);
+
+    document.getElementById('apple-theme-color')
+      .setAttribute('content', color1);
   }
 
   updateWidgets(data) {
@@ -536,6 +542,12 @@ class MainPage extends React.Component {
     this.props.user.userSettings.widgets.forEach(widget => {
       socket.emit('disconnectFromRoom', widget.roomId);
     });
+
+    document.getElementById('theme-color')
+      .setAttribute('content', 'black');
+
+    document.getElementById('apple-theme-color')
+      .setAttribute('content', 'black');
   }
 }
 
