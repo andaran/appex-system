@@ -197,6 +197,14 @@ class MainPage extends React.Component {
               .setAttribute('content', 'black');
           }, 200);
         }
+      } else {
+        setTimeout(() => {
+          document.getElementById('theme-color')
+            .setAttribute('content', 'black');
+
+          document.getElementById('apple-theme-color')
+            .setAttribute('content', 'black');
+        }, 200);
       }
     }
 
