@@ -158,11 +158,6 @@ class MainPage extends React.Component {
       });
     }
 
-    /* update system theme */
-    if (this.props.appState === 'closing') {
-      process.nextTick(() => this.updateTheme());
-    }
-
     /* set multiTasking Interpreter */
     if (['opened', 'closing'].includes(this.props.appState) &&
         this.props.appType === 'app' &&
@@ -173,42 +168,6 @@ class MainPage extends React.Component {
 
       /* show interpreter */
       app.style.display = 'block';
-
-      /* app config */
-      const markup = app.contentDocument || app.contentWindow.document;
-      const config = markup.querySelector('*[data-role=config]');
-
-      if (config) {
-
-        /* setup theme */
-        const theme = config.getAttribute('data-theme');
-        if (theme && theme !== 'auto') {
-          setTimeout(() => {
-            document.getElementById('theme-color')
-              .setAttribute('content', theme);
-
-            document.getElementById('apple-theme-color')
-              .setAttribute('content', theme);
-          }, 200);
-
-        } else if (!theme) {
-          setTimeout(() => {
-            document.getElementById('theme-color')
-              .setAttribute('content', 'black');
-
-            document.getElementById('apple-theme-color')
-              .setAttribute('content', 'black');
-          }, 200);
-        }
-      } else {
-        setTimeout(() => {
-          document.getElementById('theme-color')
-            .setAttribute('content', 'black');
-
-          document.getElementById('apple-theme-color')
-            .setAttribute('content', 'black');
-        }, 200);
-      }
     }
 
     /* set oneTasking Interpreter */
@@ -242,7 +201,45 @@ class MainPage extends React.Component {
         default:
           break;
       }
+
+      /* set black status bar */
+      if (this.props.appState === 'opened' && this.props.appType !== 'app') {
+        this.setStatusBar('black');
+      }
     }
+
+
+
+    /*   ---==== App config ====---   */
+
+    /* update system theme */
+    if (this.props.appState === 'closing') {
+      process.nextTick(() => this.updateTheme());
+
+    /* set app theme */
+    } else if (this.props.appState === 'opened' && this.props.appType === 'app') {
+
+      const app = document.getElementById('app'+this.props.appId) ||
+        document.getElementById('project'+this.props.appId);
+
+      /* app config */
+      const markup = app.contentDocument || app.contentWindow.document;
+      const config = markup.querySelector('*[data-role=config]');
+
+      if (config) {
+
+        /* setup theme */
+        const theme = config.getAttribute('data-theme');
+        if (theme && theme !== 'auto') {
+          this.setStatusBar(theme);
+        } else if (!theme) {
+          this.setStatusBar('black');
+        }
+      } else {
+        this.setStatusBar('black');
+      }
+    }
+
 
     return (
       <div className="system-wrap" id="system-wrap">
@@ -568,6 +565,16 @@ class MainPage extends React.Component {
 
     document.getElementById('apple-theme-color')
       .setAttribute('content', color1);
+  }
+
+  setStatusBar(color) {
+    setTimeout(() => {
+      document.getElementById('theme-color')
+        .setAttribute('content', color);
+
+      document.getElementById('apple-theme-color')
+        .setAttribute('content', color);
+    }, 200);
   }
 
   updateWidgets(data) {
