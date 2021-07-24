@@ -43,6 +43,7 @@ class MainPage extends React.Component {
     this.keydown = this.keydown.bind(this);
     this.resize = this.resize.bind(this);
     this.updateWidgets = this.updateWidgets.bind(this);
+    this.updateTheme = this.updateTheme.bind(this);
   }
 
   render() {
@@ -155,6 +156,8 @@ class MainPage extends React.Component {
       interpreters.forEach(node => {
         node.style.display = 'none';
       });
+
+      process.nextTick(() => this.updateTheme());
     }
 
     /* set multiTasking Interpreter */
@@ -162,10 +165,39 @@ class MainPage extends React.Component {
         this.props.appType === 'app' &&
         this.multiTasking) {
 
-      const project = document.getElementById('project'+this.props.appId);
-      const app = document.getElementById('app'+this.props.appId);
-      app ? app.style.display = 'block' : project.style.display = 'block';
+      const app = document.getElementById('app'+this.props.appId) ||
+        document.getElementById('project'+this.props.appId);
 
+      /* show interpreter */
+      app.style.display = 'block';
+
+      /* app config */
+      const markup = app.contentDocument || app.contentWindow.document;
+      const config = markup.querySelector('*[data-role=config]');
+
+      if (config) {
+
+        /* setup theme */
+        const theme = config.getAttribute('data-theme');
+        if (theme && theme !== 'auto') {
+          setTimeout(() => {
+            document.getElementById('theme-color')
+              .setAttribute('content', theme);
+
+            document.getElementById('apple-theme-color')
+              .setAttribute('content', theme);
+          }, 200);
+
+        } else if (!theme) {
+          setTimeout(() => {
+            document.getElementById('theme-color')
+              .setAttribute('content', 'black');
+
+            document.getElementById('apple-theme-color')
+              .setAttribute('content', 'black');
+          }, 200);
+        }
+      }
     }
 
     /* set oneTasking Interpreter */
@@ -302,24 +334,7 @@ class MainPage extends React.Component {
 
     /*   ---==== Theme ====---   */
 
-    const theme = this.props.user.userSettings.theme;
-    switch (theme) {
-      case 1:
-        this.setTheme('#FDF6F0', '#F5C6AA');
-        break;
-      case 2:
-        this.setTheme('#F4EEFF', '#A6B1E1');
-        break;
-      case 3:
-        this.setTheme('#D7FBE8', '#62D2A2');
-        break;
-      case 4:
-        this.setTheme('#fce9e3', '#FFBBCC');
-        break;
-      default:
-        this.setTheme('#FDF6F0', '#F5C6AA');
-        break;
-    }
+    this.updateTheme();
 
 
 
@@ -507,6 +522,27 @@ class MainPage extends React.Component {
           <div className="app-group__icons"> { apps } </div>
         </div>
     );
+  }
+
+  updateTheme() {
+    const theme = this.props.user.userSettings.theme;
+    switch (theme) {
+      case 1:
+        this.setTheme('rgb(243,236,230)', '#F5C6AA');
+        break;
+      case 2:
+        this.setTheme('rgb(237,231,248)', '#A6B1E1');
+        break;
+      case 3:
+        this.setTheme('rgb(224,260,241)', '#62D2A2');
+        break;
+      case 4:
+        this.setTheme('rgb(252,233,227)', '#FFBBCC');
+        break;
+      default:
+        this.setTheme('rgb(243,236,230)', '#F5C6AA');
+        break;
+    }
   }
 
   setTheme(color1, color2) {
