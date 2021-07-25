@@ -396,7 +396,7 @@ class MainPage extends React.Component {
           statuses[widgetStatus.res.roomId][widgetStatus.prop] = widgetStatus.res.value;
         });
         this.setState({ widgets: statuses });
-      });
+      }).catch(() => alert("Ошибка добавления виджетов!"));
     }
 
 
@@ -498,6 +498,11 @@ class MainPage extends React.Component {
       this.props.user.userSettings.widgets = [];
     }
 
+    if (this.props.user.userSettings.groups === undefined) {
+      this.props.user.userSettings.groups = [];
+    }
+
+    /* widgets */
     let widgets = this.props.user.userSettings.widgets
       .filter(widget => widget.category === name);
 
@@ -515,6 +520,11 @@ class MainPage extends React.Component {
         widgets = null;
       }
     } else { widgets = null; }
+
+    /* groups */
+    const groups = this.props.user.userSettings.groups;
+    const group = groups.find(group => group.name === name);
+    if (group) { body = group.description; }
 
     return (
         <div className="app-group" key={ name }>

@@ -68,6 +68,7 @@ router.post('/', (req, res) => {
             userSettings: {
               theme: 1,
               widgets: [],
+              groups: [],
             },
             alerts: [ start ],  // education
           });

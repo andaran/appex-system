@@ -4,7 +4,7 @@ import { faKey, faIdBadge, faLayerGroup, faAlignLeft, faCode, faThermometerHalf 
 import {request} from "../../../../../tools/apiRequest/apiRequest";
 
 /* Component */
-export default class AppBlock extends React.Component {
+export default class WidgetBlock extends React.Component {
   constructor(props) {
     super(props);
 
@@ -169,7 +169,7 @@ export default class AppBlock extends React.Component {
 
     let newUserSettings = JSON.stringify(this.props.user.userSettings);
     newUserSettings = JSON.parse(newUserSettings);
-    newUserSettings.widgets.splice(1, this.props.number);
+    newUserSettings.widgets.splice(this.props.number, 1);
 
     /* do request */
     this.userRequest({ userSettings: newUserSettings });

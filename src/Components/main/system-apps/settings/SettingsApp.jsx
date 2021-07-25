@@ -2,7 +2,7 @@ import React from 'react';
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser, faLock, faAt, faUserCog,
-  faMobile, faArrowLeft, faInfoCircle, faBoxes} from "@fortawesome/free-solid-svg-icons";
+  faMobile, faArrowLeft, faInfoCircle, faBoxes, faLayerGroup} from "@fortawesome/free-solid-svg-icons";
 
 import { fetchUser } from "../../../../actions/userActions";
 import { connect } from "react-redux";
@@ -15,6 +15,7 @@ import AccountInfo from './InputMenus/AccountInfo';
 import AppsSettings from './InputMenus/AppsSettings';
 import UserSettings from './InputMenus/UserSettings';
 import Widgets from './InputMenus/Widgets';
+import Groups from  './InputMenus/Groups';
 
 /* Component */
 class SettingsApp extends React.Component {
@@ -69,6 +70,11 @@ class SettingsApp extends React.Component {
       </div>,
       <div className="input-menu">
         { closeButton }
+        <div className="main-settings-title">Настройки групп</div>
+        <Groups { ...this.props } fetchUser={ this.props.fetchUser }/>
+      </div>,
+      <div className="input-menu">
+        { closeButton }
         <div className="main-settings-title">Об аккаунте</div>
         <AccountInfo { ...this.props } fetchUser={ this.props.fetchUser }/>
       </div>,
@@ -115,10 +121,15 @@ class SettingsApp extends React.Component {
             <span> Настройки виджетов </span>
             <div/>
           </li>
+          <li className="apps-params" onClick={ () => this.setState({ menu: 6 }) }>
+            <FontAwesomeIcon icon={ faLayerGroup } style={{ color: '#1abc9c' }}/>
+            <span> Настройки групп </span>
+            <div/>
+          </li>
         </ul>
         <hr className="settings-line"/>
         <ul className="settings-list">
-          <li className="apps-params" onClick={ () => this.setState({ menu: 6 }) }>
+          <li className="apps-params" onClick={ () => this.setState({ menu: 7 }) }>
             <FontAwesomeIcon icon={ faInfoCircle } style={{ color: '#2ecc71' }}/>
             <span> Об аккаунте </span>
             <div/>
