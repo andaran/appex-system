@@ -38,7 +38,9 @@ export default class Lending extends React.Component {
               <span className="box-title__text"> ppex </span>
             </div>
             <span className="lending-description">
-              Новейшая система умного дома для самодельных проектов
+              Новейшая система умного дома для самодельных проектов. <br/>
+              Github: <a href="https://github.com/andaran/appex-system/">
+                github.com/andaran/appex-system</a>
             </span>
           </main>
           <div className='lending-header_down'>
@@ -88,7 +90,8 @@ export default class Lending extends React.Component {
           <div className="lending-text">
             <div className="lending-text_title">Свобода</div>
             <div className="lending-text_main">
-              В appex практически нет рамок, а следовательно, нет и ограничений. Это бесплатный проект, который в дальнейшем пойдет на open source. Вы можете создавать сколько угодно приложений любой сложности, подключать сколько угодно устройств и совершать до 600 запросов на сервер в минуту. Этого достаточно, чтобы Вас ограничивало только воображение!
+              В appex практически нет рамок, а следовательно, нет и ограничений.
+              Это бесплатный open source проект. Вы можете создавать сколько угодно приложений любой сложности, подключать сколько угодно устройств и совершать до 600 запросов на сервер в минуту. Этого достаточно, чтобы Вас ограничивало только воображение!
             </div>
           </div>
           <div className='lending-header_down'>
