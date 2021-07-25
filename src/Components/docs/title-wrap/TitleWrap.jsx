@@ -11,6 +11,7 @@ export default class TitleWrap extends React.Component {
       <TitleItem title="Введение" to="enter"/>
       <TitleItem title="Комнаты" to="rooms"/>
       <TitleItem title="Приложения" to="apps"/>
+      <TitleItem title="Настройки" to="settings"/>
       <TitleItem title="Класс App" to="class-app"/>
       <TitleItem title="Эмулятор" to="emulator"/>
       <TitleItem title="Пресеты" to="presets"/>
