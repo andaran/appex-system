@@ -13,8 +13,7 @@ class AppDownload extends React.Component {
     super(props);
 
     // bind
-    this.download = this.download.bind(this);
-    this.delete = this.delete.bind(this);
+    this.clone = this.clone.bind(this);
   }
 
   render() {
@@ -53,41 +52,12 @@ class AppDownload extends React.Component {
     );
   }
 
-  componentDidMount() {
-
-  }
-
-  delete() {
+  clone() {
 
     const id = this.props.id;
-    const app = this.props.user.installedApps.find(elem => elem.id === id);
-    const newApps = this.props.user.installedApps;
 
-    /* delete app */
-    const index = newApps.indexOf(app);
-    if (index > -1) {
-      newApps.splice(index, 1);
-    }
+    // TODO: cloning app
 
-    /* do request */
-    this.userRequest({ installedApps: newApps });
-    this.forceUpdate();
-  }
-
-  download() {
-
-    const id = this.props.id;
-    const title = this.props.title;
-    const color = this.props.color;
-    const icon = this.props.icon;
-    const newApps = this.props.user.installedApps;
-
-    newApps.push({
-      title, icon, color, id,
-    });
-
-    /* do request */
-    this.userRequest({ installedApps: newApps });
     this.forceUpdate();
   }
 

@@ -29,16 +29,21 @@ const appSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  type: {
+    type: String,
+    required: true,
+  },
+  clonedFrom: {
+    type: String,
+  },
   code: {
     type: Object,
-    required: true,
     html: { type: String },
     css: { type: String },
     js: { type: String },
   },
   releaseCode: {
     type: Object,
-    required: true,
     html: { type: String },
     css: { type: String },
     js: { type: String },

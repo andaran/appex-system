@@ -159,6 +159,7 @@ router.post('/create_app', (req, res) => {
       storeVisibility: req.body.downloadAvailable,
       createDate: Date.now(),
       author: req.user.id,
+      type: 'app',
       code: {
         html: fs.readFileSync(path.join(__dirname, '../', 'startCode', 'code.html'), opt),
         css: fs.readFileSync(path.join(__dirname, '../', 'startCode', 'code.css'), opt),
@@ -178,6 +179,62 @@ router.post('/create_app', (req, res) => {
 
   }, err => res.json({ status: 'err' }))
     .catch(err => res.json({ status: 'err' }));
+});
+
+router.post('/create_clone', (req, res) => {
+
+  /* find parent app */
+  App.findOne({
+    $or: [
+      {
+        author: req.user.id,
+        id: req.body.appId,
+        type: 'app',
+      },
+      {
+        id: req.body.appId,
+        storeVisibility: true,
+        type: 'app',
+      }
+    ]
+  }).then(foundApp => {
+
+    /* if the app is not exists */
+    if (foundApp === null) {
+      return res.json({ status: 'err' });
+    }
+
+    /* generate id */
+    generateAppId().then(appId => {
+
+      /* create app object */
+      let appObj = {
+        title: foundApp.title,
+        icon: foundApp.icon,
+        color: foundApp.color,
+        id: appId,
+        storeVisibility: false,
+        createDate: Date.now(),
+        author: req.user.id,
+        type: 'clone',
+        clonedFrom: foundApp.id,
+        code: {},
+        releaseCode: {},
+      }
+
+      /* save the clone */
+      const app = new App(appObj);
+      app.save().then(newApp => {
+        res.json({ status: 'ok' });
+      }, err => {
+        console.log(err);
+        res.json({ status: 'err' });
+      });
+
+    }, err => res.json({ status: 'err' }))
+      .catch(err => res.json({ status: 'err' }));
+
+  }).catch(err => res.json({ status: 'err' }));
 });
 
 router.post('/change_app/:mode', (req, res) => {
@@ -301,30 +358,56 @@ router.post('/delete_room', (req, res) => {
 
 
 
-/*   ---==== Apps ====---   */
+/*   ---==== Apps view ====---   */
 
 router.post('/get_app', (req, res) => {
 
   /* find app by user id */
   App.findOne({
-    $or: [
-      {
-        author: req.user.id,
-        id: req.body.appId,
-      },
-      {
-        id: req.body.appId,
-        storeVisibility: true,
-      }
-    ]
+    author: req.user.id,
+    id: req.body.appId,
   }).then(foundApp => {
 
-    /* send found rooms */
+    /* if app is not exists */
     if (foundApp === null) {
-      res.json({ status: 'err' });
-    } else {
-      res.json({ status: 'ok', app: foundApp, user: req.user });
+      return res.json({ status: 'err' });
     }
+
+    if (foundApp.type !== 'clone') {
+      res.json({ status: 'ok', app: foundApp, user: req.user });
+    } else {
+
+      /* find app by user id */
+      App.findOne({
+        $or: [
+          {
+            id: foundApp.clonedFrom,
+            author: req.user.id,
+            type: 'app',
+          },
+          {
+            id: foundApp.clonedFrom,
+            storeVisibility: true,
+            type: 'app',
+          }
+        ]
+      }).then(foundParent => {
+
+        /* if app is not exists */
+        if (foundParent === null) {
+          return res.json({ status: 'err' });
+        }
+
+        /* build cloned app */
+        const app = foundParent;
+        app.code = foundApp.code;
+        app.releaseCode = foundApp.releaseCode;
+
+        /* send app */
+        res.json({ status: 'ok', app, user: req.user });
+      }).catch(err => res.json({ status: 'err' }));
+    }
+
   }).catch(err => res.json({ status: 'err' }));
 });
 
@@ -335,7 +418,10 @@ router.post('/get_app', (req, res) => {
 router.post('/get_last_apps', (req, res) => {
 
   /* find last 100 apps */
-  App.find({ storeVisibility: true })
+  App.find({
+    storeVisibility: true,
+    type: 'app',
+  })
     .sort({'date': -1})
     .limit(100)
     .then(foundApps => {
@@ -363,8 +449,16 @@ router.post('/get_find_apps', (req, res) => {
 
   /* find apps */
   App.find({$or: [
-      { title: req.body.search, storeVisibility: true },
-      { id: req.body.search, storeVisibility: true }
+      {
+        title: req.body.search,
+        storeVisibility: true,
+        type: 'app',
+      },
+      {
+        id: req.body.search,
+        storeVisibility: true,
+        type: 'app',
+      }
     ]})
     .sort({'date': -1})
     .limit(100)
