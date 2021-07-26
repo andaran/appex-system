@@ -399,9 +399,9 @@ router.post('/get_app', (req, res) => {
         }
 
         /* build cloned app */
-        const app = foundParent;
-        app.code = foundApp.code;
-        app.releaseCode = foundApp.releaseCode;
+        const app = foundApp;
+        app.code = foundParent.code;
+        app.releaseCode = foundParent.releaseCode;
 
         /* send app */
         res.json({ status: 'ok', app, user: req.user });

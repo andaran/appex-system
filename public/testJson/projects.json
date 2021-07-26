@@ -6,10 +6,8 @@
     "id": "hGud&snkxkhs&6467",
     "storeVisibility": true,
     "createDate": "123456",
-    "author": {
-      "username": "Andrey",
-      "id": "12345"
-    },
+    "author": "12345",
+    "type": "app",
     "code": {
       "html": "<h1>1</h1>",
       "css": "",
@@ -20,5 +18,16 @@
       "css":"",
       "js": "console.log('Release!');"
     }
+  },
+  {
+    "title": "макароно-варка",
+    "icon": "faUtensils",
+    "color": "#f1c40f",
+    "id": "hGud&snkxkhs&0000",
+    "storeVisibility": true,
+    "createDate": "123456",
+    "author": "12345",
+    "type": "clone",
+    "clonedFrom": "hGud&snkxkhs&6467"
   }
 ]

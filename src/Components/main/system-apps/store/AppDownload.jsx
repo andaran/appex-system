@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import * as Icons from "@fortawesome/free-solid-svg-icons";
 import {faIdBadge, faKey, faSearch} from "@fortawesome/free-solid-svg-icons";
 import {fetchUser} from "../../../../actions/userActions";
+import {fetchProjects} from "../../../../actions/projectsActions";
 import {connect} from "react-redux";
 import {request} from "../../../../tools/apiRequest/apiRequest";
 
@@ -19,21 +20,12 @@ class AppDownload extends React.Component {
   render() {
 
     const id = this.props.id;
-    const app = this.props.user.installedApps.find(elem => elem.id === id);
 
     let button = <div className="reg-window__input-item">
-      <div className="reg-window__button reg-window__button_green" onClick={ this.download }>
-        Скачать
+      <div className="reg-window__button reg-window__button_green" onClick={ this.clone }>
+        Клонировать
       </div>
     </div>;
-
-    if (app) {
-      button = <div className="reg-window__input-item">
-        <div className="reg-window__button reg-window__button_red" onClick={ this.delete }>
-          Удалить
-        </div>
-      </div>;
-    }
 
     return (
       <div className="app-block app-download-block">
@@ -56,16 +48,16 @@ class AppDownload extends React.Component {
 
     const id = this.props.id;
 
-    // TODO: cloning app
+    this.cloneApp({ appId: id });
 
     this.forceUpdate();
   }
 
-  userRequest(params) {
-    request(`/api/change_user`, params)
+  cloneApp(params) {
+    request(`/api/create_clone`, params)
       .then(res => res.json()).then(body => {
       if (body.status === 'ok') {
-        this.props.fetchUser();
+        this.props.fetchProjects();
       } else {
         console.log(body);
       }
@@ -87,6 +79,9 @@ function mapDispatchToProps(dispatch) {
   return {
     fetchUser: () => {
       dispatch(fetchUser())
+    },
+    fetchProjects: () => {
+      dispatch(fetchProjects())
     }
   }
 }

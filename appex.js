@@ -81,7 +81,6 @@ passport.deserializeUser((id, done) => {
       rooms: foundUser.rooms,
       settings: foundUser.settings,
       userSettings: foundUser.userSettings,
-      installedApps: foundUser.installedApps,
       type: foundUser.type,
       alerts: foundUser.alerts,
     });
