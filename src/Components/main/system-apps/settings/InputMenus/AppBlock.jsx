@@ -15,7 +15,6 @@ export default class AppBlock extends React.Component {
 
     // bind
     this.send = this.send.bind(this);
-    this.delete = this.delete.bind(this);
   }
 
   render() {
@@ -41,17 +40,6 @@ export default class AppBlock extends React.Component {
       }
     });
 
-    let deleteApp = null;
-    if (this.props.type === 'app') {
-      deleteApp = (
-        <div className="reg-window__input-item">
-          <div className="reg-window__button reg-window__button_red" id="delete-btn" onClick={ this.delete }>
-            Удалить
-          </div>
-        </div>
-      );
-    }
-
     return (
       <div className="app-block">
         <div className="reg-window__input-item">
@@ -71,7 +59,7 @@ export default class AppBlock extends React.Component {
           <div className="reg-window__item-block">
             <input type="text"
                    placeholder="id комнаты"
-                   id={`room-id-${ this.props.type + this.props.id }`}
+                   id={`room-id-${ this.props.id }`}
                    className="reg-window__input"/>
           </div>
         </div>
@@ -82,7 +70,7 @@ export default class AppBlock extends React.Component {
           <div className="reg-window__item-block">
             <input type="text"
                    placeholder="пароль комнаты"
-                   id={`room-pass-${ this.props.type + this.props.id }`}
+                   id={`room-pass-${ this.props.id }`}
                    className="reg-window__input"/>
           </div>
         </div>
@@ -93,7 +81,7 @@ export default class AppBlock extends React.Component {
           <div className="reg-window__item-block">
             <input type="text"
                    placeholder="группа"
-                   id={`group-${ this.props.type + this.props.id }`}
+                   id={`group-${ this.props.id }`}
                    className="reg-window__input"/>
           </div>
         </div>
@@ -103,15 +91,14 @@ export default class AppBlock extends React.Component {
             Сохранить
           </div>
         </div>
-        { deleteApp }
       </div>
     );
   }
 
   componentDidMount() {
-    const id = document.getElementById(`room-id-${ this.props.type + this.props.id }`);
-    const pass = document.getElementById(`room-pass-${ this.props.type + this.props.id }`);
-    const category = document.getElementById(`group-${ this.props.type + this.props.id }`);
+    const id = document.getElementById(`room-id-${ this.props.id }`);
+    const pass = document.getElementById(`room-pass-${ this.props.id }`);
+    const category = document.getElementById(`group-${ this.props.id }`);
 
     id.value = this.roomId || '';
     pass.value = this.roomPass || '';
@@ -125,9 +112,9 @@ export default class AppBlock extends React.Component {
       errs: ['']
     });
 
-    const roomId = document.getElementById(`room-id-${ this.props.type + this.props.id }`).value;
-    const roomPass = document.getElementById(`room-pass-${ this.props.type + this.props.id }`).value;
-    const category = document.getElementById(`group-${ this.props.type + this.props.id }`).value;
+    const roomId = document.getElementById(`room-id-${ this.props.id }`).value;
+    const roomPass = document.getElementById(`room-pass-${ this.props.id }`).value;
+    const category = document.getElementById(`group-${ this.props.id }`).value;
 
     if (!roomId || !roomPass) {
       return this.setState({
@@ -159,27 +146,6 @@ export default class AppBlock extends React.Component {
 
     /* do request */
     this.userRequest({ settings: newUserSettings });
-  }
-
-  delete() {
-
-    /* clear errs */
-    this.setState({
-      errs: ['']
-    });
-
-    const id = this.props.id;
-    const app = this.props.user.installedApps.find(elem => elem.id === id);
-    const newApps = this.props.user.installedApps;
-
-    /* delete app */
-    const index = newApps.indexOf(app);
-    if (index > -1) {
-      newApps.splice(index, 1);
-    }
-
-    /* do request */
-    this.userRequest({ installedApps: newApps });
   }
 
   userRequest(params) {

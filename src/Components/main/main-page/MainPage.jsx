@@ -49,16 +49,9 @@ class MainPage extends React.Component {
   render() {
 
     /* my apps */
-    const myApps = this.props.projects.map(app => {
-      return <AppIcon { ...app } key={ 'project' + app.id } type="app" prefix="icon-project-"/>;
+    let apps = this.props.projects.map(app => {
+      return <AppIcon { ...app } key={ 'project' + app.id } type="app" prefix="icon-app-"/>;
     });
-
-    /* installed apps */
-    const installedApps = this.props.user.installedApps.map(app => {
-      return <AppIcon { ...app } key={ 'app' + app.id } type="app" prefix="icon-app-"/>;
-    });
-
-    let apps = [...myApps, ...installedApps];
 
     /* system apps */
     let systemApps = [
@@ -145,9 +138,6 @@ class MainPage extends React.Component {
       ? this.devMode = true
       : this.devMode = false;
 
-    /* multiTasking */
-    this.multiTasking = true;
-
     /* close all apps */
     if (this.props.appState === 'closed') {
       const nodeList = document.querySelectorAll('.multiTasking-interpreter');
@@ -158,33 +148,17 @@ class MainPage extends React.Component {
       });
     }
 
-    /* set multiTasking Interpreter */
-    if (['opened', 'closing'].includes(this.props.appState) &&
-        this.props.appType === 'app' &&
-        this.multiTasking) {
+    /* set app interpreter */
+    let interpreter = null;
+    if (['opened', 'closing'].includes(this.props.appState) && this.props.appType === 'app') {
 
-      const app = document.getElementById('app'+this.props.appId) ||
-        document.getElementById('project'+this.props.appId);
+      /* find interpreter */
+      const app = document.getElementById('app'+this.props.appId);
 
       /* show interpreter */
       app.style.display = 'block';
-    }
 
-    /* set oneTasking Interpreter */
-    let interpreter = null;
-    if (['opened', 'closing'].includes(this.props.appState) &&
-        this.props.appType === 'app' &&
-        !this.multiTasking) {
-
-      interpreter = (
-        <iframe
-          src={`${ this.host }view/${ this.props.appId }?devMode=${ this.devMode }`}
-          frameBorder="0"
-          id="app-iframe"
-          style={{ width: '100%', height: '100%', backgroundColor: 'white' }}/>
-      );
-
-    /* set system app Interpreter */
+    /* set system app */
     } else if (['opened', 'closing'].includes(this.props.appState)) {
 
       /* switch system app */
@@ -219,8 +193,7 @@ class MainPage extends React.Component {
     /* set app theme */
     } else if (this.props.appState === 'opened' && this.props.appType === 'app') {
 
-      const app = document.getElementById('app'+this.props.appId) ||
-        document.getElementById('project'+this.props.appId);
+      const app = document.getElementById('app'+this.props.appId);
 
       /* app config */
       const markup = app.contentDocument || app.contentWindow.document;
@@ -271,8 +244,8 @@ class MainPage extends React.Component {
             </div>
           </div>
           <div className="main-app-page" id="main-app-page" data-state={ this.props.appState }>
-            { interpreter } {/* oneTasking */}
-            { this.state.interpreters } {/* multiTasking */}
+            { interpreter } {/* system apps */}
+            { this.state.interpreters } {/* apps */}
             <SuperButton multiTasking={ this.multiTasking }/>
           </div>
         </div>
@@ -396,37 +369,25 @@ class MainPage extends React.Component {
           statuses[widgetStatus.res.roomId][widgetStatus.prop] = widgetStatus.res.value;
         });
         this.setState({ widgets: statuses });
-      }).catch(() => alert("Ошибка добавления виджетов!"));
+      }).catch(() => {}/*alert("Ошибка добавления виджетов!")*/);
     }
 
 
 
-    /*   ---==== Caching all apps ====---   */
+    /*   ---==== Caching apps and user ====---   */
 
     /* user */
     localStorage.setItem('user', JSON.stringify(this.props.user));
 
-    /* my apps */
+    /* apps */
     this.props.projects.forEach(app => {
       request('/api/get_app', { appId: app.id })
         .then(res => res.json()).then(body => {
           if (body.status === 'ok') {
             localStorage.setItem('cache-' + app.id, JSON.stringify(body.app));
           } else {
-            console.log('err in caching project ' + app.id);
+            console.log('err in caching app ' + app.id);
           }
-      }).catch(err => console.log('err in caching project ' + app.id));
-    });
-
-    /* installed apps */
-    this.props.user.installedApps.forEach(app => {
-      request('/api/get_app', { appId: app.id })
-        .then(res => res.json()).then(body => {
-        if (body.status === 'ok') {
-          localStorage.setItem('cache-' + app.id, JSON.stringify(body.app));
-        } else {
-          console.log('err in caching app ' + app.id);
-        }
       }).catch(err => console.log('err in caching app ' + app.id));
     });
 
@@ -434,36 +395,21 @@ class MainPage extends React.Component {
 
     /*   ---==== MultiTasking ====---   */
 
-    /* if multiTasking if off */
-    if (!this.multiTasking) { return; }
-
     const interpreters = [];
 
-    /* my apps */
+    /* add apps */
     this.props.projects.forEach((app, index) => {
-      const interpreter = <iframe
-        src={`${ this.host }view/${ app.id }?devMode=${ this.devMode }`}
-        frameBorder="0"
-        id={ 'project' + app.id }
-        className="multiTasking-interpreter"
-        style={{ width: '100%', height: '100%', backgroundColor: 'white', display: 'none'}}
-        key={ 'project-' + index }/>;
-      interpreters.push(interpreter);
-    });
-
-    /* installed apps */
-    this.props.user.installedApps.forEach((app, index) => {
       const interpreter = <iframe
         src={`${ this.host }view/${ app.id }?devMode=${ this.devMode }`}
         frameBorder="0"
         id={ 'app' + app.id }
         className="multiTasking-interpreter"
-        style={{ width: '100%', height: '100%', backgroundColor: 'white', display: 'none' }}
+        style={{ width: '100%', height: '100%', backgroundColor: 'white', display: 'none'}}
         key={ 'app-' + index }/>;
       interpreters.push(interpreter);
     });
 
-    /* render all interpreters */
+    /* render interpreters */
     this.setState({ interpreters });
 
   }

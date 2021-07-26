@@ -5,32 +5,6 @@
     "email": "andrnovip@gmail.com",
     "id": "H2dv3hoel8Ij",
     "registrationDate": "1234567",
-    "installedApps": [
-      {
-        "title": "Скачаное приложение",
-        "icon": "faUtensils",
-        "color": "#f1c40f",
-        "id": "hGLd&snkxkhs&9467"
-      },
-      {
-        "title": "Скачаное приложение 2",
-        "icon": "faUtensils",
-        "color": "#f1c40f",
-        "id": "hGLd&snkxkhs&94672"
-      },
-      {
-        "title": "Скачаное приложение 3",
-        "icon": "faUtensils",
-        "color": "#f1c40f",
-        "id": "hGLd&snkxkhs&94673"
-      },
-      {
-        "title": "Скачаное приложение 4",
-        "icon": "faUtensils",
-        "color": "#f1c40f",
-        "id": "hGLd&snkxkhs&94674"
-      }
-    ],
     "type": "user",
     "settings": [
       {
@@ -39,30 +13,6 @@
           "roomId": "12345",
           "roomPass": "password",
           "category": "Моя комната"
-        }
-      },
-      {
-        "id": "hGLd&snkxkhs&94672",
-        "body": {
-          "roomId": "12345",
-          "roomPass": "password",
-          "category": "Комната бабушки"
-        }
-      },
-      {
-        "id": "hGLd&snkxkhs&94673",
-        "body": {
-          "roomId": "12345",
-          "roomPass": "password",
-          "category": "Кухня"
-        }
-      },
-      {
-        "id": "hGLd&snkxkhs&94674",
-        "body": {
-          "roomId": "12345",
-          "roomPass": "password",
-          "category": "Кухня"
         }
       }
     ],
