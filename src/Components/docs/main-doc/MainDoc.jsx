@@ -142,6 +142,13 @@ App.changeNumericProperty('volume', -10, {
     "property": "volume",
     "value": -10
 }
+`,`
+<div class="app-wrap"
+     data-role="config">
+`,`
+<div class="app-wrap"
+     data-role="config"
+     data-theme="rgb(239, 239, 239)">
 `
     ]
 
@@ -275,6 +282,25 @@ App.changeNumericProperty('volume', -10, {
           </Code>
           <Image name="icon.png"/>
           В будущем количество пресетов будет увеличиваться.
+        </DocItem>
+        <DocItem title="Конфигурация приложения" id="app-config">
+          Приложение конфигурируется в любом блоке его верстки.
+          Чтобы обозначить блок как конфигурационный, нужно добавить в него
+          атрибут <mark>data-role</mark>  со значением <mark>config</mark>.
+
+          <Code>
+            { codes[20] }
+          </Code>
+
+          <h5>Цвет статус бара</h5>
+          Можно настроить подходящий цвет статус бара приложения под его фон.
+          Для этого добавим в блок конфигурации атрибут <mark>data-theme</mark> с
+          нужным цветом или значением <mark>auto</mark>, которое назначит цвет фона
+          системы.
+
+          <Code>
+            { codes[21] }
+          </Code>
         </DocItem>
         <DocItem title="Своё приложение" id="app-guide">
           Чтобы всё встало на свои места, разработаем с нуля стартовое приложение с выключателем.
