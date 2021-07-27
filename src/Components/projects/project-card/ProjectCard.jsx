@@ -5,9 +5,13 @@ import React from 'react';
 import * as Icons from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Link } from 'react-router-dom';
+import {request} from "../../../tools/apiRequest/apiRequest";
+import {fetchUser} from "../../../actions/userActions";
+import {fetchProjects} from "../../../actions/projectsActions";
+import {connect} from "react-redux";
 
 /* Component */
-export default class ProjectCard extends React.Component {
+class ProjectCard extends React.Component {
   constructor(args) {
     super(args);
 
@@ -19,8 +23,12 @@ export default class ProjectCard extends React.Component {
   render() {
     return (
       <div className="project-card-wrap" id={`card-wrap-${ this.props.id }`}>
-        <section className="project-card">
+        <section className="project-card project-card-clone-available">
           <header className="project-card__header"> { this.props.title || 'application' } </header>
+          <div className="project-card__clone"
+               onClick={() => this.cloneApp({ appId: this.props.id })}>
+            <FontAwesomeIcon icon={ Icons['faClone'] } />
+          </div>
           <Link
             style={{ backgroundColor: this.props.color || '#1abc9c' }}
             className="project-card__icon"
@@ -43,6 +51,21 @@ export default class ProjectCard extends React.Component {
   componentWillUnmount() {
     document.getElementById(`card-wrap-${ this.props.id }`).removeEventListener('mousemove', this.mousemove);
     document.getElementById(`card-wrap-${ this.props.id }`).removeEventListener('mouseleave', this.mouseleave);
+  }
+
+  cloneApp(params) {
+    request(`/api/create_clone`, params)
+      .then(res => res.json()).then(body => {
+      if (body.status === 'ok') {
+        this.props.fetchProjects();
+      } else {
+        console.log(body);
+        alert('Ошибка клонирования!');
+      }
+    }).catch(err => {
+      console.error('Ошибка запроса!\n\n', err);
+      alert('Ошибка клонирования!');
+    });
   }
 
   mousemove(event) {
@@ -80,3 +103,17 @@ export default class ProjectCard extends React.Component {
     card.style.margin = '0';
   }
 }
+
+function mapStateToProps(store) {
+  return {}
+}
+
+function mapDispatchToProps(dispatch) {
+  return {
+    fetchProjects: () => {
+      dispatch(fetchProjects())
+    }
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(ProjectCard);

@@ -8,6 +8,7 @@ import Button from '../../../tools/button/Button';
 
 import { connect } from 'react-redux';
 import { switchModalState } from "../../../actions/projectsModalActions";
+import { fetchUser } from '../../../actions/userActions';
 import { fetchProjects } from "../../../actions/projectsActions";
 
 /* Component */
@@ -113,6 +114,21 @@ class CreateAppWindow extends React.Component {
 
     if (icons.length === 0) icons = <div className="create-app-window__no-icons"> Нет иконок с таким именем! </div>;
 
+    let storeVisibility = (
+      <div className="create-app-window__item create-app-window__switch-item">
+        <span>Показывать в магазине: </span>
+        <div>
+          <label className="appex-preset-switch create-app-window__switch">
+            <input type="checkbox" className="appex-preset-switch__input" id="app-download"/>
+            <div className="appex-preset-switch__handle"/>
+          </label>
+        </div>
+      </div>
+    );
+    if (this.props.modal.mode === 'set' && this.props.type === 'clone') {
+      storeVisibility = null;
+    }
+
     return (
       <div className="modal-content-wrapper create-app-window" id="create-app-window">
         <div className="create-app-window__title"><h4> { title } </h4></div>
@@ -120,15 +136,7 @@ class CreateAppWindow extends React.Component {
           <span>Имя приложения: </span>
           <input type="text" autoComplete="false" id="app-name"/>
         </div>
-        <div className="create-app-window__item create-app-window__switch-item">
-          <span>Возможность скачивать: </span>
-          <div>
-            <label className="appex-preset-switch create-app-window__switch">
-              <input type="checkbox" className="appex-preset-switch__input" id="app-download"/>
-              <div className="appex-preset-switch__handle"/>
-            </label>
-          </div>
-        </div>
+        { storeVisibility }
         <div className="create-app-window__item">
           <span>Цвет иконки: </span>
           <div id="create-app-window__colors">
@@ -176,7 +184,10 @@ class CreateAppWindow extends React.Component {
     /* set settings if mode === 'set' */
     if (this.props.modal.mode === 'set') {
       document.getElementById('app-name').value = this.props.title;
-      document.getElementById('app-download').checked = this.props.storeVisibility;
+
+      if (this.props.type !== 'clone') {
+        document.getElementById('app-download').checked = this.props.storeVisibility;
+      }
 
       let color = document
         .getElementById('create-app-window__colors')
@@ -271,7 +282,10 @@ class CreateAppWindow extends React.Component {
     const name = document.getElementById('app-name').value;
     if (name.length === 0) { return { err: true, message: 'Введите имя приложения!' }; }
 
-    const downloadAvailable = document.getElementById('app-download').checked;
+    let downloadAvailable;
+    if (this.props.type !== 'clone') {
+      downloadAvailable = document.getElementById('app-download').checked;
+    } else { downloadAvailable = false; }
 
     let color = document
       .getElementById('create-app-window__colors')
@@ -366,6 +380,20 @@ class CreateAppWindow extends React.Component {
     }).then(res => res.json()).then(body => {
       if (body.status === 'ok') {
 
+        /* delete app settings */
+        let newUserSettings = JSON.parse( JSON.stringify(this.props.user.settings) );
+        newUserSettings = newUserSettings.filter(setting => setting.id !== this.props.id);
+        const settingsBody = JSON.stringify({ settings: newUserSettings });
+
+        fetch('../api/change_user', {
+          method: "POST",
+          headers: {
+            'Accept': 'application/json, text/plain, */*',
+            'Content-Type': 'application/json',
+          },
+          body: settingsBody
+        }).then(() => this.props.fetchUser());
+
         /* fetch new projects list */
         this.props.fetchProjects();
         this.closeWindow();
@@ -396,6 +424,9 @@ function mapDispatchToProps(dispatch) {
     },
     fetchProjects: () => {
       dispatch(fetchProjects())
+    },
+    fetchUser: () => {
+      dispatch(fetchUser())
     },
   }
 }

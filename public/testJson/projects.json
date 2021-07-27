@@ -1,7 +1,7 @@
 [
   {
-    "title": "макароно-варка",
-    "icon": "faUtensils",
+    "title": "test",
+    "icon": "faLightbulb",
     "color": "#f1c40f",
     "id": "hGud&snkxkhs&6467",
     "storeVisibility": true,
@@ -20,9 +20,9 @@
     }
   },
   {
-    "title": "макароно-варка",
-    "icon": "faUtensils",
-    "color": "#f1c40f",
+    "title": "test clone",
+    "icon": "faLightbulb",
+    "color": "#3498db",
     "id": "hGud&snkxkhs&0000",
     "storeVisibility": true,
     "createDate": "123456",

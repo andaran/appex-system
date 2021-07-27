@@ -4,6 +4,7 @@ import React from 'react';
 /* Components */
 import Navbar from '../navbar/Navbar';
 import Card from '../project-card/ProjectCard';
+import CloneCard from "../clone-card/CloneCard";
 import Room from '../room-card/RoomCard';
 import Window from '../create-app-window/CreateAppWindow';
 import Wrap from '../../../tools/modal-wrap/ModalWrap';
@@ -27,10 +28,12 @@ class ProjectsWrap extends React.Component {
 
     this.state = {
       message: false,
+      cloneParams: false,
     }
 
     // bind
     this.newProject = this.newProject.bind(this);
+    this.cloneSettings = this.cloneSettings.bind(this);
     this.close = this.close.bind(this);
     this.newRoom = this.newRoom.bind(this);
   }
@@ -38,13 +41,28 @@ class ProjectsWrap extends React.Component {
   render() {
 
     /* all cards */
-    let cards = null;
+    let apps = null;
+    let clones = null;
     if (!this.props.projectsIsFetching && !this.props.projectsError) {
-      cards = this.props.projects.map((props, index) => {
+
+      /* apps */
+      apps = this.props.projects.map((props, index) => {
         return (
           <Card { ...props } key = { index }/>
         );
       });
+
+      /* clones */
+      clones = this.props.projects.map((props, index) => {
+        return (
+          <CloneCard { ...props }
+                     key = { index }
+                     cloneSettings = { this.cloneSettings }/>
+        );
+      });
+
+      clones = clones.filter(item => item.props.type === 'clone');
+      apps = apps.filter(item => item.props.type === 'app');
     }
 
     /* all rooms */
@@ -57,9 +75,23 @@ class ProjectsWrap extends React.Component {
       });
     }
 
+    /* clones */
+    let clonedApps = null;
+    let hr = null;
+    if (clones && clones.length > 0) {
+      clonedApps = (
+        <div className="projects-wrap">
+          <article className="cards">
+            { clones }
+          </article>
+        </div>
+      );
+      hr = <hr/>;
+    }
+
     /* rendering window */
     let modal;
-    this.props.modal.status? modal = <Wrap for={ <Window/> } />: modal = null;
+    this.props.modal.status? modal = <Wrap for={ <Window { ...this.state.cloneParams }/> } />: modal = null;
 
     /* render message */
     let message = null;
@@ -84,7 +116,7 @@ class ProjectsWrap extends React.Component {
             id="hGud&snkxkhs&6467"
            />  */}
 
-            { cards }
+            { apps }
 
             <div className="project-card-wrap"  id="project-card-plus-wrap">
               <section className="project-card_plus" id="project-card__plus">
@@ -95,6 +127,7 @@ class ProjectsWrap extends React.Component {
             </div>
           </article>
         </div>
+        { hr } { clonedApps }
         <hr/>
         <div className="projects-wrap">
           <article className="cards">
@@ -169,7 +202,12 @@ class ProjectsWrap extends React.Component {
   }
 
   newProject() {
-    this.props.switchModalState(this.props.modal.status, 'new', {});
+    this.props.switchModalState(this.props.modal.status, 'new');
+  }
+
+  cloneSettings(cloneParams) {
+    this.setState({ cloneParams });
+    this.props.switchModalState(this.props.modal.status, 'set');
   }
 
   newRoom() {
