@@ -31,36 +31,38 @@ export default class ChangeUserName extends React.Component {
 
     return (
       <div className="reg-window">
-        <div className="reg-window__input-item">
-          <div className="reg-window__item-block">
-            <FontAwesomeIcon icon={ faLock } />
+        <div className="app-block">
+          <div className="reg-window__input-item">
+            <div className="reg-window__item-block">
+              <FontAwesomeIcon icon={ faLock } />
+            </div>
+            <div className="reg-window__item-block">
+              <input type="text" placeholder="старый пароль" id="old-password" className="reg-window__input"/>
+            </div>
           </div>
-          <div className="reg-window__item-block">
-            <input type="text" placeholder="старый пароль" id="old-password" className="reg-window__input"/>
+          { errs[0] }
+          <div className="reg-window__input-item">
+            <div className="reg-window__item-block">
+              <FontAwesomeIcon icon={ faLock } />
+            </div>
+            <div className="reg-window__item-block">
+              <input type="text" placeholder="новый пароль" id="new-password" className="reg-window__input"/>
+            </div>
           </div>
-        </div>
-        { errs[0] }
-        <div className="reg-window__input-item">
-          <div className="reg-window__item-block">
-            <FontAwesomeIcon icon={ faLock } />
+          { errs[1] }
+          <div className="reg-window__input-item">
+            <div className="reg-window__item-block">
+              <FontAwesomeIcon icon={ faLock } />
+            </div>
+            <div className="reg-window__item-block">
+              <input type="text" placeholder="повторите пароль" id="repeat-password" className="reg-window__input"/>
+            </div>
           </div>
-          <div className="reg-window__item-block">
-            <input type="text" placeholder="новый пароль" id="new-password" className="reg-window__input"/>
-          </div>
-        </div>
-        { errs[1] }
-        <div className="reg-window__input-item">
-          <div className="reg-window__item-block">
-            <FontAwesomeIcon icon={ faLock } />
-          </div>
-          <div className="reg-window__item-block">
-            <input type="text" placeholder="повторите пароль" id="repeat-password" className="reg-window__input"/>
-          </div>
-        </div>
-        { errs[2] }
-        <div className="reg-window__input-item">
-          <div className="reg-window__button reg-window__button_blue" onClick={ this.send }>
-            Сменить пароль!
+          { errs[2] }
+          <div className="reg-window__input-item">
+            <div className="reg-window__button reg-window__button_blue" onClick={ this.send }>
+              Сменить пароль!
+            </div>
           </div>
         </div>
       </div>

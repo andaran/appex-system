@@ -31,18 +31,20 @@ export default class ChangeUserName extends React.Component {
 
     return (
       <div className="reg-window">
-        <div className="reg-window__input-item">
-          <div className="reg-window__item-block">
-            <FontAwesomeIcon icon={ faEnvelope } />
+        <div className="app-block">
+          <div className="reg-window__input-item">
+            <div className="reg-window__item-block">
+              <FontAwesomeIcon icon={ faEnvelope } />
+            </div>
+            <div className="reg-window__item-block">
+              <input type="text" placeholder="почта" id="reg-email" className="reg-window__input"/>
+            </div>
           </div>
-          <div className="reg-window__item-block">
-            <input type="text" placeholder="почта" id="reg-email" className="reg-window__input"/>
-          </div>
-        </div>
-        { errs[0] }
-        <div className="reg-window__input-item">
-          <div className="reg-window__button reg-window__button_blue" onClick={ this.send }>
-            Сменить почту!
+          { errs[0] }
+          <div className="reg-window__input-item">
+            <div className="reg-window__button reg-window__button_blue" onClick={ this.send }>
+              Сменить почту!
+            </div>
           </div>
         </div>
       </div>
