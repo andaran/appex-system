@@ -48,6 +48,7 @@ const createStartApp = (userId) => {
         createDate: Date.now(),
         author: userId,
         code: appCode,
+        type: 'app',
         releaseCode: appCode,
       }
 
