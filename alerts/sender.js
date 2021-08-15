@@ -8,6 +8,7 @@ const mongoose = require('mongoose');
 const start = require(path.join(__dirname, '../', 'alerts', 'code', 'start.js'));
 const main = require(path.join(__dirname, '../', 'alerts', 'code', 'main.js'));
 const project = require(path.join(__dirname, '../', 'alerts', 'code', 'project.js'));
+const message = require(path.join(__dirname, '../', 'alerts', 'code', 'message.js'));
 
 /* models */
 const User = require(path.join(__dirname, '../', 'models', 'user.js'));
@@ -21,7 +22,7 @@ mongoose.connect('mongodb://127.0.0.1/appex', {
 
 /* alerts */
 const alerts = {
-  start, main, project,
+  start, main, project, message,
 }
 
 
