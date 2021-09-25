@@ -12,3 +12,21 @@
     {{ text }}
 
 </div>
+
+<script>
+class {{ name }}Class extends EventEmitter {
+    #button;
+	constructor(id) {
+        super();
+    	this.#button = document.getElementById(id);
+    }
+
+    init() {
+    	this.#button.addEventListener('click', e => {
+        	this.emit('click');
+        });
+    }
+}
+{{ name }} = new {{ name }}Class("{{ id }}");
+{{ name }}.init();
+</script>

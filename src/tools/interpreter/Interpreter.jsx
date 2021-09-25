@@ -4,6 +4,7 @@ import { changeAppState } from "../../actions/appStateActions";
 import { connect } from "react-redux";
 import { App } from "../../socketCore";
 import * as Icons from "@fortawesome/free-solid-svg-icons";
+import EventEmitter from "events";
 
 /* Component */
 export default class Interpreter extends React.Component {
@@ -94,6 +95,7 @@ export default class Interpreter extends React.Component {
     /*   ---==== Add presets ====---   */
 
     let finallyCode = '';
+    let additionalJSCode = '';
     let promises = [];
 
     /* fetch presets html */
@@ -134,13 +136,26 @@ export default class Interpreter extends React.Component {
             promises.push(fetch(`../presets/${item.preset.type}.hbs`)
               .then(response => response.text())
               .then(text => {
+
+                /* change args */
                 let presetHtml = text;
+                let presetId = 'preset-' + Math.round(Math.random() * 10000000000);
+
+                presetHtml = presetHtml.replaceAll(`{{ id }}`, presetId);
                 item.preset.args.forEach(arg => {
                   presetHtml = presetHtml.replaceAll(`{{ ${arg.name} }}`, arg.value);
                 });
 
-                /* add this html to another code */
-                return item.code + presetHtml;
+                /* extract js preset code */
+                const presetJS = presetHtml.split('<script>')[1]
+                  ? presetHtml.split('<script>')[1].replace('</script>', '')
+                  : '';
+
+                /* add js code */
+                additionalJSCode += presetJS;
+
+                /* add this html without JS to another code */
+                return item.code + presetHtml.split('<script>')[0];
               }));
             break;
         }
@@ -188,8 +203,8 @@ export default class Interpreter extends React.Component {
 
       /* start! */
       try {
-        this.appJS = Function( 'App', appSourceCode.js );
-        this.appJS(app);
+        this.appJS = Function( 'App', 'EventEmitter', additionalJSCode + appSourceCode.js );
+        this.appJS(app, EventEmitter);
       } catch(e) { console.error('Ошибка запуска приложения!! \n\n', e); }
     });
   }

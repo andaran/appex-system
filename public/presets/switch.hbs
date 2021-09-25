@@ -3,7 +3,27 @@
   id=element-id
 ]]  -->
 
-<label class = "appex-preset-switch" id = "{{ id }}">
+<label class="appex-preset-switch" id="{{ id }}">
     <input type="checkbox" class="appex-preset-switch__input">
-    <div class="appex-preset-switch__handle"> </div>
+    <div class="appex-preset-switch__handle"></div>
 </label>
+
+<script>
+class {{ name }}Class extends EventEmitter {
+    #input;
+	constructor(id) {
+        super();
+    	this.#input = document.querySelector(`#${id} input`);
+    }
+
+    init() {
+    	this.#input.addEventListener('change', e => {
+        	this.emit('click', this.#input.checked);
+        });
+    }
+
+    get value() { return this.#input.checked; }
+}
+{{ name }} = new {{ name }}Class("{{ id }}");
+{{ name }}.init();
+</script>
