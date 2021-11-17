@@ -27,11 +27,14 @@ App.on('err', err => {
 });`,`App.send({ status: !App.state.status });`,
 `App.start();`,
 `[[Button
-  background="#48dbfb"
-  size="md"  <!-- sm - 30px, md - 50px, lg - 70px, -->
+  color="#48dbfb"
+  size="md"  <!-- sm - 30px, md - 50px, lg - 70px -->
   text="кнопка"
   name="btn"
-]]`, `[[Switch name="sw"]]`,
+]]`, `[[Switch 
+  name="sw"
+  color="green"
+]]`,
 `[[Icon name="faPowerOff"]]`, `<!-- обертка приложения -->
 <div class="app-wrap">
 
@@ -156,7 +159,30 @@ sw.on('click', val => console.log(val));
 
 // посмотреть значение выключателя
 console.log(sw.value);
-`
+
+// записать значение в выключатель
+sw.value = false;
+`, `[[Joystick
+  name="joystick"
+  color="orange"
+  size="150"  <!-- diameter of joystick -->
+  delta="255"  <!-- range from -255 to 255 -->
+  interval="100"  <!-- update state 10 times per second -->
+]]
+`,`// обновление джойстика
+joystick.on('change', cords => {
+    console.log(cords);  // {Xpos: 0, Ypos: 0}
+});
+
+// обновление джойстика с заданным интервалом
+joystick.on('changeToSend', cords => {
+    App.send(cords); 
+});
+
+// запись координат в джойстик
+App.on('update', cords => {  // {Xpos: 0, Ypos: 0}
+    joystick.updatePosition(cords);
+});`
     ]
 
     const R = '}';
@@ -293,6 +319,16 @@ console.log(sw.value);
             { codes[23] }
           </Code>
           <Image name="switch.png"/>
+          <h5>Джойстик</h5>
+          Джойстик для управления вашими роботами. В size принимает свой диаметр, в delta - диапазон значений (при delta=255 диапазон будет от -255 до 255), в interval - интервал отправления своего состояния на сервер.
+          <Code>
+            { codes[24] }
+          </Code>
+          Javascript код:
+          <Code>
+            { codes[25] }
+          </Code>
+          <Image name="joystick.png"/>
           <h5>Иконки</h5>
           Иконки из набора fontawesome. Названия пишутся в camelCase.
           <Code>
