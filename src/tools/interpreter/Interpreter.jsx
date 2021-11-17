@@ -139,7 +139,7 @@ export default class Interpreter extends React.Component {
 
                 /* change args */
                 let presetHtml = text;
-                let presetId = 'preset-' + Math.round(Math.random() * 10000000000);
+                let presetId = 'preset-' + item.preset.args.find(arg => arg.name === 'name').value;
 
                 presetHtml = presetHtml.replaceAll(`{{ id }}`, presetId);
                 item.preset.args.forEach(arg => {

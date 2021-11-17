@@ -1,0 +1,196 @@
+<!--  Documentation:
+[[Joystick
+  name="joystick"  // class name
+  color="orange"
+  size="150"  // diameter
+  delta="255"  // range from -255 to 255
+  interval="100"  // update state 10 times per second
+]]  -->
+
+<div class="appex-preset-joystick" id="{{ id }}">
+    <div class="appex-preset-joystick__handle"></div>
+</div>
+
+<style>
+#{{ id }} {
+    border-radius: 50%;
+    border: 2px solid {{ color }};
+    display: flex;
+    justify-content: center;
+    position: relative;
+    align-items: center;
+}
+
+#{{ id }} .appex-preset-joystick__handle {
+    background: {{ color }};
+    border-radius: 50%;
+    position: absolute;
+    opacity: 0.8;
+}
+</style>
+
+<script>
+class {{ name }}Class extends EventEmitter {
+
+    #wrap;
+    #handle;
+   	#delta = +{{ delta }};
+    #size = +{{ size }};
+    #interval = +{{ interval }};
+    #cords = { Xpos: 0, Ypos: 0 };
+    #lastChange = Date.now();
+
+	constructor(id) {
+        super();
+    	this.#wrap = document.getElementById(id);
+        this.#handle = this.#wrap.querySelector('.appex-preset-joystick__handle');
+    }
+
+    init() {
+
+        /* set joystick size */
+    	this.#wrap.style.width = this.#size + 'px';
+        this.#wrap.style.height = this.#size + 'px';
+        this.#handle.style.width = this.#size * 0.6 + 'px';
+        this.#handle.style.height = this.#size * 0.6 + 'px';
+
+        /* listeners */
+        this.#handle.addEventListener('touchmove', ev => {
+        	ev.preventDefault();
+        }, { passive: false });
+        this.#handle.addEventListener('mousemove', (ev) => this.#move(ev));
+        this.#handle.addEventListener('touchmove', (ev) => this.#move(ev.touches[0]));
+        this.#handle.addEventListener('mouseleave', (ev) => this.#reset(ev));
+        this.#handle.addEventListener('touchend', (ev) => this.#reset(ev));
+
+        /* set changeToSend loop */
+        let timeout;
+        this.#changeToSend(this.#cords, timeout);
+    }
+
+    #move(ev) {
+
+        /* cartesian coordinates */
+        const position = this.#wrap.getBoundingClientRect();
+
+        let Ypos = Math.round(this.#size - ev.clientY + position.top);
+        let Xpos = Math.round(ev.clientX - position.left);
+
+        Ypos = Ypos - this.#size / 2;
+        Xpos = Xpos - this.#size / 2;
+
+        /* calculate quarter */
+        let quater;
+        if (Xpos >= 0 && Ypos >= 0) quater = 1;
+        if (Xpos < 0 && Ypos >= 0) quater = 2;
+        if (Xpos < 0 && Ypos < 0) quater = 3;
+        if (Xpos >= 0 && Ypos < 0) quater = 4;
+
+        /* limitade cords */
+        [Xpos, Ypos] = this.#limitate(quater, Xpos, Ypos);
+
+        /* set handle position */
+        this.#handle.style.marginLeft = Xpos * 2 + 'px';
+        this.#handle.style.marginBottom = Ypos * 2 + 'px';
+
+        /* convert cords */
+        this.#cords.Xpos = this.#convert(Xpos, this.#size / 2, this.#delta);
+        this.#cords.Ypos = this.#convert(Ypos, this.#size / 2, this.#delta);
+
+        /* send event */
+        this.emit('change', this.#cords);
+
+        /* update lastChange time */
+        this.#lastChange = Date.now();
+
+    }
+
+    #limitate(quater, Xpos, Ypos) {
+
+        /* coordinates modulo */
+        let absXpos = Math.abs(Xpos)
+        let absYpos = Math.abs(Ypos)
+        let radius = this.#size / 2;
+
+        /* simple cases */
+        if (absXpos === 0 && absYpos === 0) {
+            return [ 0, 0 ];
+        }
+        if (absXpos === 0 && absYpos > radius) {
+            radius = Ypos < 0 ? -radius : radius;
+       		return [ Xpos, radius ];
+        }
+        if (absXpos  > radius && absYpos === 0) {
+            radius = Xpos < 0 ? -radius : radius;
+       		return [ radius, Ypos ];
+        }
+
+        /* calc handle position */
+        const hyp = Math.sqrt(absXpos**2 + absYpos**2);
+        const cosX = absXpos / hyp;
+        const cosY = absYpos / hyp;
+
+        /* set new position */
+        if (hyp > radius) {
+        	Xpos = Xpos < 0 ? -(radius * cosX) : (radius * cosX);
+        	Ypos = Ypos < 0 ? -(radius * cosY) : (radius * cosY);
+        } else {
+        	Xpos = Xpos < 0 ? -(hyp * cosX) : (hyp * cosX);
+        	Ypos = Ypos < 0 ? -(hyp * cosY) : (hyp * cosY);
+        }
+
+        return [ Xpos, Ypos ];
+    }
+
+    #reset(event) {
+
+        /* reset handle position */
+        this.#handle.style.marginLeft = 0;
+        this.#handle.style.marginBottom = 0;
+
+        /* reset cords */
+        this.#cords.Xpos = 0;
+        this.#cords.Ypos = 0;
+
+        /* send event */
+        this.emit('change', this.#cords);
+    }
+
+    #convert(x, in_max, out_max) {
+        const [in_min, out_min] = [-in_max, -out_max];
+        return Math.floor((x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min);
+    }
+
+    #changeToSend(prevCords, timeout) {
+
+        /* send cords if they are changed */
+        if (prevCords.Xpos !== this.#cords.Xpos || prevCords.Ypos !== this.#cords.Ypos) {
+        	this.emit('changeToSend', this.#cords);
+        }
+
+        /* timeout to next iteration */
+        const cordsClosing = (cords) => () => this.#changeToSend(cords, timeout);
+        const nextIteration = cordsClosing({ ...this.#cords });
+        timeout = setTimeout(() => nextIteration(), this.#interval);
+    }
+
+    updatePosition(cords) {
+
+        /* if stick is moving */
+        if (Date.now() - this.#lastChange < 1000) return;
+
+        /* calc handle cords */
+    	const Xpos = this.#convert(cords.Xpos, this.#delta, this.#size / 2);
+        const Ypos = this.#convert(cords.Ypos, this.#delta, this.#size / 2);
+
+        /* set handle position */
+        this.#handle.style.marginLeft = Xpos * 2 + 'px';
+        this.#handle.style.marginBottom = Ypos * 2 + 'px';
+    }
+
+    get cords() { return this.#cords; }
+}
+{{ name }} = new {{ name }}Class("{{ id }}");
+{{ name }}.init();
+</script>
+

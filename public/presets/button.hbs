@@ -1,17 +1,22 @@
 <!--  Documentation:
-[[
-  background='anyBackgroundColor'
-  size='md'  // sm - 30px, md - 50px, lg - 70px,
-  text='anyText'
+[[Button
+  name="btn"  // class name
+  background="#fff"
+  text="anyText"
 ]]  -->
 
 <div class = "appex-preset-button preset-button preset-button_{{ size }}"
-     id = "{{ id }}"
-     style = "background-color: {{ background }}">
+     id = "{{ id }}">
 
     {{ text }}
 
 </div>
+
+<style>
+#{{ id }} {
+    background-color: {{ color }};
+}
+</style>
 
 <script>
 class {{ name }}Class extends EventEmitter {
