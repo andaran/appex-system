@@ -19,6 +19,7 @@
     "cookie-session": "^1.4.0",
     "cors": "^2.8.5",
     "dotenv": "^8.6.0",
+    "eslint": "^7.32.0",
     "eslint-loader": "^4.0.2",
     "express": "^4.17.3",
     "handlebars": "^4.7.7",
