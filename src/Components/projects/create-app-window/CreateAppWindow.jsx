@@ -197,7 +197,7 @@ class CreateAppWindow extends React.Component {
       document.getElementById('create-app-window__icon-name').value = this.props.icon.substring(2);
       this.tap();
 
-      process.nextTick(() => {
+      setTimeout(() => {
         let icon = document.querySelector(`.create-app-window__icon-div[data-icon="${ this.props.icon }"]`);
         this.elementMouseOver({ target: icon });
         this.changeIcon({ target: icon });

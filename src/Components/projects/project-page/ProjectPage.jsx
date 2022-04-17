@@ -459,7 +459,7 @@ class ProjectPage extends React.Component {
       try {
         const value = JSON.stringify( this.app.code );
         localStorage.setItem(this.app.id, value);
-        process.nextTick(() => {
+        setTimeout(() => {
           this.setState({message: { type: true, text: 'Бекап сохранен!', time: Date.now() }});
         });
       } catch {
@@ -485,7 +485,7 @@ class ProjectPage extends React.Component {
     }
 
     /* release */
-    process.nextTick(() => {
+    setTimeout(() => {
       if (event.altKey && event.code === 'KeyR') {
         event.preventDefault();
         this.download('_', false);
@@ -497,7 +497,7 @@ class ProjectPage extends React.Component {
     /* Switch mode */
     if (event.altKey && event.code === 'KeyV') {
       event.preventDefault();
-      process.nextTick(() => {
+      setTimeout(() => {
         const mode = this.state.mode;
         mode === 'any' ? this.setState({ mode: 'one' }) : this.setState({ mode: 'any' });
       });
@@ -523,7 +523,7 @@ class ProjectPage extends React.Component {
     /* save */
     if (event.ctrlKey && event.code === 'KeyS') {
       event.preventDefault();
-      process.nextTick(() => this.upload());
+      setTimeout(() => this.upload());
       return false;
     }
   }

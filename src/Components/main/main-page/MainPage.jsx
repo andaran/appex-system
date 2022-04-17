@@ -188,7 +188,7 @@ class MainPage extends React.Component {
 
     /* update system theme */
     if (this.props.appState === 'closing') {
-      process.nextTick(() => this.updateTheme());
+      setTimeout(() => this.updateTheme());
 
     /* set app theme */
     } else if (this.props.appState === 'opened' && this.props.appType === 'app') {

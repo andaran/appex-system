@@ -451,7 +451,7 @@ App.on('update', cords => {  // {Xpos: 0, Ypos: 0}
   }
 
   move() {
-    process.nextTick(() => {
+    setTimeout(() => {
 
       /* scroll to top */
       const id = window.location.hash.substring(1);

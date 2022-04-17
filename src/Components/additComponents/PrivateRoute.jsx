@@ -43,7 +43,7 @@ class PrivateRoute extends React.Component {
 
 
     /* projects */
-    process.nextTick(() => {
+    setTimeout(() => {
       if (!this.props.projectsFulfilled && !this.props.projectsIsFetching) { this.props.fetchProjects() }
     });
 
@@ -54,7 +54,7 @@ class PrivateRoute extends React.Component {
 
 
     /* rooms */
-    process.nextTick(() => {
+    setTimeout(() => {
       if (!this.props.roomsFulfilled && !this.props.roomsIsFetching) { this.props.fetchRooms() }
     });
 
