@@ -334,42 +334,26 @@ class MainPage extends React.Component {
 
     if (widgets.length > 0) {
 
-      const states = [];
-
+      /* connect to the socket room */
       widgets.forEach(widget => {
-
-        /* connect to the socket room */
         socket.emit('connectToRoom', {
           roomId: widget.roomId,
           roomPass: widget.roomPass,
           currentState: false
         });
-
-        /* fetch widgets statuses */
-        const state = request('/core_api/get_property_value', {
-          roomId: widget.roomId,
-          roomPass: widget.roomPass,
-          property: widget.property,
-        }).then(res => res.json())
-          .then(data => {
-            return { res: data, prop: widget.property }
-          });
-
-        states.push(state)
       });
+
+      /* add empty widgets */
+      const statuses = {};
+      widgets.forEach(widgetProps => {
+        statuses[widgetProps.roomId] = {};
+        statuses[widgetProps.roomId][widgetProps.property] = null;
+      });
+      this.setState({ widgets: statuses });
 
       /* update widgets state */
       socket.on('updateState', this.updateWidgets);
-
-      /* set widgets state */
-      Promise.all(states).then(data => {
-        const statuses = {};
-        data.forEach(widgetStatus => {
-          statuses[widgetStatus.res.roomId] = {};
-          statuses[widgetStatus.res.roomId][widgetStatus.prop] = widgetStatus.res.value;
-        });
-        this.setState({ widgets: statuses });
-      }).catch(() => {}/*alert("Ошибка добавления виджетов!")*/);
+      socket.on('connectSuccess', this.updateWidgets);
     }
 
 

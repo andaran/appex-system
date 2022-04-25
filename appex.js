@@ -381,7 +381,9 @@ io.on('connection', (socket) => {
 
         /* send state */
         const state = JSON.parse(room.state);
-        socket.emit('connectSuccess', state);
+        const answer = { roomId: data.roomId, roomPass: data.roomPass, params: state, ...state };
+        // TODO: delete ...state from answer
+        socket.emit('connectSuccess', answer);
 
         /* delete room trash */
         if (data.currentState) {
