@@ -265,3 +265,43 @@ $icon-background: #3b4148
   align-items: center
   left: 10px
   position: absolute
+
+/* store visibility checkbox */
+.create-app-window__switch
+  display: block
+  width: 60px
+  height: 34px
+  margin: 10px
+  border-radius: 17px
+
+.create-app-window__switch .appex-preset-switch__input
+  display: none
+
+.create-app-window__switch .appex-preset-switch__handle
+  width: 60px
+  height: 34px
+  background: #3b4148
+  border-radius: 17px
+  display: flex
+  justify-content: center
+  align-items: center
+  transition: .12s
+
+.create-app-window__switch .appex-preset-switch__handle:after
+  content: ''
+  position: absolute
+  cursor: pointer
+  width: 20px
+  height: 20px
+  border-radius: 50%
+  background: #fff
+  box-shadow: 0 0 4px rgba(0, 0, 0, .2)
+  margin-left: -26px
+  transition: .12s
+
+.create-app-window__switch .appex-preset-switch__input:checked + .appex-preset-switch__handle
+  background: deepskyblue
+
+.create-app-window__switch .appex-preset-switch__input:checked + .appex-preset-switch__handle:after
+  margin-left: 0
+  margin-right: -26px

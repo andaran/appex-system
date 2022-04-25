@@ -42,7 +42,7 @@ class CreateAppWindow extends React.Component {
 
     /* change modal mode */
     let title = 'Создать новое приложение:';
-    if (this.props.modal.mode === 'set') { title = 'Настойки'; }
+    if (this.props.modal.mode === 'set') { title = 'Настройки'; }
 
     let buttons = (
       <div id="buttons" className="create-app-window__buttons-wrap">

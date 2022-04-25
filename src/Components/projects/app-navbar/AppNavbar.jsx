@@ -102,7 +102,7 @@ class AppNavbar extends React.Component {
             </div>
           </div>
           <div className="app-navbar__item app-navbar__item-link" id="app-navbar__settings">
-            <span> Настойки </span>
+            <span> Настройки </span>
             <span> Alt + S </span>
           </div>
           <div className="app-navbar__item app-navbar__item-link app-navbar__item-connect">
