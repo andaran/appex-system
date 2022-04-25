@@ -4,7 +4,7 @@ import React from 'react';
 /* Components */
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser, faLock } from '@fortawesome/free-solid-svg-icons';
-import { Link, Redirect } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 /* Component */
 export default class RegWindow extends React.Component {

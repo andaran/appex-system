@@ -24,8 +24,8 @@ export default class View extends React.Component {
     }
 
     /* find app id and devMode */
-    this.id = this.props.location.pathname.split('/')[2];
-    let devMode = this.props.location.search.split('?devMode=')[1];
+    this.id = window.location.pathname.split('/')[2];
+    let devMode = window.location.search.split('?devMode=')[1];
     devMode === 'false'
       ? this.devMode = false
       : this.devMode = true;

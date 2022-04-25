@@ -7,7 +7,7 @@
 
 /* React */
 import React from 'react';
-import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
 
 /* Components */
 import Register from './Components/register/RegWrap/reg-wrap';
@@ -29,9 +29,8 @@ import * as serviceWorkerRegistration from './serviceWorkerRegistration';
 
 import {
   BrowserRouter as Router,
-  Switch,
+  Routes,
   Route,
-  Redirect
 } from "react-router-dom";
 
 import { Provider } from 'react-redux';
@@ -44,30 +43,26 @@ import './Styles/style.sass';
 
 /*   ---==== Render ====---   */
 
-ReactDOM.render(
+const container = document.getElementById('root');
+const root = createRoot(container);
+
+root.render(
   <Provider store={store}>
     <Router>
-      <Switch>
-        <Route exact path="/" component={ Lending }/>
-        <Route exact path="/sign_up" component={ Register }/>
-        <Route exact path="/sign_in" component={ Login }/>
-        <Route exact path="/change_password" component={ ChangePass }/>
-        <Route exact path="/view/:id" component={ View }/>
-        <Route exact path="/doc" component={ DocsPage }/>
-        <Route exact path="/projects">
-          <PrivateRoute> <Projects/> </PrivateRoute>
-        </Route>
-        <Route exact path="/projects/:id">
-          <PrivateRoute> <ProjectPage/> </PrivateRoute>
-        </Route>
-        <Route exact path="/main">
-          <PrivateRoute> <MainPage/> </PrivateRoute>
-        </Route>
-        <Route component={ Error404 }/>
-      </Switch>
+      <Routes>
+        <Route exact path="/" element={ <Lending/> }/>
+        <Route exact path="/sign_up" element={ <Register/> }/>
+        <Route exact path="/sign_in" element={ <Login/> }/>
+        <Route exact path="/change_password" element={ <ChangePass/> }/>
+        <Route exact path="/view/:id" element={ <View/> }/>
+        <Route exact path="/doc" element={ <DocsPage/> }/>
+        <Route exact path="/projects" element={ <PrivateRoute> <Projects/> </PrivateRoute> }/>
+        <Route exact path="/projects/:id" element={ <PrivateRoute> <ProjectPage/> </PrivateRoute> }/>
+        <Route exact path="/main" element={ <PrivateRoute> <MainPage/> </PrivateRoute> }/>
+        <Route element={ <Error404/> }/>
+      </Routes>
     </Router>
-  </Provider>,
-  document.getElementById('root')
+  </Provider>
 );
 
 

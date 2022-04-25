@@ -6,7 +6,7 @@ import { fetchProjects } from "../../actions/projectsActions";
 import { fetchRooms } from "../../actions/roomsActions";
 
 import { connect } from "react-redux";
-import { Redirect } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 
 /* Component */
 class PrivateRoute extends React.Component {
@@ -32,7 +32,7 @@ class PrivateRoute extends React.Component {
       return component;
     }
     if (this.props.status !== 'ok' && this.props.status !== 'loading' || this.props.error) {
-      component = <Redirect to={{ pathname: "/sign_in" }}/>;
+      component = <Navigate to={{ pathname: "/sign_in" }}/>;
       status[0] = 'err';
     }
 
