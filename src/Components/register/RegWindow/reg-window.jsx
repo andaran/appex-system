@@ -253,7 +253,7 @@ export default class RegWindow extends React.Component {
           });
         } else {
           this.setState({ email });
-          this.codeRequest();
+          setTimeout(() => this.codeRequest());
         }
       }).catch(err => console.log('Ahtung in checking email!', new Error(err)));
     }
