@@ -357,7 +357,10 @@ class CreateAppWindow extends React.Component {
     let text = document.getElementById('create-app-window__err-text');
     text.innerText = '';
     this.setState({ deleteConfirm: true });
-    document.getElementById('delete-confirm').onclick = this.deleteApp;
+    setTimeout(() => {
+      document.getElementById('delete-confirm')
+        .addEventListener('click', () => this.deleteApp());
+    });
   }
 
   deleteApp() {
