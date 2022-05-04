@@ -11,12 +11,12 @@ const generateRoomId = () => {
     async function gen() {
 
       /* generate id */
-      const id = uid(12);
+      const roomId = uid(12);
 
       /* check this id */
-      Room.find({ id }).then(foundUsers => {
-        foundUsers.length === 0
-          ? resolve(id)
+      Room.find({ roomId }).then(foundRooms => {
+        foundRooms.length === 0
+          ? resolve(roomId)
           : gen();
       }, err => reject(err));
     }

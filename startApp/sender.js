@@ -91,12 +91,10 @@ const createStartApp = (userId) => {
           }
           User.updateOne(
             { id: userId },
-            { $addToSet:
-                {
-                  settings: settings,
-                  alerts: [main, start, project]
-                }
-            }
+            {
+              $addToSet:  { settings },
+              $set: { alerts: [main, start, project] },
+            },
           ).catch(err => console.log('Error in creating start user settings!', err));
 
         }).catch(err => console.log('Error in creating start room!', err));

@@ -10,9 +10,6 @@ const mailer = require(path.join(__dirname, '../', 'mails', 'mailer.js'));
 const generateUserId = require(path.join(__dirname, '../', 'IdActions', 'generateUserID.js'));
 const createStartApp = require(path.join(__dirname, '../', 'startApp', 'sender.js'));
 
-/* alerts */
-const start = require(path.join(__dirname, '../', 'alerts', 'code', 'start.js'));
-
 /* models */
 const User = require(path.join(__dirname, '../', 'models', 'user.js'));
 
@@ -70,7 +67,7 @@ router.post('/', (req, res) => {
               widgets: [],
               groups: [],
             },
-            alerts: [ start ],  // education
+            alerts: [],
           });
 
           /* save new user */
