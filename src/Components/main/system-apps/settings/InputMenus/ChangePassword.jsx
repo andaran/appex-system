@@ -77,7 +77,7 @@ export default class ChangeUserName extends React.Component {
     });
 
     const oldPassword = document.getElementById('old-password').value;
-    if (!/(?=.*[0-9])(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z!@#$%^&*]{6,}/.test(oldPassword)) {
+    if (!/[0-9a-z]{6,}/.test(oldPassword)) {
       this.setState({
         errs: ['Неверный старый пароль!', '', '']
       });
@@ -85,7 +85,7 @@ export default class ChangeUserName extends React.Component {
     }
 
     const newPassword = document.getElementById('new-password').value;
-    if (!/(?=.*[0-9])(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z!@#$%^&*]{6,}/.test(newPassword)) {
+    if (!/[0-9a-z]{6,}/.test(newPassword)) {
       this.setState({
         errs: ['', 'Слишком легкий пароль!', '']
       });
