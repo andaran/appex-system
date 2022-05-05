@@ -26,6 +26,7 @@ export default class RegWindow extends React.Component {
     this.hotkey = this.hotkey.bind(this);
     this.sendCode = this.sendCode.bind(this);
     this.codeRequest = this.codeRequest.bind(this);
+    this.register = this.register.bind(this);
   }
 
   render() {
@@ -143,7 +144,7 @@ export default class RegWindow extends React.Component {
     } else {
 
       /* checking username available */
-      const body = JSON.stringify({ username });
+      const body = JSON.stringify({username});
       await fetch('/sign_up/is_param_available', {
         method: "POST",
         headers: {
@@ -157,7 +158,9 @@ export default class RegWindow extends React.Component {
             errs: ['Такой пользователь уже есть в системе!', '', '', '']
           });
           return;
-        } else { this.setState({ username }); }
+        } else {
+          this.setState({username});
+        }
       }).catch(err => console.log('Ahtung in checking username!', new Error(err)));
     }
 
@@ -167,7 +170,9 @@ export default class RegWindow extends React.Component {
         errs: ['', 'Слишком легкий пароль!', '', '']
       });
       return;
-    } else { this.setState({ password }); }
+    } else {
+      this.setState({password});
+    }
 
     const email = document.getElementById('reg-email').value;
     if (!/\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,6}/.test(email)) {
@@ -182,7 +187,9 @@ export default class RegWindow extends React.Component {
         errs: ['', '', '', 'Неверный формат кода! Он должен прийти вам на почту.']
       });
       return;
-    } else { this.setState({ code }); }
+    } else {
+      this.setState({code});
+    }
 
     /* if email code isn`t posted */
     if (this.state.email === '' || this.state.codeID === '' || !this.state.emailCode) {
@@ -191,6 +198,12 @@ export default class RegWindow extends React.Component {
       });
       return;
     }
+
+    /* send register request at next tick */
+    setTimeout(this.register);
+  }
+
+  register() {
 
     /* if all data is here */
     if (this.state.username === '' || this.state.password === '') { return; }
