@@ -8,10 +8,10 @@
 
   header
     background: #4b6584
-    transition: .5s ease-in
 
     main
-      width: 500px
+      width: 600px
+      margin: 10px
 
       .lending-description
         display: block
@@ -19,32 +19,20 @@
         color: white
         text-align: center
 
-  section:nth-child(2)
-    background: #FED6BC
-
-  section:nth-child(3)
-    background: #B5F2EA
-
-  section:nth-child(4)
-    background: #FFFADD
-
-  section:nth-child(5)
-    background: #DEF7FE
-
 .lending-header
   display: flex
   justify-content: center
   align-items: center
   position: relative
+  transition: .4s linear
 
   &_down
     position: absolute
     margin: auto
     bottom: 20px
     display: flex
-
-    &__animate
-      animation: swipe linear infinite 2s
+    align-items: flex-end
+    z-index: 1
 
   &_space
     width: 140px
@@ -64,10 +52,17 @@
     height: 30px
     background: white
     text-align: center
-    padding-top: 1px
+    padding-top: .5px
     border-radius: 5px
     box-shadow: 0 -3px rgba(0, 0, 0, .2) inset
     margin: 0 8px
+    animation: space 2s linear infinite
+
+    &__animate1
+      animation-delay: .1s
+
+    &__animate2
+      animation-delay: .2s
 
   &_swipe
     transform: rotate(-135deg)
@@ -134,18 +129,20 @@
   overflow: hidden
 
 .lending-text
+  left: 50%
+  top: 50%
+  transform: translate(-50%, -50%)
+  z-index: 1
   position: absolute
-  left: 20px
-  top: 20px
-  width: 50%
+  color: white
+  font-weight: bold
 
   &_title
-    font-size: 54px
-    color: #1f1f1f
+    font-size: 46px
 
   &_main
-    font-size: 24px
-    margin-top: 12px
+    font-size: 28px
+    margin-top: 6px
 
 .lending-register
   position: absolute
@@ -199,8 +196,59 @@
   .lending-header_down
     top: 50px
 
-a
+.lending-description a
   color: white
 
   &:hover
-    color: black
+    color: #d9dff5
+
+.lending-section video
+  min-height: 100%
+  min-width: 100%
+  overflow: hidden
+  position: absolute
+  left: 0
+  top: 0
+  z-index: 0
+  filter: brightness(.7)
+
+/* mobile controls */
+.lending-header_mobile-controls
+  position: fixed
+  right: 10px
+  bottom: 10px
+  font-size: 20px
+  z-index: 2000
+
+.lending-header_mobile-button
+  width: 45px
+  height: 45px
+  border-radius: 12px
+  margin: 10px
+  display: flex
+  justify-content: center
+  align-items: center
+  color: whitesmoke
+  background: #494e57
+  border: .5px solid #2f3542
+  transition: .1s
+
+  &:active
+    transform: scale(.95)
+
+/* mobile sections view */
+
+@media (max-width: 500px)
+  .lending-header
+    transition: 0s
+
+  .lending-section
+    display: none
+
+  .active-slide-5-5, .active-slide-4-4, .active-slide-3-3, .active-slide-2-2, .active-slide-1-1
+    display: flex
+    position: absolute
+    width: 100vw
+    height: 100vh
+    top: 0
+    left: 0
